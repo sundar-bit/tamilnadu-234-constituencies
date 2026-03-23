@@ -374,17 +374,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- ═══════════════ PANEL 4: ELECTION TIMELINE ═══════════════ -->
 <div class="panel" id="panel-timeline">
 
-  <div class="section-label">State Election Timeline (1977–2021)</div>
-  <div class="chart-box" style="margin-bottom:1.2rem;">
-    <div class="cbox-sub" style="margin-bottom:14px">Which party/alliance won each Tamil Nadu election — and who led the government</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0 2.5rem;" id="stateTimeline"></div>
-  </div>
+  <div class="section-label">Complete Election History — 1952 to 2021</div>
+  <div style="font-size:12px;color:#888;margin-bottom:1rem;">Tamil Nadu (formerly Madras State) has held 16 assembly elections since independence. Click any election card for full details.</div>
 
-  <div class="section-label">Who Governed Tamil Nadu (1977–2021)</div>
-  <div class="chart-box" style="margin-bottom:1.2rem;">
-    <div class="cbox-sub" style="margin-bottom:12px">Chief Ministers and their tenures · Source: Tamil Nadu Legislative Assembly records</div>
+  <div id="timelineCards" style="display:flex;flex-direction:column;gap:12px;"></div>
+
+  <div class="section-label" style="margin-top:2rem;">All Chief Ministers of Tamil Nadu — 1952 to 2021</div>
+  <div class="chart-box" style="margin-bottom:1.2rem;padding:0;overflow:hidden;">
     <table class="results-table">
-      <thead><tr><th>Year</th><th>Chief Minister</th><th>Party</th><th>Alliance</th><th>Majority</th><th>Turnout</th></tr></thead>
+      <thead>
+        <tr>
+          <th style="width:50px">No.</th>
+          <th>Chief Minister</th>
+          <th>Party</th>
+          <th>Term</th>
+          <th>Duration</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
       <tbody id="cmTableBody"></tbody>
     </table>
   </div>
@@ -816,48 +823,106 @@ new Chart(document.getElementById('allianceTrend'),{
     scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'},stacked:true},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888'},stacked:true,max:234}}}
 });
 
-// ── STATE ELECTION TIMELINE ──
-const stateWinners=[
-  {year:1977,winner:'M. G. Ramachandran',party:'ADMK',seats:130,alliance:'AIADMK (standalone)',turnout:'78.0%'},
-  {year:1980,winner:'M. G. Ramachandran',party:'ADMK',seats:129,alliance:'AIADMK-INC',turnout:'71.0%'},
-  {year:1984,winner:'M. G. Ramachandran',party:'ADMK',seats:132,alliance:'AIADMK-INC',turnout:'74.0%'},
-  {year:1989,winner:'M. Karunanidhi',party:'DMK',seats:150,alliance:'DMK-Left',turnout:'69.5%'},
-  {year:1991,winner:'J. Jayalalithaa',party:'ADMK',seats:164,alliance:'AIADMK-INC',turnout:'75.5%'},
-  {year:1996,winner:'M. Karunanidhi',party:'DMK',seats:173,alliance:'DMK-TMC Front',turnout:'66.3%'},
-  {year:2001,winner:'J. Jayalalithaa',party:'ADMK',seats:132,alliance:'SDPA (AIADMK+INC+PMK)',turnout:'58.4%'},
-  {year:2006,winner:'M. Karunanidhi',party:'DMK',seats:96,alliance:'DPA (DMK+INC+PMK)',turnout:'70.7%'},
-  {year:2011,winner:'J. Jayalalithaa',party:'ADMK',seats:150,alliance:'AIADMK+DMDK+Left',turnout:'77.6%'},
-  {year:2016,winner:'J. Jayalalithaa → EKP',party:'ADMK',seats:136,alliance:'AIADMK (solo)',turnout:'74.8%'},
-  {year:2021,winner:'M. K. Stalin',party:'DMK',seats:133,alliance:'SPA (DMK+INC+Left)',turnout:'73.6%'},
+// ── FULL ELECTION TIMELINE 1952–2021 ──
+const electionHistory=[
+  {year:1952,seats:375,totalSeats:375,turnout:49.10,cm:'C. Rajagopalachari (Rajaji)',cmParty:'INC',cmNote:'First CM of independent Madras State. Not directly elected — appointed despite no majority.',lop:'—',lopNote:'No formal LOP (fragmented)',winner:'INC',winnerSeats:152,alliance:'INC (Congress era)',runnerUp:'CPI',runnerUpSeats:62,keyParties:[{p:'INC',s:152},{p:'CPI',s:62},{p:'Others',s:161}],highlight:'First election after independence. No majority. Rajaji became CM. CPI main opposition. DMK did not yet exist. State still called Madras State.',era:'Congress Era',eraColor:'#2e8b57'},
+  {year:1957,seats:205,totalSeats:205,turnout:57.60,cm:'K. Kamaraj',cmParty:'INC',cmNote:'Kamaraj\'s first full term. Landmark governance — built thousands of schools, launched midday meals. DMK\'s debut election.',lop:'—',lopNote:'DMK as nascent opposition (15 seats)',winner:'INC',winnerSeats:151,alliance:'INC',runnerUp:'CPI',runnerUpSeats:16,keyParties:[{p:'INC',s:151},{p:'DMK',s:15},{p:'CPI',s:16},{p:'Others',s:23}],highlight:'Kamaraj\'s landmark governance. DMK debuted with 15 seats (contested as Independents — not yet officially recognised). Congress at peak.',era:'Congress Era',eraColor:'#2e8b57'},
+  {year:1962,seats:206,totalSeats:206,turnout:55.80,cm:'K. Kamaraj → M. Bhaktavatsalam',cmParty:'INC',cmNote:'Kamaraj won again but resigned in 1963 under "Kamaraj Plan" to strengthen national Congress. M. Bhaktavatsalam took over.',lop:'C. N. Annadurai',lopNote:'DMK — growing fast to 50 seats',winner:'INC',winnerSeats:139,alliance:'INC',runnerUp:'DMK',runnerUpSeats:50,keyParties:[{p:'INC',s:139},{p:'DMK',s:50},{p:'Others',s:17}],highlight:'DMK surged to 50 seats — clear rising power. Kamaraj resigned mid-term (Kamaraj Plan). Bhaktavatsalam became CM. Last Congress government in TN.',era:'Congress Era',eraColor:'#2e8b57'},
+  {year:1967,seats:234,totalSeats:234,turnout:76.57,cm:'C. N. Annadurai',cmParty:'DMK',cmNote:'Historic watershed. First non-Congress govt in any major Indian state. Annadurai died in office 3 Feb 1969.',lop:'M. Bhaktavatsalam',lopNote:'INC — outgoing CM',winner:'DMK',winnerSeats:138,alliance:'DMK + allies',runnerUp:'INC',runnerUpSeats:49,keyParties:[{p:'DMK',s:138},{p:'INC',s:49},{p:'Others',s:47}],highlight:'DMK\'s historic victory ended 20 years of Congress rule. Highest turnout ever (76.57%). Dravidian era began. Anna died in office 1969.',era:'Dravidian Era Begins',eraColor:'#e88c10'},
+  {year:1971,seats:234,totalSeats:234,turnout:69.60,cm:'M. Karunanidhi',cmParty:'DMK',cmNote:'Karunanidhi\'s biggest election win — 184 seats. Dismissed by Indira Gandhi in Jan 1976 under Emergency. President\'s Rule until 1977.',lop:'M. G. Ramachandran',lopNote:'MGR (still in DMK, expelled 1972)',winner:'DMK',winnerSeats:184,alliance:'DMK + INC(O)',runnerUp:'INC',runnerUpSeats:15,keyParties:[{p:'DMK',s:184},{p:'INC',s:15},{p:'Others',s:35}],highlight:'Karunanidhi\'s biggest win — 184 seats. INC decimated. MGR still in DMK. Govt dismissed 1976 during Emergency. President\'s Rule for 18 months.',era:'Dravidian Era',eraColor:'#e88c10'},
+  {year:1977,seats:234,totalSeats:234,turnout:61.58,cm:'M. G. Ramachandran (MGR)',cmParty:'ADMK',cmNote:'AIADMK debut. MGR won 130 seats & became CM. Served 3 consecutive terms until death in Dec 1987.',lop:'M. Karunanidhi',lopNote:'DMK',winner:'AIADMK',winnerSeats:130,alliance:'AIADMK + INC + CPI',runnerUp:'DMK',runnerUpSeats:48,keyParties:[{p:'ADMK',s:130},{p:'DMK',s:48},{p:'INC',s:27},{p:'Others',s:29}],highlight:'AIADMK\'s debut win. MGR — film star turned politician — became CM for first time. Power shifted from DMK to AIADMK for next decade.',era:'MGR Era',eraColor:'#c94c2e'},
+  {year:1980,seats:234,totalSeats:234,turnout:68.00,cm:'M. G. Ramachandran (MGR)',cmParty:'ADMK',cmNote:'MGR\'s 2nd term. Retained power despite DMK-INC sweeping Lok Sabha 37/39 seats earlier in Jan 1980.',lop:'M. Karunanidhi',lopNote:'DMK',winner:'AIADMK',winnerSeats:129,alliance:'AIADMK + INC',runnerUp:'DMK',runnerUpSeats:38,keyParties:[{p:'ADMK',s:129},{p:'DMK',s:38},{p:'INC',s:30},{p:'Others',s:37}],highlight:'MGR\'s 2nd win. DMK-INC swept Lok Sabha (37/39) but lost assembly election. Showed AIADMK\'s strong independent state-level base.',era:'MGR Era',eraColor:'#c94c2e'},
+  {year:1984,seats:234,totalSeats:234,turnout:73.00,cm:'M. G. Ramachandran (MGR)',cmParty:'ADMK',cmNote:'MGR\'s 3rd & final term. Won on Indira Gandhi assassination sympathy wave. Died in office 24 Dec 1987 — political crisis followed.',lop:'M. Karunanidhi',lopNote:'DMK (Karunanidhi did not contest)',winner:'AIADMK',winnerSeats:132,alliance:'AIADMK + INC',runnerUp:'DMK',runnerUpSeats:24,keyParties:[{p:'ADMK',s:132},{p:'INC',s:62},{p:'DMK',s:24},{p:'Others',s:16}],highlight:'AIADMK+INC swept 194/234 on Indira assassination sympathy. DMK routed. MGR died Dec 1987. AIADMK split: Jayalalithaa vs V.N.Janaki factions.',era:'MGR Era',eraColor:'#c94c2e'},
+  {year:1989,seats:234,totalSeats:234,turnout:69.69,cm:'M. Karunanidhi',cmParty:'DMK',cmNote:'DMK swept back with 150 seats. AIADMK split after MGR\'s death. Govt dismissed by Centre in 1991.',lop:'J. Jayalalithaa',lopNote:'AIADMK (Jayalalithaa faction) · 27 seats',winner:'DMK',winnerSeats:150,alliance:'DMK + Left parties',runnerUp:'AIADMK(J)',runnerUpSeats:27,keyParties:[{p:'DMK',s:150},{p:'ADMK',s:27},{p:'INC',s:26},{p:'CPI(M)',s:15},{p:'Others',s:16}],highlight:'DMK returned. AIADMK split into Jayalalithaa vs Janaki factions. INC alone won 26 seats. Karunanidhi\'s govt dismissed 1991 by Centre (Rajiv Gandhi) citing LTTE support.',era:'Dravidian Alternation',eraColor:'#e88c10'},
+  {year:1991,seats:234,totalSeats:234,turnout:75.50,cm:'J. Jayalalithaa',cmParty:'ADMK',cmNote:'Jayalalithaa\'s 1st term. AIADMK-INC swept 224/234 seats. DMK nearly wiped out — won only 2 seats.',lop:'M. Karunanidhi',lopNote:'DMK — won only 2 seats',winner:'AIADMK',winnerSeats:164,alliance:'AIADMK + INC + PMK',runnerUp:'DMK',runnerUpSeats:2,keyParties:[{p:'ADMK',s:164},{p:'INC',s:29},{p:'PMK',s:10},{p:'DMK',s:2},{p:'Others',s:29}],highlight:'Jayalalithaa\'s historic 1st term. AIADMK+INC got 224/234. DMK almost wiped out. Rajiv Gandhi assassinated during campaign. President\'s Rule lifted.',era:'Dravidian Alternation',eraColor:'#c94c2e'},
+  {year:1996,seats:234,totalSeats:234,turnout:66.30,cm:'M. Karunanidhi',cmParty:'DMK',cmNote:'4th term. DMK-TMC landslide. Jayalalithaa lost her own seat. AIADMK reduced to 4 seats — worst ever.',lop:'So. Balakrishnan',lopNote:'Tamil Maanila Congress (TMC)',winner:'DMK',winnerSeats:173,alliance:'DMK + TMC + CPI + others',runnerUp:'AIADMK',runnerUpSeats:4,keyParties:[{p:'DMK',s:173},{p:'TMC',s:39},{p:'ADMK',s:4},{p:'INC',s:3},{p:'BJP',s:4},{p:'Others',s:11}],highlight:'AIADMK historic rout — only 4 seats. Jayalalithaa lost own seat. INC split: TMC formed by Moopanar. DMK biggest alliance win. Karunanidhi 4th term.',era:'Dravidian Alternation',eraColor:'#e88c10'},
+  {year:2001,seats:234,totalSeats:234,turnout:58.40,cm:'J. Jayalalithaa',cmParty:'ADMK',cmNote:'2nd term. Barred by courts — OPS acted as CM (Sep 2001–Mar 2002). Anti-DMK wave. Lowest turnout in modern era.',lop:'M. Karunanidhi',lopNote:'DMK',winner:'AIADMK',winnerSeats:132,alliance:'SDPA: AIADMK + INC + PMK + Left',runnerUp:'DMK',runnerUpSeats:31,keyParties:[{p:'ADMK',s:132},{p:'INC',s:10},{p:'PMK',s:23},{p:'DMK',s:31},{p:'BJP',s:0},{p:'Others',s:38}],highlight:'SDPA swept 197 seats. DMK-BJP DPA only 37. Jayalalithaa disqualified — OPS acted as CM for 6 months. Lowest turnout (58.4%).',era:'Dravidian Alternation',eraColor:'#c94c2e'},
+  {year:2006,seats:234,totalSeats:234,turnout:70.70,cm:'M. Karunanidhi',cmParty:'DMK',cmNote:'5th & final term. First minority govt in TN history. DMK-led DPA won 163 seats, DMK alone only 96. Part of UPA at Centre.',lop:'J. Jayalalithaa',lopNote:'AIADMK · 61 seats',winner:'DMK',winnerSeats:96,alliance:'DPA: DMK + INC + PMK + CPI + CPI(M)',runnerUp:'AIADMK',runnerUpSeats:61,keyParties:[{p:'DMK',s:96},{p:'INC',s:34},{p:'PMK',s:18},{p:'ADMK',s:61},{p:'CPI(M)',s:9},{p:'CPI',s:6}],highlight:'First minority govt. DMK+allies 163/234, DMK alone only 96. Karunanidhi 5th term. Vijayakanth\'s DMDK debuted. UPA partner at Centre.',era:'Dravidian Alternation',eraColor:'#e88c10'},
+  {year:2011,seats:234,totalSeats:234,turnout:77.63,cm:'J. Jayalalithaa',cmParty:'ADMK',cmNote:'4th term. Historic 203-seat alliance sweep. DMK-INC (UPA) devastated by 2G scam. Highest turnout since 1967.',lop:'M. Karunanidhi',lopNote:'DMK — only 23 seats (worst ever)',winner:'AIADMK',winnerSeats:150,alliance:'AIADMK + DMDK + Left',runnerUp:'DMK',runnerUpSeats:23,keyParties:[{p:'ADMK',s:150},{p:'DMDK',s:29},{p:'DMK',s:23},{p:'INC',s:5},{p:'PMK',s:3},{p:'Others',s:24}],highlight:'Biggest alliance majority ever — 203/234. DMK worst result (23 seats). 2G scam devastated DMK-UPA. Vijayakanth\'s DMDK 29 seats as main opposition.',era:'Dravidian Alternation',eraColor:'#c94c2e'},
+  {year:2016,seats:234,totalSeats:234,turnout:74.81,cm:'J. Jayalalithaa → E.K.Palaniswami',cmParty:'ADMK',cmNote:'Historic back-to-back win. Jayalalithaa died 5 Dec 2016. OPS briefly CM, then EKP took over. Stalin became main LOP.',lop:'M. K. Stalin',lopNote:'DMK — 89 seats · Stalin became LOP',winner:'AIADMK',winnerSeats:136,alliance:'AIADMK (largely solo)',runnerUp:'DMK',runnerUpSeats:89,keyParties:[{p:'ADMK',s:136},{p:'DMK',s:89},{p:'INC',s:8},{p:'PMK',s:1}],highlight:'First back-to-back win since MGR 1984. Jayalalithaa died Dec 2016. OPS vs Sasikala vs EKP power struggle. Stalin became principal opposition leader.',era:'Transition Era',eraColor:'#c94c2e'},
+  {year:2021,seats:234,totalSeats:234,turnout:73.63,cm:'M. K. Stalin',cmParty:'DMK',cmNote:'Stalin\'s first term. DMK returned after 10 years. First election after deaths of Jayalalithaa (2016) & Karunanidhi (2018). New Dravidian era.',lop:'E. K. Palaniswami',lopNote:'AIADMK · 66 seats',winner:'DMK',winnerSeats:133,alliance:'SPA: DMK + INC + CPI + CPI(M) + VCK + MDMK',runnerUp:'AIADMK',runnerUpSeats:66,keyParties:[{p:'DMK',s:133},{p:'ADMK',s:66},{p:'INC',s:18},{p:'PMK',s:5},{p:'BJP',s:4},{p:'VCK',s:4},{p:'Others',s:4}],highlight:'Post-Jaya & post-Karunanidhi era. MNM (Kamal Haasan) debuted — 0 seats. SPA swept 159/234. Stalin as CM — new generation of Dravidian politics.',era:'New Dravidian Era',eraColor:'#e88c10'},
 ];
 
-const tlCols=3;
-const tlSize=Math.ceil(stateWinners.length/tlCols);
-const tlContainer=document.getElementById('stateTimeline');
-for(let c=0;c<tlCols;c++){
-  const div=document.createElement('div');
-  div.className='timeline';
-  stateWinners.slice(c*tlSize,(c+1)*tlSize).forEach(w=>{
-    div.innerHTML+=`<div class="tl-item">
-      <div class="tl-dot" style="background:${gc(w.party)}"></div>
-      <div class="tl-year">${w.year}</div>
-      <div class="tl-winner">${w.winner}<span class="tl-party-badge" style="background:${gc(w.party)}">${w.party}</span></div>
-      <div class="tl-detail" style="font-style:italic;color:#777">${w.alliance}</div>
-      <div class="tl-detail">Seats: ${w.seats} · Turnout: ${w.turnout}</div>
+const tlContainer=document.getElementById('timelineCards');
+electionHistory.forEach(e=>{
+  const winColor=gc(e.winner==='AIADMK'?'ADMK':e.winner==='INC'?'INC':e.winner==='DMK'?'DMK':'ADMK');
+  const card=document.createElement('div');
+  card.style.cssText='background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden;';
+  card.innerHTML=`
+    <div style="background:${winColor};padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+      <div>
+        <span style="font-size:20px;font-weight:800;color:#fff;">${e.year}</span>
+        <span style="font-size:11px;background:rgba(255,255,255,0.2);color:#fff;padding:2px 8px;border-radius:4px;margin-left:10px;">${e.era}</span>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:11px;padding:3px 10px;border-radius:4px;">Assembly No. ${electionHistory.indexOf(e)+1}</span>
+        <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:11px;padding:3px 10px;border-radius:4px;">Turnout: ${e.turnout}%</span>
+        <span style="background:rgba(255,255,255,0.2);color:#fff;font-size:11px;padding:3px 10px;border-radius:4px;">${e.totalSeats} seats</span>
+      </div>
+    </div>
+    <div style="padding:14px 18px;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
+        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+          <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Chief Minister</div>
+          <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.cm}</div>
+          <div style="font-size:11px;color:${winColor};font-weight:600;margin-top:2px;">${e.cmParty}</div>
+          <div style="font-size:11px;color:#888;margin-top:3px;line-height:1.5;">${e.cmNote}</div>
+        </div>
+        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+          <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Result</div>
+          <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.winner} — ${e.winnerSeats} seats</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;line-height:1.5;">${e.alliance}</div>
+          <div style="font-size:11px;color:#888;margin-top:3px;">Runner-up: ${e.runnerUp} (${e.runnerUpSeats})</div>
+        </div>
+        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+          <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Opposition Leader</div>
+          <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.lop}</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;line-height:1.5;">${e.lopNote}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+        ${e.keyParties.map(p=>`<span style="background:${gc(p.p==='ADMK'?'ADMK':p.p)}22;color:${gc(p.p==='ADMK'?'ADMK':p.p)};font-size:11px;padding:3px 9px;border-radius:4px;font-weight:600;">${p.p}: ${p.s}</span>`).join('')}
+      </div>
+      <div style="background:#fff8e8;border-left:3px solid #f5c842;padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#555;line-height:1.6;">★ ${e.highlight}</div>
     </div>`;
-  });
-  tlContainer.appendChild(div);
-}
+  tlContainer.appendChild(card);
+});
 
 // ── CM TABLE ──
-document.getElementById('cmTableBody').innerHTML=stateWinners.map((w,i)=>`
-  <tr class="${i===stateWinners.length-1?'winner-row':''}">
-    <td><span class="year-badge">${w.year}</span></td>
-    <td style="font-weight:700;color:#1a2f5e">${w.winner}</td>
-    <td><span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gc(w.party)};display:inline-block"></span>${w.party}</span></td>
-    <td style="font-size:11px;color:#666">${w.alliance}</td>
-    <td>${w.seats}/234</td>
-    <td>${w.turnout}</td>
+const cmData=[
+  {no:1,name:'C. Rajagopalachari (Rajaji)',party:'INC',term:'Apr 1952 – Apr 1954',duration:'2 years',note:'First CM of independent Madras State. Appointed (not elected) despite INC not winning outright majority.'},
+  {no:2,name:'K. Kamaraj',party:'INC',term:'Apr 1954 – Oct 1963',duration:'9 yrs 6 months',note:'Legendary CM. Built 12,000+ schools, launched midday meals. Resigned under "Kamaraj Plan" to strengthen Congress nationally.'},
+  {no:3,name:'M. Bhaktavatsalam',party:'INC',term:'Oct 1963 – Mar 1967',duration:'3 yrs 5 months',note:'Last Congress CM of Tamil Nadu. Lost 1967 election decisively to C. N. Annadurai.'},
+  {no:4,name:'C. N. Annadurai (Anna)',party:'DMK',term:'Mar 1967 – Feb 1969',duration:'1 yr 10 months',note:'DMK founder. First non-Congress CM in any major Indian state. Died in office 3 Feb 1969. Tamil pride icon.'},
+  {no:5,name:'V. R. Nedunchezhiyan (Acting)',party:'DMK',term:'Feb 1969 – Mar 1969',duration:'~6 weeks',note:'Acting CM briefly after Annadurai\'s death.'},
+  {no:6,name:'M. Karunanidhi',party:'DMK',term:'Mar 1969 – Jan 1976',duration:'~7 years (1st & 2nd terms)',note:'Longest-serving CM overall (18+ years across 5 terms). 1st & 2nd terms. Dismissed by Indira Gandhi during Emergency.'},
+  {no:'—',name:'President\'s Rule',party:'Central Govt',term:'Jan 1976 – Jun 1977',duration:'18 months',note:'Karunanidhi\'s government dismissed. Central rule imposed.'},
+  {no:7,name:'M. G. Ramachandran (MGR)',party:'AIADMK',term:'Jun 1977 – Dec 1987',duration:'~10.5 years',note:'AIADMK founder. Film star turned CM. Won 3 consecutive elections. 3rd-longest serving CM. Died in office 24 Dec 1987.'},
+  {no:8,name:'V. N. Janaki Ramachandran',party:'AIADMK',term:'7 Jan 1988 – 30 Jan 1988',duration:'23 days',note:'MGR\'s wife. Shortest tenure in TN history. Lost confidence vote. Only 2nd woman CM of TN.'},
+  {no:'—',name:'President\'s Rule',party:'Central Govt',term:'Jan 1988 – Jan 1989',duration:'~12 months',note:'After Janaki lost confidence vote. Both AIADMK factions in political turmoil.'},
+  {no:9,name:'M. Karunanidhi',party:'DMK',term:'Jan 1989 – Jan 1991',duration:'2 years (3rd term)',note:'3rd term. Dismissed by Centre citing LTTE links. President\'s Rule imposed just before 1991 election.'},
+  {no:'—',name:'President\'s Rule',party:'Central Govt',term:'Jan 1991 – Jun 1991',duration:'~5 months',note:'After dismissal. Rajiv Gandhi assassination occurred during this period (May 1991).'},
+  {no:10,name:'J. Jayalalithaa',party:'AIADMK',term:'Jun 1991 – May 1996',duration:'5 years (1st term)',note:'First elected woman CM of TN. Youngest CM at the time. Controversial style — many arrests of opponents including Karunanidhi.'},
+  {no:11,name:'M. Karunanidhi',party:'DMK',term:'May 1996 – May 2001',duration:'5 years (4th term)',note:'4th term. DMK-TMC front govt. Part of United Front at Centre. Filed corruption cases against Jayalalithaa.'},
+  {no:12,name:'O. Panneerselvam (Acting)',party:'AIADMK',term:'Sep 2001 – Mar 2002',duration:'~6 months',note:'1st stint as Acting CM — Jayalalithaa disqualified by Supreme Court over DA case conviction.'},
+  {no:13,name:'J. Jayalalithaa',party:'AIADMK',term:'Mar 2002 – May 2006',duration:'~4 years (2nd term)',note:'2nd term proper after OPS interlude. Arrested DMK leaders. NDA ally at Centre.'},
+  {no:14,name:'M. Karunanidhi',party:'DMK',term:'May 2006 – May 2011',duration:'5 years (5th term)',note:'5th & final term. Minority govt. UPA partner at Centre. 2G spectrum scandal devastated party.'},
+  {no:15,name:'J. Jayalalithaa',party:'AIADMK',term:'May 2011 – Sep 2014',duration:'3+ years (4th term)',note:'4th term. Historic 203-seat sweep. Suspended Sep 2014 after DA case conviction.'},
+  {no:16,name:'O. Panneerselvam (Acting)',party:'AIADMK',term:'Sep 2014 – May 2015',duration:'~8 months',note:'2nd stint as Acting CM. Jayalalithaa acquitted by Karnataka HC May 2015.'},
+  {no:17,name:'J. Jayalalithaa',party:'AIADMK',term:'May 2015 – Dec 2016',duration:'~19 months (5th & 6th terms)',note:'5th then 6th term after 2016 win. Historic back-to-back. Hospitalised Sep 2016. Died 5 Dec 2016.'},
+  {no:18,name:'O. Panneerselvam (Acting)',party:'AIADMK',term:'Dec 2016 – Feb 2017',duration:'~2 months',note:'3rd stint. After Jayalalithaa\'s death. Party split between OPS, Sasikala, and EKP factions.'},
+  {no:19,name:'E. K. Palaniswami',party:'AIADMK',term:'Feb 2017 – May 2021',duration:'~4 years',note:'Led TN through Sasikala power struggle, Gaja cyclone, COVID-19 pandemic. Lost 2021 election. Now LOP.'},
+  {no:20,name:'M. K. Stalin',party:'DMK',term:'7 May 2021 – Present',duration:'Ongoing',note:'Current CM. Son of Karunanidhi. DMK president since 2018. Won 133 seats. New generation of Dravidian politics.'},
+];
+
+document.getElementById('cmTableBody').innerHTML=cmData.map(c=>`
+  <tr>
+    <td style="font-size:12px;color:#aaa;font-weight:700;text-align:center;">${c.no}</td>
+    <td style="font-weight:700;color:#1a2f5e;font-size:13px;">${c.name}</td>
+    <td><span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;"><span style="width:8px;height:8px;border-radius:2px;background:${gc(c.party==='AIADMK'?'ADMK':c.party)};display:inline-block;flex-shrink:0;"></span>${c.party}</span></td>
+    <td style="font-size:11px;color:#555;">${c.term}</td>
+    <td style="font-size:11px;color:#888;white-space:nowrap;">${c.duration}</td>
+    <td style="font-size:11px;color:#888;line-height:1.5;">${c.note}</td>
   </tr>`).join('');
 
 // ══════════════════════════════════════════
