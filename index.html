@@ -312,7 +312,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="position:relative;width:100%;height:260px;"><canvas id="allianceTrend"></canvas></div>
     <div class="legend" style="margin-top:12px;">
       <span class="leg-item"><span class="leg-dot" style="background:#c94c2e"></span>AIADMK-led</span>
-      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>DMK-led</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>DMK+ Alliance</span>
       <span class="leg-item"><span class="leg-dot" style="background:#888"></span>Others</span>
     </div>
   </div>
@@ -346,7 +346,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </select>
     <select class="filter-select" id="allianceFilter" onchange="applyFilters()">
       <option value="">All Alliances</option>
-      <option value="SPA">SPA (DMK-led)</option>
+      <option value="DMK+">DMK-led Alliance</option>
       <option value="NDA">NDA (AIADMK-led)</option>
       <option value="Other">Others</option>
     </select>
@@ -506,9 +506,9 @@ const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a'
 const gc=p=>PC[p]||PC[p.replace('(M)','')]||'#888';
 const SPA=['DMK','INC','CPI','CPI(M)','VCK','MDMK','IUML'];
 const NDA=['ADMK','BJP','PMK'];
-const getAlliance=p=>SPA.includes(p)?'SPA':NDA.includes(p)?'NDA':'Other';
-const alColor={'SPA':'rgba(46,139,87,0.15)','NDA':'rgba(201,76,46,0.15)','Other':'rgba(136,136,136,0.15)'};
-const alText={'SPA':'#1a5c30','NDA':'#7a2010','Other':'#555'};
+const getAlliance=p=>SPA.includes(p)?'DMK+':NDA.includes(p)?'NDA':'Other';
+const alColor={'DMK+':'rgba(46,139,87,0.15)','NDA':'rgba(201,76,46,0.15)','Other':'rgba(136,136,136,0.15)'};
+const alText={'DMK+':'#1a5c30','NDA':'#7a2010','Other':'#555'};
 
 // ── PANEL SWITCH ──
 function switchPanel(id,btn){
@@ -818,7 +818,7 @@ new Chart(document.getElementById('allianceTrend'),{
   type:'bar',
   data:{labels:tY,datasets:[
     {label:'AIADMK-led',data:tY.map(y=>getAllianceSeats(y,'NDA')),backgroundColor:'#c94c2e',borderRadius:3,borderSkipped:false},
-    {label:'DMK-led',data:tY.map(y=>getAllianceSeats(y,'SPA')),backgroundColor:'#e88c10',borderRadius:3,borderSkipped:false},
+    {label:'DMK+ Alliance',data:tY.map(y=>getAllianceSeats(y,'DMK+')),backgroundColor:'#e88c10',borderRadius:3,borderSkipped:false},
     {label:'Others',data:tY.map(y=>getAllianceSeats(y,'Other')),backgroundColor:'#ccc',borderRadius:3,borderSkipped:false},
   ]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
