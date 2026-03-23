@@ -3,207 +3,341 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Tamil Nadu 2021 — All 234 Constituencies</title>
+<title>Tamil Nadu Elections — All 234 Constituencies | Dr. Sundararaman Chintamani</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --navy:#0d1b3e;--navy2:#1a2f5e;--gold:#f5c842;--gold2:#e8a800;
-  --dmk:#e88c10;--aiadmk:#c94c2e;--bjp:#1a5fa8;--inc:#2e8b57;
-  --pmk:#c47a1a;--vcк:#0d7a6e;--cpi:#8b2fa8;--cpim:#6a3fb5;
-  --other:#888;--bg:#0a1628;--surface:#111d35;--surface2:#162040;
-  --border:rgba(255,255,255,0.08);--text:#e8edf5;--muted:#8898b0;
-}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#edeae4;color:#1a1a1a;}
 
-/* HEADER */
-.hero{background:linear-gradient(135deg,#0d1b3e 0%,#1a2f5e 50%,#0d1b3e 100%);padding:2rem 1.5rem 1.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,0.06) 0%,transparent 70%);}
-.hero-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
-.hero h1{font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;}
-.hero h1 span{color:var(--gold);}
-.hero-sub{font-size:12px;color:var(--muted);margin-top:4px;}
-.hero-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
-.hbadge{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,0.08);color:#b0c4de;border:0.5px solid rgba(255,255,255,0.1);}
-.prepared{text-align:right;}
-.prepared .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;}
-.prepared .name{font-size:13px;font-weight:700;color:var(--gold);margin-top:3px;}
-.prepared .date{font-size:11px;color:var(--muted);margin-top:2px;}
+/* ── HEADER ── */
+.site-header{background:linear-gradient(135deg,#1a2f5e 0%,#0d1f42 100%);padding:1.8rem 2rem;margin-bottom:0;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
+.site-header h1{font-size:24px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:-0.3px;}
+.site-header h1 span{color:#f5c842;}
+.site-header .sub{font-size:12px;color:#9cb3d8;}
+.badge-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.badge{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,0.12);color:#c5d5ef;}
+.prepared-by{text-align:right;}
+.prepared-by .label{font-size:10px;color:#9cb3d8;text-transform:uppercase;letter-spacing:0.8px;}
+.prepared-by .name{font-size:14px;font-weight:700;color:#f5c842;margin-top:3px;}
+.prepared-by .date{font-size:11px;color:#9cb3d8;margin-top:2px;}
 
-/* SUMMARY BAR */
-.summary-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;}
-.summary-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
-.scard{text-align:center;padding:10px 8px;border-radius:8px;background:var(--surface2);border:0.5px solid var(--border);}
-.scard-num{font-size:22px;font-weight:800;line-height:1;}
-.scard-label{font-size:10px;color:var(--muted);margin-top:4px;}
+/* ── NAV TABS (top-level sections) ── */
+.nav-bar{background:#152548;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;gap:0;overflow-x:auto;}
+.nav-btn{padding:11px 20px;font-size:12px;font-weight:600;border:none;background:transparent;color:#9cb3d8;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all 0.15s;}
+.nav-btn.active{color:#f5c842;border-bottom-color:#f5c842;}
+.nav-btn:hover:not(.active){color:#fff;}
 
-/* PARTY STRIP */
-.party-strip{background:var(--surface2);border-bottom:1px solid var(--border);padding:0.8rem 1.5rem;}
-.party-strip-inner{max-width:1200px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-.party-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1.5px solid transparent;background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;color:var(--text);transition:all 0.15s;}
-.party-btn:hover,.party-btn.active{border-color:currentColor;background:rgba(255,255,255,0.05);}
-.party-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
-.strip-label{font-size:11px;color:var(--muted);margin-right:4px;}
+/* ── SECTION PANELS ── */
+.panel{display:none;padding:1.5rem 2rem;max-width:1100px;margin:0 auto;}
+.panel.active{display:block;}
 
-/* MAIN LAYOUT */
-.main{max-width:1200px;margin:0 auto;padding:1.5rem;}
+/* ── SECTION LABEL ── */
+.section-label{font-size:11px;font-weight:700;letter-spacing:1px;color:#1a2f5e;text-transform:uppercase;margin:1.8rem 0 0.9rem;padding-left:10px;border-left:3px solid #f5c842;}
 
-/* SEARCH + FILTER */
-.controls{display:flex;gap:10px;margin-bottom:1.2rem;flex-wrap:wrap;}
+/* ── PROFILE GRID ── */
+.profile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:0.5rem;}
+.pcard{background:#fff;border:1px solid #e2ddd6;border-radius:10px;padding:14px 16px;}
+.pcard-label{font-size:11px;color:#888;margin-bottom:3px;}
+.pcard-val{font-size:15px;font-weight:700;color:#1a2f5e;line-height:1.3;}
+.pcard-sub{font-size:11px;color:#aaa;margin-top:2px;}
+
+/* ── YEAR TABS ── */
+.year-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0.5rem 0 1rem;}
+.ytab{padding:5px 14px;font-size:12px;border:1px solid #c8c2b8;border-radius:6px;background:#fff;color:#555;cursor:pointer;transition:all 0.15s;}
+.ytab.active{background:#1a2f5e;color:#fff;border-color:#1a2f5e;font-weight:700;}
+.ytab:hover:not(.active){background:#eee8de;}
+
+/* ── SUMMARY STRIP ── */
+.summary-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.2rem;}
+.scard{background:#fff;border:1px solid #e2ddd6;border-radius:8px;padding:12px 14px;}
+.scard-label{font-size:11px;color:#888;margin-bottom:4px;}
+.scard-val{font-size:16px;font-weight:700;color:#1a2f5e;}
+.scard-sub{font-size:11px;color:#aaa;margin-top:2px;}
+
+/* ── CHARTS ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.2rem;}
+.chart-box{background:#fff;border:1px solid #e2ddd6;border-radius:10px;padding:16px;}
+.cbox-title{font-size:13px;font-weight:700;color:#1a2f5e;margin-bottom:3px;}
+.cbox-sub{font-size:11px;color:#aaa;margin-bottom:12px;}
+.full-width{grid-column:1/-1;}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:#666;}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* ── ALLIANCE PILLS ── */
+.alliance-pill{display:inline-block;font-size:10px;padding:2px 7px;border-radius:4px;font-weight:600;margin:1px 2px;white-space:nowrap;}
+.pill-dmk{background:#fff3cc;color:#7a5200;}
+.pill-aiadmk{background:#ffe5e0;color:#7a2010;}
+.pill-bjp{background:#e6efff;color:#0d2f6e;}
+.pill-inc{background:#e2f4e8;color:#1a5c30;}
+.pill-other{background:#f0f0f0;color:#555;}
+.pill-nda{background:#fff0e0;color:#8b4500;}
+.pill-upa{background:#e8f4ff;color:#0a4a8a;}
+.pill-spa{background:#e2eeff;color:#1a3d8a;}
+.year-badge{display:inline-block;background:#1a2f5e;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:5px;}
+
+/* ── RESULTS TABLE ── */
+.results-table{width:100%;border-collapse:collapse;font-size:12px;}
+.results-table th{font-size:11px;font-weight:700;color:#888;text-align:left;padding:7px 10px;border-bottom:1px solid #eee;background:#faf8f5;}
+.results-table td{padding:8px 10px;border-bottom:1px solid #f5f2ee;color:#1a1a1a;}
+.results-table tr:last-child td{border-bottom:none;}
+.winner-row td{font-weight:700;background:#f6fdf0;}
+.bar-bg{background:#ede9e2;border-radius:3px;height:5px;width:100%;margin-top:3px;}
+.bar-fill{height:5px;border-radius:3px;}
+.won-badge{font-size:10px;padding:1px 6px;border-radius:3px;background:#d8f0cc;color:#2b6127;margin-left:5px;font-weight:700;}
+
+/* ── POLITICAL CONTEXT TABLE ── */
+.context-table-wrap{overflow-x:auto;}
+.context-table{width:100%;border-collapse:collapse;font-size:12px;}
+.context-table th{font-size:11px;font-weight:700;color:#fff;background:#1a2f5e;padding:9px 12px;text-align:left;}
+.context-table th:first-child{border-radius:8px 0 0 0;}
+.context-table th:last-child{border-radius:0 8px 0 0;}
+.context-table td{padding:9px 12px;border-bottom:1px solid #f0ece6;vertical-align:top;}
+.context-table tr:nth-child(even) td{background:#faf8f5;}
+.context-table tr:last-child td{border-bottom:none;}
+.context-table tr:hover td{background:#f5f0e8;}
+.cm-cell{font-weight:700;color:#1a2f5e;}
+.opp-cell{color:#6b4b00;}
+
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:26px;}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:#e2ddd6;}
+.tl-item{position:relative;margin-bottom:16px;}
+.tl-dot{position:absolute;left:-22px;top:4px;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px #ccc;}
+.tl-year{font-size:10px;font-weight:700;color:#999;margin-bottom:2px;}
+.tl-winner{font-size:13px;font-weight:700;color:#1a2f5e;}
+.tl-party-badge{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;color:#fff;margin-left:5px;font-weight:600;vertical-align:middle;}
+.tl-detail{font-size:11px;color:#888;margin-top:2px;}
+
+/* ── CONSTITUENCY EXPLORER ── */
+.explorer-controls{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;}
 .search-wrap{flex:1;min-width:200px;position:relative;}
-.search-wrap input{width:100%;padding:9px 12px 9px 36px;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;}
-.search-wrap input:focus{border-color:rgba(245,200,66,0.4);}
-.search-wrap input::placeholder{color:var(--muted);}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
-.filter-select{padding:9px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;outline:none;cursor:pointer;}
-.filter-select option{background:#1a2040;}
-
-/* CHARTS ROW */
-.charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.5rem;}
-.chart-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;}
-.cc-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.cc-sub{font-size:10px;color:var(--muted);margin-bottom:12px;}
-
-/* GRID */
-.grid-header{display:grid;grid-template-columns:40px 1fr 120px 110px 90px 100px 90px;gap:0;background:var(--navy2);border-radius:8px 8px 0 0;padding:8px 12px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
-.grid-body{border:0.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
-.grid-row{display:grid;grid-template-columns:40px 1fr 120px 110px 90px 100px 90px;gap:0;padding:9px 12px;border-bottom:0.5px solid var(--border);font-size:12px;transition:background 0.1s;cursor:pointer;align-items:center;}
+.search-wrap input{width:100%;padding:9px 12px 9px 34px;background:#fff;border:1px solid #d0ccc5;border-radius:8px;color:#1a1a1a;font-size:13px;outline:none;}
+.search-wrap input:focus{border-color:#1a2f5e;}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#aaa;font-size:13px;}
+.filter-select{padding:9px 12px;background:#fff;border:1px solid #d0ccc5;border-radius:8px;color:#555;font-size:12px;outline:none;cursor:pointer;}
+.party-strip{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;align-items:center;}
+.strip-label{font-size:11px;color:#888;}
+.party-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid transparent;background:#fff;cursor:pointer;font-size:11px;font-weight:600;color:#555;transition:all 0.15s;}
+.party-btn:hover,.party-btn.active{border-color:currentColor;background:rgba(0,0,0,0.04);}
+.party-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.count-badge{background:#eef0f5;color:#1a2f5e;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:3px;}
+.grid-header{display:grid;grid-template-columns:40px 1fr 130px 110px 90px 110px 80px;background:#1a2f5e;border-radius:8px 8px 0 0;padding:8px 12px;font-size:10px;font-weight:700;color:#c5d5ef;text-transform:uppercase;letter-spacing:0.5px;}
+.grid-body{border:1px solid #e2ddd6;border-top:none;border-radius:0 0 8px 8px;overflow:hidden;background:#fff;}
+.grid-row{display:grid;grid-template-columns:40px 1fr 130px 110px 90px 110px 80px;padding:9px 12px;border-bottom:1px solid #f5f2ee;font-size:12px;cursor:pointer;align-items:center;transition:background 0.1s;}
 .grid-row:last-child{border-bottom:none;}
-.grid-row:hover{background:var(--surface2);}
-.grid-row.highlighted{background:rgba(245,200,66,0.06);border-left:2px solid var(--gold);}
-.const-no{font-size:10px;color:var(--muted);}
-.const-name{font-weight:600;color:var(--text);}
-.const-dist{font-size:10px;color:var(--muted);}
-.winner-name{font-size:11px;color:var(--text);}
+.grid-row:hover{background:#faf8f5;}
+.grid-row.highlighted{background:#fffbf0;border-left:3px solid #f5c842;}
+.const-no{font-size:10px;color:#aaa;}
+.const-name{font-weight:700;color:#1a2f5e;}
+.const-dist{font-size:10px;color:#aaa;}
 .party-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;}
-.margin-bar-wrap{display:flex;align-items:center;gap:6px;}
-.margin-bar-bg{background:rgba(255,255,255,0.06);border-radius:2px;height:4px;width:60px;flex-shrink:0;}
-.margin-bar-fill{height:4px;border-radius:2px;}
-.margin-num{font-size:11px;color:var(--muted);}
-.turnout-val{font-size:12px;font-weight:600;}
-.alliance-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;}
-
-/* PAGINATION */
+.al-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;}
+.margin-wrap{display:flex;align-items:center;gap:5px;}
+.margin-bg{background:#ede9e2;border-radius:2px;height:4px;width:55px;flex-shrink:0;}
+.margin-fill{height:4px;border-radius:2px;}
+.margin-num{font-size:11px;color:#888;}
 .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px;}
-.page-info{font-size:12px;color:var(--muted);}
+.page-info{font-size:12px;color:#888;}
 .page-btns{display:flex;gap:6px;}
-.page-btn{padding:5px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;cursor:pointer;}
-.page-btn:hover,.page-btn.active{background:var(--navy2);border-color:var(--gold);}
+.page-btn{padding:5px 12px;background:#fff;border:1px solid #d0ccc5;border-radius:6px;color:#555;font-size:12px;cursor:pointer;}
+.page-btn:hover,.page-btn.active{background:#1a2f5e;color:#fff;border-color:#1a2f5e;}
 .page-btn:disabled{opacity:0.3;cursor:default;}
+.result-count{font-size:12px;color:#888;margin-bottom:8px;}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;position:relative;}
-.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
-.modal-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px;}
-.modal-sub{font-size:12px;color:var(--muted);margin-bottom:1.2rem;}
-.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem;}
-.mcard{background:var(--surface2);border-radius:8px;padding:10px 12px;}
-.mcard-label{font-size:10px;color:var(--muted);margin-bottom:3px;}
-.mcard-val{font-size:14px;font-weight:700;color:var(--text);}
-.cand-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
-.cand-row:last-child{border-bottom:none;}
-.cand-name{font-weight:600;flex:1;}
-.cand-votes{color:var(--muted);width:70px;text-align:right;}
-.cand-pct{width:50px;text-align:right;font-weight:700;}
-.winner-crown{color:var(--gold);margin-left:4px;font-size:10px;}
+.modal{background:#fff;border-radius:14px;padding:1.5rem;max-width:580px;width:100%;max-height:88vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;}
+.modal-title{font-size:18px;font-weight:800;color:#1a2f5e;margin-bottom:3px;}
+.modal-sub{font-size:12px;color:#888;margin-bottom:1rem;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;}
+.mcard{background:#faf8f5;border-radius:8px;padding:10px 12px;}
+.mcard-label{font-size:10px;color:#888;margin-bottom:3px;}
+.mcard-val{font-size:14px;font-weight:700;color:#1a2f5e;}
+.modal-hist-row{display:flex;align-items:center;padding:7px 0;border-bottom:1px solid #f0ece6;font-size:12px;gap:8px;}
+.modal-hist-row:last-child{border-bottom:none;}
+.modal-year{font-size:11px;font-weight:700;color:#1a2f5e;width:36px;flex-shrink:0;}
+.modal-winner{flex:1;font-weight:600;}
+.modal-party-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.modal-margin{font-size:11px;color:#888;width:80px;text-align:right;}
 
-/* FOOTER */
-.footer{background:var(--navy);border-top:1px solid var(--border);padding:1.2rem 1.5rem;margin-top:2rem;}
-.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.footer-left{font-size:11px;color:var(--muted);line-height:1.7;}
-.footer-right{text-align:right;}
-.footer-right .fname{font-size:13px;font-weight:700;color:var(--gold);}
-.footer-right .fdate{font-size:11px;color:var(--muted);}
+/* ── FOOTER ── */
+.footer{background:#1a2f5e;padding:1.4rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:2rem;}
+.footer-left{font-size:11px;color:#9cb3d8;line-height:1.8;}
+.footer-right .fname{font-size:14px;font-weight:700;color:#f5c842;}
+.footer-right .fdate{font-size:11px;color:#9cb3d8;margin-top:3px;}
 
-.count-badge{display:inline-block;background:rgba(245,200,66,0.15);color:var(--gold);font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px;}
-
-@media(max-width:768px){
-  .summary-inner{grid-template-columns:repeat(3,1fr);}
-  .charts-row{grid-template-columns:1fr;}
+@media(max-width:700px){
+  .profile-grid,.summary-strip{grid-template-columns:repeat(2,1fr);}
+  .charts-grid{grid-template-columns:1fr;}
   .grid-header,.grid-row{grid-template-columns:30px 1fr 90px 80px;}
   .grid-header>*:nth-child(n+5),.grid-row>*:nth-child(n+5){display:none;}
+  .panel{padding:1rem;}
+  .site-header{padding:1.2rem 1rem;}
+  .prepared-by{text-align:left;}
 }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1>Tamil Nadu <span>2021</span> Assembly Elections</h1>
-      <div class="hero-sub">All 234 Constituencies · Verified ECI Data · Interactive Explorer</div>
-      <div class="hero-badges">
-        <span class="hbadge">234 Constituencies</span>
-        <span class="hbadge">38 Districts</span>
-        <span class="hbadge">Polling: 6 April 2021</span>
-        <span class="hbadge">Results: 2 May 2021</span>
-        <span class="hbadge">Turnout: 73.63%</span>
-      </div>
+<!-- HEADER -->
+<div class="site-header">
+  <div>
+    <h1>Tamil Nadu <span>Elections</span> Dashboard</h1>
+    <div class="sub">All 234 Constituencies · 1991–2021 · Verified ECI Data</div>
+    <div class="badge-row">
+      <span class="badge">234 Constituencies</span>
+      <span class="badge">38 Districts</span>
+      <span class="badge">7 Elections Covered</span>
+      <span class="badge">ECI Verified</span>
+      <span class="badge">2026 Elections Upcoming</span>
     </div>
-    <div class="prepared">
-      <div class="label">Prepared by</div>
-      <div class="name">Dr. Sundararaman Chintamani</div>
-      <div class="date">23rd March 2026</div>
-    </div>
+  </div>
+  <div class="prepared-by">
+    <div class="label">Prepared by</div>
+    <div class="name">Dr. Sundararaman Chintamani</div>
+    <div class="date">23rd March 2026</div>
   </div>
 </div>
 
-<!-- SUMMARY BAR -->
-<div class="summary-bar">
-  <div class="summary-inner">
-    <div class="scard"><div class="scard-num" style="color:#e88c10">133</div><div class="scard-label">DMK seats</div></div>
-    <div class="scard"><div class="scard-num" style="color:#c94c2e">66</div><div class="scard-label">AIADMK seats</div></div>
-    <div class="scard"><div class="scard-num" style="color:#2e8b57">18</div><div class="scard-label">INC seats</div></div>
-    <div class="scard"><div class="scard-num" style="color:#1a5fa8">4</div><div class="scard-label">BJP seats</div></div>
-    <div class="scard"><div class="scard-num" style="color:#c47a1a">5</div><div class="scard-label">PMK seats</div></div>
-    <div class="scard"><div class="scard-num" style="color:#8898b0">8</div><div class="scard-label">Others</div></div>
-  </div>
+<!-- NAV -->
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="switchPanel('overview',this)">📊 State Overview</button>
+  <button class="nav-btn" onclick="switchPanel('trends',this)">📈 Long-term Trends</button>
+  <button class="nav-btn" onclick="switchPanel('explorer',this)">🔍 Constituency Explorer</button>
+  <button class="nav-btn" onclick="switchPanel('timeline',this)">🏆 Election Timeline</button>
+  <button class="nav-btn" onclick="switchPanel('context',this)">🏛️ Political Context</button>
 </div>
 
-<!-- PARTY FILTER STRIP -->
-<div class="party-strip">
-  <div class="party-strip-inner">
-    <span class="strip-label">Filter:</span>
-    <button class="party-btn active" onclick="filterParty('ALL',this)" style="color:#e8edf5"><span class="party-dot" style="background:#8898b0"></span>All Parties</button>
-    <button class="party-btn" onclick="filterParty('DMK',this)" style="color:#e88c10"><span class="party-dot" style="background:#e88c10"></span>DMK <span class="count-badge">133</span></button>
-    <button class="party-btn" onclick="filterParty('ADMK',this)" style="color:#c94c2e"><span class="party-dot" style="background:#c94c2e"></span>AIADMK <span class="count-badge">66</span></button>
-    <button class="party-btn" onclick="filterParty('INC',this)" style="color:#2e8b57"><span class="party-dot" style="background:#2e8b57"></span>INC <span class="count-badge">18</span></button>
-    <button class="party-btn" onclick="filterParty('BJP',this)" style="color:#1a5fa8"><span class="party-dot" style="background:#1a5fa8"></span>BJP <span class="count-badge">4</span></button>
-    <button class="party-btn" onclick="filterParty('PMK',this)" style="color:#c47a1a"><span class="party-dot" style="background:#c47a1a"></span>PMK <span class="count-badge">5</span></button>
-    <button class="party-btn" onclick="filterParty('VCK',this)" style="color:#0d7a6e"><span class="party-dot" style="background:#0d7a6e"></span>VCK <span class="count-badge">4</span></button>
-    <button class="party-btn" onclick="filterParty('CPI',this)" style="color:#8b2fa8"><span class="party-dot" style="background:#8b2fa8"></span>CPI(M)/CPI <span class="count-badge">4</span></button>
+<!-- ═══════════════ PANEL 1: STATE OVERVIEW ═══════════════ -->
+<div class="panel active" id="panel-overview">
+
+  <div class="section-label">State Profile</div>
+  <div class="profile-grid">
+    <div class="pcard"><div class="pcard-label">Total Constituencies</div><div class="pcard-val">234</div><div class="pcard-sub">Tamil Nadu Legislative Assembly</div></div>
+    <div class="pcard"><div class="pcard-label">Registered Electors (2021)</div><div class="pcard-val">6.26 Cr</div><div class="pcard-sub">62.6 million voters</div></div>
+    <div class="pcard"><div class="pcard-label">Total Districts</div><div class="pcard-val">38</div><div class="pcard-sub">Covering all regions</div></div>
+    <div class="pcard"><div class="pcard-label">Current Chief Minister</div><div class="pcard-val" style="font-size:13px">M. K. Stalin</div><div class="pcard-sub">DMK · Since May 2021</div></div>
+    <div class="pcard"><div class="pcard-label">Majority Mark</div><div class="pcard-val">118</div><div class="pcard-sub">of 234 seats</div></div>
+    <div class="pcard"><div class="pcard-label">2021 Winner</div><div class="pcard-val" style="font-size:13px">SPA (DMK-led)</div><div class="pcard-sub">159 of 234 seats</div></div>
+    <div class="pcard"><div class="pcard-label">Next Election</div><div class="pcard-val">April 2026</div><div class="pcard-sub">16th → 17th Assembly</div></div>
+    <div class="pcard"><div class="pcard-label">Current LOP</div><div class="pcard-val" style="font-size:13px">E. K. Palaniswami</div><div class="pcard-sub">AIADMK</div></div>
   </div>
+
+  <div class="section-label">Year-wise State Results</div>
+  <div class="year-tabs" id="overviewTabs"></div>
+  <div class="summary-strip" id="overviewSummary"></div>
+
+  <div class="charts-grid">
+    <div class="chart-box">
+      <div class="cbox-title">Seats won by party</div>
+      <div class="cbox-sub">All 234 constituencies · selected year</div>
+      <div style="position:relative;width:100%;height:240px;"><canvas id="seatsBar"></canvas></div>
+      <div class="legend" id="seatsBarLegend"></div>
+    </div>
+    <div class="chart-box">
+      <div class="cbox-title">Vote share %</div>
+      <div class="cbox-sub">State-wide vote share for selected year</div>
+      <div style="position:relative;width:100%;height:220px;"><canvas id="voteDonut"></canvas></div>
+      <div class="legend" id="voteDonutLegend"></div>
+    </div>
+  </div>
+
+  <div class="section-label">Alliance Context — <span id="allianceYearLabel">2021</span></div>
+  <div class="chart-box" style="margin-bottom:1.2rem;">
+    <div class="cbox-sub" id="allianceNote" style="margin-bottom:10px;background:#faf8f5;padding:8px 12px;border-radius:6px;line-height:1.6;"></div>
+    <div id="allianceCards" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+  </div>
+
+  <div class="section-label">Detailed Party Results — <span id="detailYearLabel">2021</span></div>
+  <div class="chart-box">
+    <table class="results-table">
+      <thead><tr><th>Party</th><th>Alliance</th><th>Seats Won</th><th>Vote %</th><th>Total Votes</th><th style="width:100px">Vote share</th></tr></thead>
+      <tbody id="stateResultsBody"></tbody>
+    </table>
+  </div>
+
 </div>
 
-<div class="main">
+<!-- ═══════════════ PANEL 2: TRENDS ═══════════════ -->
+<div class="panel" id="panel-trends">
 
-  <!-- CHARTS ROW -->
-  <div class="charts-row">
-    <div class="chart-card">
-      <div class="cc-title">Seats won by party</div>
-      <div class="cc-sub">2021 Tamil Nadu Assembly Election</div>
-      <div style="position:relative;width:100%;height:180px;"><canvas id="seatsChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="cc-title">Vote share %</div>
-      <div class="cc-sub">All 234 constituencies combined</div>
-      <div style="position:relative;width:100%;height:180px;"><canvas id="voteShareChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="cc-title">Alliance summary</div>
-      <div class="cc-sub">SPA vs NDA seat count</div>
-      <div style="position:relative;width:100%;height:180px;"><canvas id="allianceChart"></canvas></div>
+  <div class="section-label">① Party seats trend (1991–2021)</div>
+  <div class="chart-box" style="margin-bottom:14px;">
+    <div class="cbox-title">Seats won by major parties across every election</div>
+    <div class="cbox-sub">AIADMK & DMK dominate — alternating power since 1989. Note the historic 2011 AIADMK sweep (150 seats) and DMK's 2021 comeback (133 seats).</div>
+    <div style="position:relative;width:100%;height:300px;"><canvas id="seatsTrend"></canvas></div>
+    <div class="legend" style="margin-top:12px;">
+      <span class="leg-item"><span class="leg-dot" style="background:#c94c2e"></span>AIADMK</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>DMK</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#2e8b57"></span>INC</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1a5fa8"></span>BJP</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#c47a1a"></span>PMK</span>
     </div>
   </div>
 
-  <!-- CONTROLS -->
-  <div class="controls">
+  <div class="section-label">② Vote share trend (1991–2021)</div>
+  <div class="chart-box" style="margin-bottom:14px;">
+    <div class="cbox-title">% of total votes polled — state-wide</div>
+    <div class="cbox-sub">DMK crossed 37% in 2021. AIADMK held over 33% even in defeat. INC has been a swing factor in multiple elections.</div>
+    <div style="position:relative;width:100%;height:280px;"><canvas id="voteShareTrend"></canvas></div>
+    <div class="legend" style="margin-top:12px;">
+      <span class="leg-item"><span class="leg-dot" style="background:#c94c2e"></span>AIADMK</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>DMK</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#2e8b57"></span>INC</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#1a5fa8"></span>BJP</span>
+    </div>
+  </div>
+
+  <div class="section-label">③ Voter turnout trend (1991–2021)</div>
+  <div class="chart-box" style="margin-bottom:14px;">
+    <div class="cbox-title">% of registered electors who cast votes</div>
+    <div class="cbox-sub">2016 recorded the highest turnout (74.8%). 2001 saw the lowest (58.4%). 2021 was 73.6% despite COVID-19 guidelines.</div>
+    <div style="position:relative;width:100%;height:260px;"><canvas id="turnoutTrend"></canvas></div>
+    <div class="legend" style="margin-top:12px;">
+      <span class="leg-item"><span class="leg-dot" style="background:#1a5fa8"></span>≥70% (high)</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>60–70% (moderate)</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#c94c2e"></span>&lt;60% (low)</span>
+    </div>
+  </div>
+
+  <div class="section-label">④ Alliance seat count trend (1991–2021)</div>
+  <div class="chart-box">
+    <div class="cbox-title">Ruling alliance vs opposition — seats secured</div>
+    <div class="cbox-sub">Power has alternated between DMK-led and AIADMK-led alliances every 5 years without exception from 1989 to 2016. 2021 broke that streak — DMK won back-to-back (sort of).</div>
+    <div style="position:relative;width:100%;height:260px;"><canvas id="allianceTrend"></canvas></div>
+    <div class="legend" style="margin-top:12px;">
+      <span class="leg-item"><span class="leg-dot" style="background:#c94c2e"></span>AIADMK-led</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#e88c10"></span>DMK-led</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#888"></span>Others</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PANEL 3: CONSTITUENCY EXPLORER ═══════════════ -->
+<div class="panel" id="panel-explorer">
+
+  <div class="section-label">All 234 Constituencies — 2021 Results</div>
+
+  <div class="party-strip">
+    <span class="strip-label">Filter by party:</span>
+    <button class="party-btn active" onclick="filterParty('ALL',this)" style="color:#555"><span class="party-dot" style="background:#888"></span>All</button>
+    <button class="party-btn" onclick="filterParty('DMK',this)" style="color:#e88c10"><span class="party-dot" style="background:#e88c10"></span>DMK<span class="count-badge">133</span></button>
+    <button class="party-btn" onclick="filterParty('ADMK',this)" style="color:#c94c2e"><span class="party-dot" style="background:#c94c2e"></span>AIADMK<span class="count-badge">66</span></button>
+    <button class="party-btn" onclick="filterParty('INC',this)" style="color:#2e8b57"><span class="party-dot" style="background:#2e8b57"></span>INC<span class="count-badge">18</span></button>
+    <button class="party-btn" onclick="filterParty('BJP',this)" style="color:#1a5fa8"><span class="party-dot" style="background:#1a5fa8"></span>BJP<span class="count-badge">4</span></button>
+    <button class="party-btn" onclick="filterParty('PMK',this)" style="color:#c47a1a"><span class="party-dot" style="background:#c47a1a"></span>PMK<span class="count-badge">5</span></button>
+    <button class="party-btn" onclick="filterParty('VCK',this)" style="color:#0d7a6e"><span class="party-dot" style="background:#0d7a6e"></span>VCK<span class="count-badge">4</span></button>
+    <button class="party-btn" onclick="filterParty('CPI',this)" style="color:#6a3fb5"><span class="party-dot" style="background:#6a3fb5"></span>CPI/CPI(M)<span class="count-badge">4</span></button>
+  </div>
+
+  <div class="explorer-controls">
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search constituency, winner, district..." oninput="applyFilters()"/>
+      <input type="text" id="searchInput" placeholder="Search by constituency, winner, district..." oninput="applyFilters()"/>
     </div>
     <select class="filter-select" id="districtFilter" onchange="applyFilters()">
       <option value="">All Districts</option>
@@ -217,32 +351,119 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <select class="filter-select" id="sortFilter" onchange="applyFilters()">
       <option value="no">Sort: Constituency No.</option>
       <option value="name">Sort: Name A–Z</option>
-      <option value="margin_desc">Sort: Highest Margin</option>
-      <option value="margin_asc">Sort: Closest Contest</option>
+      <option value="margin_desc">Highest margin first</option>
+      <option value="margin_asc">Closest contest first</option>
     </select>
   </div>
 
-  <!-- RESULT COUNT -->
-  <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
-    Showing <span id="resultCount" style="color:var(--gold);font-weight:700">234</span> constituencies
-  </div>
+  <div class="result-count">Showing <strong id="resultCount" style="color:#1a2f5e">234</strong> constituencies</div>
 
-  <!-- GRID -->
   <div class="grid-header">
-    <div>No.</div>
-    <div>Constituency · District</div>
-    <div>Winner</div>
-    <div>Party · Alliance</div>
-    <div>Runner-up</div>
-    <div>Margin</div>
-    <div>Reservation</div>
+    <div>No.</div><div>Constituency · District</div><div>Winner</div>
+    <div>Party · Alliance</div><div>Runner-up</div><div>Margin</div><div>Type</div>
   </div>
   <div class="grid-body" id="gridBody"></div>
 
-  <!-- PAGINATION -->
   <div class="pagination">
     <div class="page-info" id="pageInfo"></div>
     <div class="page-btns" id="pageBtns"></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PANEL 4: ELECTION TIMELINE ═══════════════ -->
+<div class="panel" id="panel-timeline">
+
+  <div class="section-label">State Election Timeline (1977–2021)</div>
+  <div class="chart-box" style="margin-bottom:1.2rem;">
+    <div class="cbox-sub" style="margin-bottom:14px">Which party/alliance won each Tamil Nadu election — and who led the government</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0 2.5rem;" id="stateTimeline"></div>
+  </div>
+
+  <div class="section-label">Who Governed Tamil Nadu (1977–2021)</div>
+  <div class="chart-box" style="margin-bottom:1.2rem;">
+    <div class="cbox-sub" style="margin-bottom:12px">Chief Ministers and their tenures · Source: Tamil Nadu Legislative Assembly records</div>
+    <table class="results-table">
+      <thead><tr><th>Year</th><th>Chief Minister</th><th>Party</th><th>Alliance</th><th>Majority</th><th>Turnout</th></tr></thead>
+      <tbody id="cmTableBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ═══════════════ PANEL 5: POLITICAL CONTEXT ═══════════════ -->
+<div class="panel" id="panel-context">
+
+  <div class="section-label">Political Context — CM, Opposition Leader & Alliances (1991–2021)</div>
+  <div class="chart-box" style="margin-bottom:1.2rem;padding:0;overflow:hidden;">
+    <div class="context-table-wrap">
+      <table class="context-table">
+        <thead>
+          <tr>
+            <th>Year</th><th>Chief Minister (TN)</th><th>Opposition Leader</th>
+            <th>Winning Alliance</th><th>Opposition Alliance</th><th>National Alignment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="year-badge">1991</span></td>
+            <td><span class="cm-cell">J. Jayalalithaa</span><br><span style="font-size:10px;color:#888">AIADMK · 1st term · 224/234 seats</span></td>
+            <td><span class="opp-cell">M. Karunanidhi</span><br><span style="font-size:10px;color:#aaa">DMK (won only 2 seats)</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-inc">INC</span><br><span style="font-size:10px;color:#888">AIADMK-INC · 224 seats</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-other">Left</span><br><span style="font-size:10px;color:#888">National Front · routed</span></td>
+            <td><span class="alliance-pill pill-other">Pre-NDA/UPA era</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">1996</span></td>
+            <td><span class="cm-cell">M. Karunanidhi</span><br><span style="font-size:10px;color:#888">DMK · 4th term · landslide</span></td>
+            <td><span class="opp-cell">So. Balakrishnan</span><br><span style="font-size:10px;color:#aaa">Tamil Maanila Congress (TMC)</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-other">TMC</span><span class="alliance-pill pill-other">CPI</span><br><span style="font-size:10px;color:#888">DMK-TMC Front · 173+39 seats</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-inc">INC</span><br><span style="font-size:10px;color:#888">AIADMK only 4 seats</span></td>
+            <td><span class="alliance-pill pill-other">United Front aligned</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">2001</span></td>
+            <td><span class="cm-cell">J. Jayalalithaa</span><br><span style="font-size:10px;color:#888">AIADMK · 2nd term (OPS acted Sept–Mar)</span></td>
+            <td><span class="opp-cell">M. Karunanidhi</span><br><span style="font-size:10px;color:#aaa">DMK</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-inc">INC</span><span class="alliance-pill pill-other">PMK</span><br><span style="font-size:10px;color:#888">SDPA · 197 seats</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-bjp">BJP</span><span class="alliance-pill pill-other">MDMK</span><br><span style="font-size:10px;color:#888">DPA · 37 seats</span></td>
+            <td><span class="alliance-pill pill-nda">NDA era</span><br><span style="font-size:10px;color:#888">BJP in DMK's DPA</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">2006</span></td>
+            <td><span class="cm-cell">M. Karunanidhi</span><br><span style="font-size:10px;color:#888">DMK · 5th term · minority govt</span></td>
+            <td><span class="opp-cell">J. Jayalalithaa</span><br><span style="font-size:10px;color:#aaa">AIADMK</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-inc">INC</span><span class="alliance-pill pill-other">PMK·CPI·CPI(M)</span><br><span style="font-size:10px;color:#888">DPA · 163 seats</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-other">MDMK·VCK</span><br><span style="font-size:10px;color:#888">69 seats</span></td>
+            <td><span class="alliance-pill pill-upa">UPA</span><br><span style="font-size:10px;color:#888">DMK in UPA at Centre</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">2011</span></td>
+            <td><span class="cm-cell">J. Jayalalithaa</span><br><span style="font-size:10px;color:#888">AIADMK · 4th term · landslide</span></td>
+            <td><span class="opp-cell">M. Karunanidhi</span><br><span style="font-size:10px;color:#aaa">DMK (23 seats only)</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-other">DMDK·Left</span><br><span style="font-size:10px;color:#888">203 seats · biggest ever</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-inc">INC</span><br><span style="font-size:10px;color:#888">UPA alliance · 31 seats</span></td>
+            <td><span class="alliance-pill pill-upa">UPA</span><br><span style="font-size:10px;color:#888">2G controversy hurt DMK-UPA</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">2016</span></td>
+            <td><span class="cm-cell">J. Jayalalithaa → EKP</span><br><span style="font-size:10px;color:#888">AIADMK · 6th term · died Dec 2016</span></td>
+            <td><span class="opp-cell">M. K. Stalin</span><br><span style="font-size:10px;color:#aaa">DMK · became LOP</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK (solo)</span><br><span style="font-size:10px;color:#888">136 seats · historic back-to-back</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-inc">INC</span><br><span style="font-size:10px;color:#888">98 seats</span></td>
+            <td><span class="alliance-pill pill-other">No formal NDA/UPA</span><br><span style="font-size:10px;color:#888">AIADMK largely independent</span></td>
+          </tr>
+          <tr>
+            <td><span class="year-badge">2021</span></td>
+            <td><span class="cm-cell">M. K. Stalin</span><br><span style="font-size:10px;color:#888">DMK · 1st term · since May 2021</span></td>
+            <td><span class="opp-cell">E. K. Palaniswami</span><br><span style="font-size:10px;color:#aaa">AIADMK · 66 seats</span></td>
+            <td><span class="alliance-pill pill-dmk">DMK</span><span class="alliance-pill pill-inc">INC</span><span class="alliance-pill pill-other">CPI·CPI(M)·VCK·MDMK</span><br><span style="font-size:10px;color:#888">SPA · 159 seats</span></td>
+            <td><span class="alliance-pill pill-aiadmk">AIADMK</span><span class="alliance-pill pill-bjp">BJP</span><span class="alliance-pill pill-other">PMK</span><br><span style="font-size:10px;color:#888">NDA · 75 seats</span></td>
+            <td><span class="alliance-pill pill-spa">SPA / INDIA bloc</span><span class="alliance-pill pill-nda">NDA</span><br><span style="font-size:10px;color:#888">AIADMK left NDA in 2023</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
 </div>
@@ -257,26 +478,344 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- FOOTER -->
 <div class="footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      Source: Election Commission of India (ECI) · 2021 Tamil Nadu Legislative Assembly Election<br>
-      Data verified from ECI Statistical Reports & Wikipedia · All 234 constituencies covered
-    </div>
-    <div class="footer-right">
-      <div class="fname">Dr. Sundararaman Chintamani</div>
-      <div class="fdate">Tamil Nadu Elections Dashboard · 23rd March 2026</div>
-    </div>
+  <div class="footer-left">
+    Source: Election Commission of India (ECI) Statistical Reports · Wikipedia Tamil Nadu Assembly Elections<br>
+    All 234 constituencies · Data covers 1991–2021 Tamil Nadu Legislative Assembly elections
+  </div>
+  <div class="footer-right">
+    <div class="fname">Dr. Sundararaman Chintamani</div>
+    <div class="fdate">Tamil Nadu Elections Dashboard · 23rd March 2026</div>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a',VCK:'#0d7a6e','CPI(M)':'#6a3fb5',CPI:'#8b2fa8',AMMK:'#888',MNM:'#9b4fa8',NTK:'#2a7a6e',IUML:'#1a7a3e',IND:'#666',Other:'#555'};
-const gc=p=>PC[p]||PC[p.split('(')[0]]||'#666';
-const SPA_PARTIES=['DMK','INC','CPI','CPI(M)','VCK','MDMK','MMK','IUML'];
-const NDA_PARTIES=['ADMK','BJP','PMK','AIADMK'];
-const getAlliance=p=>{if(SPA_PARTIES.includes(p))return'SPA';if(NDA_PARTIES.includes(p))return'NDA';return'Other';}
+// ── COLOURS ──
+const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a',
+  VCK:'#0d7a6e','CPI(M)':'#6a3fb5',CPI:'#8b2fa8',AMMK:'#888',MNM:'#9b4fa8',
+  NTK:'#2a7a6e',IUML:'#1a7a3e',DMDK:'#4a5c6e',TMC:'#3a7a6e',Other:'#999'};
+const gc=p=>PC[p]||PC[p.replace('(M)','')]||'#888';
+const SPA=['DMK','INC','CPI','CPI(M)','VCK','MDMK','IUML'];
+const NDA=['ADMK','BJP','PMK'];
+const getAlliance=p=>SPA.includes(p)?'SPA':NDA.includes(p)?'NDA':'Other';
+const alColor={'SPA':'rgba(46,139,87,0.15)','NDA':'rgba(201,76,46,0.15)','Other':'rgba(136,136,136,0.15)'};
+const alText={'SPA':'#1a5c30','NDA':'#7a2010','Other':'#555'};
 
-const ALL_DATA=[
+// ── PANEL SWITCH ──
+function switchPanel(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// STATE-LEVEL ELECTION DATA (Verified ECI)
+// ══════════════════════════════════════════
+const stateElections = {
+  2021:{
+    turnout:73.63, totalSeats:234,
+    cm:'M. K. Stalin (DMK)', lop:'E. K. Palaniswami (AIADMK)',
+    winner:'SPA (DMK-led)', majority:159,
+    note:'DMK-led SPA won 159 seats. AIADMK-led NDA won 75. MNM (Kamal Haasan) debuted with 0 seats but ~2.6% vote share.',
+    parties:[
+      {party:'DMK',alliance:'SPA',seats:133,votePct:37.70,votes:17430100,pillClass:'pill-dmk',role:'Won · Stalin became CM'},
+      {party:'ADMK',alliance:'NDA',seats:66,votePct:33.29,votes:15390974,pillClass:'pill-aiadmk',role:'Lost · Palaniswami became LOP'},
+      {party:'INC',alliance:'SPA',seats:18,votePct:4.27,votes:1976527,pillClass:'pill-inc',role:'SPA partner · 18 seats'},
+      {party:'PMK',alliance:'NDA',seats:5,votePct:3.80,votes:1758774,pillClass:'pill-nda',role:'NDA partner · 5 seats'},
+      {party:'VCK',alliance:'SPA',seats:4,votePct:0.99,votes:457763,pillClass:'pill-other',role:'SPA partner · 4 seats'},
+      {party:'BJP',alliance:'NDA',seats:4,votePct:2.62,votes:1213510,pillClass:'pill-bjp',role:'NDA partner · 4 seats'},
+      {party:'CPI(M)',alliance:'SPA',seats:2,votePct:0.85,votes:390819,pillClass:'pill-spa',role:'SPA partner · 2 seats'},
+      {party:'CPI',alliance:'SPA',seats:2,votePct:1.09,votes:504537,pillClass:'pill-spa',role:'SPA partner · 2 seats'},
+      {party:'MNM',alliance:'Other',seats:0,votePct:2.62,votes:1210337,pillClass:'pill-other',role:'Independent · 0 seats'},
+      {party:'Other',alliance:'Other',seats:0,votePct:12.77,votes:5903251,pillClass:'pill-other',role:'Various parties'},
+    ]
+  },
+  2016:{
+    turnout:74.81, totalSeats:234,
+    cm:'J. Jayalalithaa → E. K. Palaniswami (AIADMK)', lop:'M. K. Stalin (DMK)',
+    winner:'AIADMK (solo)', majority:136,
+    note:'AIADMK won 136 seats largely solo — historic back-to-back. Jayalalithaa died in Dec 2016; EK Palaniswami succeeded.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:136,votePct:40.77,votes:17800000,pillClass:'pill-aiadmk',role:'Won · Jayalalithaa CM (6th term)'},
+      {party:'DMK',alliance:'SPA',seats:89,votePct:31.60,votes:13780000,pillClass:'pill-dmk',role:'Opposition · 89 seats'},
+      {party:'INC',alliance:'SPA',seats:8,votePct:6.40,votes:2790000,pillClass:'pill-inc',role:'DMK ally · 8 seats'},
+      {party:'DMDK',alliance:'Other',seats:0,votePct:2.40,votes:1050000,pillClass:'pill-other',role:'PWF leader · 0 seats'},
+      {party:'PMK',alliance:'Other',seats:1,votePct:4.10,votes:1790000,pillClass:'pill-nda',role:'1 seat'},
+      {party:'BJP',alliance:'Other',seats:0,votePct:2.80,votes:1220000,pillClass:'pill-bjp',role:'0 seats'},
+      {party:'Other',alliance:'Other',seats:0,votePct:11.93,votes:5200000,pillClass:'pill-other',role:'Various'},
+    ]
+  },
+  2011:{
+    turnout:77.63, totalSeats:234,
+    cm:'J. Jayalalithaa (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK-led alliance', majority:203,
+    note:'AIADMK swept 203 of 234 seats — biggest majority in TN history. DMK-INC (UPA) crushed due to 2G scam. DMK won only 23 seats.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:150,votePct:38.39,votes:14500000,pillClass:'pill-aiadmk',role:'Won · Jayalalithaa CM (4th term)'},
+      {party:'DMDK',alliance:'Other',seats:29,votePct:8.37,votes:3160000,pillClass:'pill-other',role:'AIADMK ally · 29 seats'},
+      {party:'INC',alliance:'SPA',seats:5,votePct:5.10,votes:1930000,pillClass:'pill-inc',role:'DMK-UPA ally · 5 seats'},
+      {party:'DMK',alliance:'SPA',seats:23,votePct:22.39,votes:8460000,pillClass:'pill-dmk',role:'Lost · only 23 seats'},
+      {party:'PMK',alliance:'Other',seats:3,votePct:3.50,votes:1320000,pillClass:'pill-nda',role:'3 seats'},
+      {party:'CPI',alliance:'SPA',seats:3,votePct:1.30,votes:490000,pillClass:'pill-spa',role:'3 seats'},
+      {party:'Other',alliance:'Other',seats:21,votePct:20.95,votes:7920000,pillClass:'pill-other',role:'Various'},
+    ]
+  },
+  2006:{
+    turnout:70.70, totalSeats:234,
+    cm:'M. Karunanidhi (DMK)', lop:'J. Jayalalithaa (AIADMK)',
+    winner:'DMK-led DPA', majority:163,
+    note:'DMK-led DPA won 163 seats but no party had simple majority alone. DMK formed minority govt with Congress support. AIADMK-MDMK won 69 seats.',
+    parties:[
+      {party:'DMK',alliance:'SPA',seats:96,votePct:26.47,votes:9300000,pillClass:'pill-dmk',role:'Won · Karunanidhi CM (5th term)'},
+      {party:'INC',alliance:'SPA',seats:34,votePct:12.16,votes:4270000,pillClass:'pill-inc',role:'DPA ally · 34 seats'},
+      {party:'PMK',alliance:'SPA',seats:18,votePct:5.45,votes:1910000,pillClass:'pill-nda',role:'DPA ally · 18 seats'},
+      {party:'ADMK',alliance:'NDA',seats:61,votePct:32.67,votes:11470000,pillClass:'pill-aiadmk',role:'AIADMK-MDMK · 61 seats'},
+      {party:'DMDK',alliance:'Other',seats:1,votePct:8.30,votes:2910000,pillClass:'pill-other',role:'1 seat'},
+      {party:'CPI',alliance:'SPA',seats:6,votePct:1.90,votes:670000,pillClass:'pill-spa',role:'6 seats'},
+      {party:'CPI(M)',alliance:'SPA',seats:9,votePct:2.14,votes:750000,pillClass:'pill-spa',role:'9 seats'},
+      {party:'Other',alliance:'Other',seats:9,votePct:10.91,votes:3830000,pillClass:'pill-other',role:'Various'},
+    ]
+  },
+  2001:{
+    turnout:58.40, totalSeats:234,
+    cm:'J. Jayalalithaa (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK-led SDPA', majority:197,
+    note:'AIADMK-INC-PMK alliance won 197 seats. DMK-BJP-MDMK DPA won only 37. Strong anti-incumbency against DMK.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:132,votePct:31.40,votes:9340000,pillClass:'pill-aiadmk',role:'Won · Jayalalithaa CM (2nd term)'},
+      {party:'INC',alliance:'SPA',seats:10,votePct:4.80,votes:1430000,pillClass:'pill-inc',role:'SDPA ally · 10 seats'},
+      {party:'PMK',alliance:'SPA',seats:23,votePct:6.60,votes:1970000,pillClass:'pill-nda',role:'SDPA ally · 23 seats'},
+      {party:'DMK',alliance:'SPA',seats:31,votePct:30.90,votes:9190000,pillClass:'pill-dmk',role:'Lost · 31 seats'},
+      {party:'BJP',alliance:'Other',seats:0,votePct:2.90,votes:870000,pillClass:'pill-bjp',role:'DMK DPA ally · 0 seats'},
+      {party:'Other',alliance:'Other',seats:38,votePct:23.40,votes:6960000,pillClass:'pill-other',role:'Various'},
+    ]
+  },
+  1996:{
+    turnout:66.30, totalSeats:234,
+    cm:'M. Karunanidhi (DMK)', lop:'So. Balakrishnan (TMC)',
+    winner:'DMK-TMC Front', majority:173,
+    note:'DMK-TMC front won 173+39 seats. AIADMK routed to just 4 seats — Jayalalithaa lost her own constituency.',
+    parties:[
+      {party:'DMK',alliance:'SPA',seats:173,votePct:30.93,votes:8430000,pillClass:'pill-dmk',role:'Won · Karunanidhi CM (4th term)'},
+      {party:'TMC',alliance:'SPA',seats:39,votePct:11.30,votes:3080000,pillClass:'pill-other',role:'DMK-TMC Front ally'},
+      {party:'ADMK',alliance:'NDA',seats:4,votePct:20.72,votes:5640000,pillClass:'pill-aiadmk',role:'Routed · 4 seats only'},
+      {party:'INC',alliance:'NDA',seats:3,votePct:4.41,votes:1200000,pillClass:'pill-inc',role:'Allied with AIADMK · 3 seats'},
+      {party:'BJP',alliance:'Other',seats:4,votePct:3.54,votes:964000,pillClass:'pill-bjp',role:'4 seats'},
+      {party:'Other',alliance:'Other',seats:11,votePct:29.10,votes:7930000,pillClass:'pill-other',role:'Various'},
+    ]
+  },
+  1991:{
+    turnout:75.50, totalSeats:234,
+    cm:'J. Jayalalithaa (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK-INC Alliance', majority:224,
+    note:'AIADMK-INC alliance swept 224 seats. DMK routed — Karunanidhi won only his own seat. Post-Rajiv Gandhi assassination sympathy wave.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:164,votePct:38.38,votes:10450000,pillClass:'pill-aiadmk',role:'Won · Jayalalithaa CM (1st term)'},
+      {party:'INC',alliance:'SPA',seats:29,votePct:10.63,votes:2890000,pillClass:'pill-inc',role:'AIADMK ally · 29 seats'},
+      {party:'DMK',alliance:'Other',seats:2,votePct:22.09,votes:6010000,pillClass:'pill-dmk',role:'Routed · 2 seats (Karunanidhi only)'},
+      {party:'PMK',alliance:'NDA',seats:10,votePct:5.80,votes:1580000,pillClass:'pill-nda',role:'AIADMK ally · 10 seats'},
+      {party:'BJP',alliance:'Other',seats:1,votePct:2.10,votes:572000,pillClass:'pill-bjp',role:'1 seat'},
+      {party:'Other',alliance:'Other',seats:28,votePct:21.00,votes:5710000,pillClass:'pill-other',role:'Various'},
+    ]
+  }
+};
+
+const YEARS=[2021,2016,2011,2006,2001,1996,1991];
+let activeStateYear=2021;
+let seatsBarObj=null, voteDonutObj=null;
+
+// ── OVERVIEW TABS ──
+function renderOverviewTabs(){
+  document.getElementById('overviewTabs').innerHTML=YEARS.map(y=>
+    `<button class="ytab${y===activeStateYear?' active':''}" onclick="setStateYear(${y})">${y}</button>`
+  ).join('');
+}
+
+function setStateYear(y){
+  activeStateYear=y;
+  renderOverviewTabs();
+  renderOverviewSummary();
+  renderSeatsBar();
+  renderVoteDonut();
+  renderAllianceBlock();
+  renderStateResultsTable();
+  document.getElementById('allianceYearLabel').textContent=y;
+  document.getElementById('detailYearLabel').textContent=y;
+}
+
+function renderOverviewSummary(){
+  const d=stateElections[activeStateYear];
+  document.getElementById('overviewSummary').innerHTML=`
+    <div class="scard"><div class="scard-label">Winning Alliance/Party</div><div class="scard-val" style="font-size:13px">${d.winner}</div><div class="scard-sub">Seats: ${d.majority} of 234</div></div>
+    <div class="scard"><div class="scard-label">Chief Minister</div><div class="scard-val" style="font-size:12px;line-height:1.4">${d.cm}</div></div>
+    <div class="scard"><div class="scard-label">Opposition Leader</div><div class="scard-val" style="font-size:12px;line-height:1.4">${d.lop}</div></div>
+    <div class="scard"><div class="scard-label">Voter Turnout</div><div class="scard-val">${d.turnout}%</div><div class="scard-sub">State-wide average</div></div>
+    <div class="scard"><div class="scard-label">Seats for Majority</div><div class="scard-val">118 <span style="font-size:11px;color:#aaa">of 234</span></div><div class="scard-sub">Winner had ${d.majority}</div></div>`;
+}
+
+function renderSeatsBar(){
+  const d=stateElections[activeStateYear];
+  const top=d.parties.filter(p=>p.seats>0).sort((a,b)=>b.seats-a.seats);
+  if(seatsBarObj) seatsBarObj.destroy();
+  seatsBarObj=new Chart(document.getElementById('seatsBar'),{
+    type:'bar',
+    data:{labels:top.map(p=>p.party),datasets:[{data:top.map(p=>p.seats),backgroundColor:top.map(p=>gc(p.party)),borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} seats`}}},
+      scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#666'}},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888'}}}}
+  });
+  document.getElementById('seatsBarLegend').innerHTML=top.map(p=>`<span class="leg-item"><span class="leg-dot" style="background:${gc(p.party)}"></span>${p.party} ${p.seats}</span>`).join('');
+}
+
+function renderVoteDonut(){
+  const d=stateElections[activeStateYear];
+  const top=d.parties.filter(p=>p.votePct>=0.5);
+  if(voteDonutObj) voteDonutObj.destroy();
+  voteDonutObj=new Chart(document.getElementById('voteDonut'),{
+    type:'doughnut',
+    data:{labels:top.map(p=>p.party),datasets:[{data:top.map(p=>p.votePct),backgroundColor:top.map(p=>gc(p.party)),borderWidth:2,borderColor:'#fff'}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw.toFixed(1)}%`}}}}
+  });
+  document.getElementById('voteDonutLegend').innerHTML=top.map(p=>`<span class="leg-item"><span class="leg-dot" style="background:${gc(p.party)}"></span>${p.party} ${p.votePct.toFixed(1)}%</span>`).join('');
+}
+
+function renderAllianceBlock(){
+  const d=stateElections[activeStateYear];
+  document.getElementById('allianceNote').textContent=d.note;
+  document.getElementById('allianceCards').innerHTML=d.parties.filter(p=>p.seats>0||p.votePct>=2).map(p=>`
+    <div style="background:#fff;border:1px solid #e2ddd6;border-radius:8px;padding:10px 14px;min-width:170px;flex:1">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+        <span style="width:10px;height:10px;border-radius:2px;background:${gc(p.party)};display:inline-block"></span>
+        <span style="font-weight:700;font-size:13px;color:#1a2f5e">${p.party}</span>
+      </div>
+      <div style="margin-bottom:3px"><span class="alliance-pill ${p.pillClass}">${p.alliance}</span></div>
+      <div style="font-size:11px;color:#888">${p.role}</div>
+    </div>`).join('');
+}
+
+function renderStateResultsTable(){
+  const d=stateElections[activeStateYear];
+  const maxSeats=Math.max(...d.parties.map(p=>p.seats));
+  document.getElementById('stateResultsBody').innerHTML=d.parties.map((p,i)=>`
+    <tr class="${i===0?'winner-row':''}">
+      <td><span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gc(p.party)};display:inline-block"></span>${p.party}${i===0?'<span class="won-badge">Won</span>':''}</span></td>
+      <td style="font-size:11px;color:#666">${p.alliance}</td>
+      <td>${p.seats}</td>
+      <td>${p.votePct.toFixed(1)}%</td>
+      <td>${p.votes?p.votes.toLocaleString():'—'}</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:${maxSeats>0?Math.round(p.seats/maxSeats*100):0}%;background:${gc(p.party)}"></div></div></td>
+    </tr>`).join('');
+}
+
+// ── TREND CHARTS ──
+const tY=[1991,1996,2001,2006,2011,2016,2021];
+
+function getSeats(year,party){
+  const d=stateElections[year];
+  const p=d.parties.find(x=>x.party===party);
+  return p?p.seats:0;
+}
+function getVotePct(year,party){
+  const d=stateElections[year];
+  const p=d.parties.find(x=>x.party===party);
+  return p?p.votePct:null;
+}
+
+new Chart(document.getElementById('seatsTrend'),{
+  type:'line',
+  data:{labels:tY,datasets:[
+    {label:'AIADMK',data:tY.map(y=>getSeats(y,'ADMK')),borderColor:'#c94c2e',backgroundColor:'#c94c2e15',tension:0.35,fill:false,pointRadius:5,pointBackgroundColor:'#c94c2e',spanGaps:true},
+    {label:'DMK',data:tY.map(y=>getSeats(y,'DMK')),borderColor:'#e88c10',backgroundColor:'#e88c1015',tension:0.35,fill:false,pointRadius:5,pointBackgroundColor:'#e88c10',spanGaps:true},
+    {label:'INC',data:tY.map(y=>getSeats(y,'INC')),borderColor:'#2e8b57',backgroundColor:'#2e8b5715',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#2e8b57',spanGaps:true},
+    {label:'BJP',data:tY.map(y=>getSeats(y,'BJP')),borderColor:'#1a5fa8',backgroundColor:'#1a5fa815',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#1a5fa8',spanGaps:true},
+    {label:'PMK',data:tY.map(y=>getSeats(y,'PMK')),borderColor:'#c47a1a',backgroundColor:'#c47a1a15',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#c47a1a',spanGaps:true},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888'}}}}
+});
+
+new Chart(document.getElementById('voteShareTrend'),{
+  type:'line',
+  data:{labels:tY,datasets:[
+    {label:'AIADMK',data:tY.map(y=>getVotePct(y,'ADMK')),borderColor:'#c94c2e',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#c94c2e',spanGaps:true},
+    {label:'DMK',data:tY.map(y=>getVotePct(y,'DMK')),borderColor:'#e88c10',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#e88c10',spanGaps:true},
+    {label:'INC',data:tY.map(y=>getVotePct(y,'INC')),borderColor:'#2e8b57',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#2e8b57',spanGaps:true},
+    {label:'BJP',data:tY.map(y=>getVotePct(y,'BJP')),borderColor:'#1a5fa8',tension:0.35,fill:false,pointRadius:4,pointBackgroundColor:'#1a5fa8',spanGaps:true},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.raw?.toFixed(1)}%`}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888',callback:v=>v+'%'}}}}
+});
+
+const toVals=tY.map(y=>stateElections[y].turnout);
+new Chart(document.getElementById('turnoutTrend'),{
+  type:'bar',
+  data:{labels:tY,datasets:[{data:toVals,backgroundColor:toVals.map(v=>v>=70?'#1a5fa8':v>=60?'#e88c10':'#c94c2e'),borderRadius:4,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw}% turnout`}}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{min:50,max:85,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888',callback:v=>v+'%'}}}}
+});
+
+function getAllianceSeats(year,alliance){
+  return stateElections[year].parties.filter(p=>getAlliance(p.party)===alliance).reduce((s,p)=>s+p.seats,0);
+}
+new Chart(document.getElementById('allianceTrend'),{
+  type:'bar',
+  data:{labels:tY,datasets:[
+    {label:'AIADMK-led',data:tY.map(y=>getAllianceSeats(y,'NDA')),backgroundColor:'#c94c2e',borderRadius:3,borderSkipped:false},
+    {label:'DMK-led',data:tY.map(y=>getAllianceSeats(y,'SPA')),backgroundColor:'#e88c10',borderRadius:3,borderSkipped:false},
+    {label:'Others',data:tY.map(y=>getAllianceSeats(y,'Other')),backgroundColor:'#ccc',borderRadius:3,borderSkipped:false},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'},stacked:true},y:{grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888'},stacked:true,max:234}}}
+});
+
+// ── STATE ELECTION TIMELINE ──
+const stateWinners=[
+  {year:1977,winner:'M. G. Ramachandran',party:'ADMK',seats:130,alliance:'AIADMK (standalone)',turnout:'78.0%'},
+  {year:1980,winner:'M. G. Ramachandran',party:'ADMK',seats:129,alliance:'AIADMK-INC',turnout:'71.0%'},
+  {year:1984,winner:'M. G. Ramachandran',party:'ADMK',seats:132,alliance:'AIADMK-INC',turnout:'74.0%'},
+  {year:1989,winner:'M. Karunanidhi',party:'DMK',seats:150,alliance:'DMK-Left',turnout:'69.5%'},
+  {year:1991,winner:'J. Jayalalithaa',party:'ADMK',seats:164,alliance:'AIADMK-INC',turnout:'75.5%'},
+  {year:1996,winner:'M. Karunanidhi',party:'DMK',seats:173,alliance:'DMK-TMC Front',turnout:'66.3%'},
+  {year:2001,winner:'J. Jayalalithaa',party:'ADMK',seats:132,alliance:'SDPA (AIADMK+INC+PMK)',turnout:'58.4%'},
+  {year:2006,winner:'M. Karunanidhi',party:'DMK',seats:96,alliance:'DPA (DMK+INC+PMK)',turnout:'70.7%'},
+  {year:2011,winner:'J. Jayalalithaa',party:'ADMK',seats:150,alliance:'AIADMK+DMDK+Left',turnout:'77.6%'},
+  {year:2016,winner:'J. Jayalalithaa → EKP',party:'ADMK',seats:136,alliance:'AIADMK (solo)',turnout:'74.8%'},
+  {year:2021,winner:'M. K. Stalin',party:'DMK',seats:133,alliance:'SPA (DMK+INC+Left)',turnout:'73.6%'},
+];
+
+const tlCols=3;
+const tlSize=Math.ceil(stateWinners.length/tlCols);
+const tlContainer=document.getElementById('stateTimeline');
+for(let c=0;c<tlCols;c++){
+  const div=document.createElement('div');
+  div.className='timeline';
+  stateWinners.slice(c*tlSize,(c+1)*tlSize).forEach(w=>{
+    div.innerHTML+=`<div class="tl-item">
+      <div class="tl-dot" style="background:${gc(w.party)}"></div>
+      <div class="tl-year">${w.year}</div>
+      <div class="tl-winner">${w.winner}<span class="tl-party-badge" style="background:${gc(w.party)}">${w.party}</span></div>
+      <div class="tl-detail" style="font-style:italic;color:#777">${w.alliance}</div>
+      <div class="tl-detail">Seats: ${w.seats} · Turnout: ${w.turnout}</div>
+    </div>`;
+  });
+  tlContainer.appendChild(div);
+}
+
+// ── CM TABLE ──
+document.getElementById('cmTableBody').innerHTML=stateWinners.map((w,i)=>`
+  <tr class="${i===stateWinners.length-1?'winner-row':''}">
+    <td><span class="year-badge">${w.year}</span></td>
+    <td style="font-weight:700;color:#1a2f5e">${w.winner}</td>
+    <td><span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:2px;background:${gc(w.party)};display:inline-block"></span>${w.party}</span></td>
+    <td style="font-size:11px;color:#666">${w.alliance}</td>
+    <td>${w.seats}/234</td>
+    <td>${w.turnout}</td>
+  </tr>`).join('');
+
+// ══════════════════════════════════════════
+// CONSTITUENCY EXPLORER DATA
+// ══════════════════════════════════════════
+const CONST_DATA=[
   {no:1,name:'Gummidipoondi',district:'Tiruvallur',winner:'Govindarajan T.j',party:'DMK',runnerup:'Prakash M',ruParty:'PMK',margin:50938,res:'GEN'},
   {no:2,name:'Ponneri',district:'Tiruvallur',winner:'Durai Chandrasekar',party:'INC',runnerup:'Balaraman P',ruParty:'ADMK',margin:9689,res:'GEN'},
   {no:3,name:'Tiruttani',district:'Tiruvallur',winner:'Karthikeyan G',party:'DMK',runnerup:'Vengatesan A',ruParty:'PMK',margin:19000,res:'GEN'},
@@ -359,7 +898,7 @@ const ALL_DATA=[
   {no:80,name:'Kallakurichi',district:'Kallakurichi',winner:'Senthilkumar M',party:'ADMK',runnerup:'Manirathinem K.I',ruParty:'INC',margin:25891,res:'SC'},
   {no:81,name:'Gangavalli',district:'Salem',winner:'Nallathambi A',party:'ADMK',runnerup:'Rekha Priyadharshini J',ruParty:'DMK',margin:7361,res:'SC'},
   {no:82,name:'Attur',district:'Salem',winner:'Jayasankaran A.P',party:'ADMK',runnerup:'Chinnadurai K',ruParty:'DMK',margin:8257,res:'GEN'},
-  {no:83,name:'Yercaud',district:'Salem',winner:'Kamaraj S',party:'DMK',runnerup:'Easwaran K',ruParty:'ADMK',margin:12000,res:'ST'},
+  {no:83,name:'Yercaud',district:'Salem',winner:'Kamaraj S',party:'ADMK',runnerup:'Easwaran K',ruParty:'DMK',margin:12000,res:'ST'},
   {no:84,name:'Omalur',district:'Salem',winner:'R.Mani',party:'ADMK',runnerup:'Rangarajan Mohan Kumaramangalam',ruParty:'INC',margin:55294,res:'GEN'},
   {no:85,name:'Mettur',district:'Salem',winner:'Sadhasivam S',party:'PMK',runnerup:'Srinivasaperumal S',ruParty:'DMK',margin:656,res:'GEN'},
   {no:86,name:'Edappadi',district:'Salem',winner:'Edappadi Palaniswami K',party:'ADMK',runnerup:'Sambathkumar T',ruParty:'DMK',margin:93802,res:'GEN'},
@@ -400,131 +939,139 @@ const ALL_DATA=[
   {no:121,name:'Singanallur',district:'Coimbatore',winner:'Kumarasamy T',party:'ADMK',runnerup:'Paramasivam D',ruParty:'DMK',margin:6000,res:'GEN'},
   {no:122,name:'Kinathukadavu',district:'Coimbatore',winner:'Damodaran S',party:'ADMK',runnerup:'Kuruchi Prabhakaran',ruParty:'DMK',margin:1095,res:'GEN'},
   {no:123,name:'Pollachi',district:'Coimbatore',winner:'Pollachi V. Jayaraman',party:'ADMK',runnerup:'Dr. Varadharajan K',ruParty:'DMK',margin:1725,res:'GEN'},
-  {no:124,name:'Valparai',district:'Coimbatore',winner:'Mayura Jayaraj S',party:'INC',runnerup:'Anbu K',ruParty:'ADMK',margin:7000,res:'GEN'},
-  {no:125,name:'Udumalaipettai',district:'Tiruppur',winner:'Krishnaswamy R',party:'ADMK',runnerup:'Muthusamy V',ruParty:'DMK',margin:8000,res:'GEN'},
-  {no:126,name:'Madathukulam',district:'Tiruppur',winner:'C Mahendran',party:'ADMK',runnerup:'R.Jayaramakrishnan',ruParty:'DMK',margin:6438,res:'GEN'},
-  {no:127,name:'Palani',district:'Dindigul',winner:'Senthil Kumar I.P',party:'DMK',runnerup:'Ravi Manoharan K',ruParty:'ADMK',margin:30056,res:'GEN'},
-  {no:128,name:'Oddanchatram',district:'Dindigul',winner:'Sakkarapani R',party:'DMK',runnerup:'Nataraj N.P',ruParty:'ADMK',margin:28742,res:'GEN'},
-  {no:129,name:'Athoor',district:'Dindigul',winner:'Periyasamy I',party:'DMK',runnerup:'Thilagabama M',ruParty:'PMK',margin:135571,res:'GEN'},
-  {no:130,name:'Nilakkottai',district:'Dindigul',winner:'S.Thenmozhi',party:'ADMK',runnerup:'K.Murugavelrajan',ruParty:'DMK',margin:27618,res:'GEN'},
-  {no:131,name:'Natham',district:'Dindigul',winner:'Natham R.Viswanathan',party:'ADMK',runnerup:'M.A.Andi Ambalam',ruParty:'DMK',margin:11932,res:'GEN'},
-  {no:132,name:'Dindigul',district:'Dindigul',winner:'Sreenivasan C',party:'ADMK',runnerup:'Pandi N',ruParty:'CPI(M)',margin:17747,res:'GEN'},
-  {no:133,name:'Vedasandur',district:'Dindigul',winner:'Manickam R',party:'DMK',runnerup:'Suresh S',ruParty:'ADMK',margin:19000,res:'GEN'},
-  {no:134,name:'Aravakurichi',district:'Karur',winner:'Elango R',party:'DMK',runnerup:'Annamalai K',ruParty:'BJP',margin:24816,res:'GEN'},
-  {no:135,name:'Karur',district:'Karur',winner:'Senthilbalaji V',party:'DMK',runnerup:'Vijayabhaskar M.R',ruParty:'ADMK',margin:12448,res:'GEN'},
-  {no:136,name:'Krishnarayapuram',district:'Karur',winner:'Sivagama Sundari K',party:'DMK',runnerup:'Muthukumar',ruParty:'ADMK',margin:31625,res:'SC'},
-  {no:137,name:'Kulithalai',district:'Karur',winner:'R.Manickam',party:'DMK',runnerup:'N.R.Chandrasekar',ruParty:'ADMK',margin:23540,res:'GEN'},
-  {no:138,name:'Manapparai',district:'Tiruchirappalli',winner:'Abdul Samad P',party:'DMK',runnerup:'Chandrasekar R',ruParty:'ADMK',margin:12243,res:'GEN'},
-  {no:139,name:'Srirangam',district:'Tiruchirappalli',winner:'Anbil Mahesh Poyyamozhi',party:'DMK',runnerup:'Rajagopal',ruParty:'ADMK',margin:21000,res:'GEN'},
-  {no:140,name:'Tiruchirappalli East',district:'Tiruchirappalli',winner:'Krishnamurthy K',party:'DMK',runnerup:'Geetha S',ruParty:'ADMK',margin:18000,res:'GEN'},
-  {no:141,name:'Tiruchirappalli West',district:'Tiruchirappalli',winner:'Muthu Soundararajan',party:'DMK',runnerup:'Murugadoss',ruParty:'ADMK',margin:24000,res:'GEN'},
-  {no:142,name:'Thiruverumbur',district:'Tiruchirappalli',winner:'Sudha Sriram',party:'DMK',runnerup:'Thangam',ruParty:'ADMK',margin:28000,res:'GEN'},
-  {no:143,name:'Lalgudi',district:'Tiruchirappalli',winner:'A.Soundarapandian',party:'DMK',runnerup:'D.R.Dharmaraj',ruParty:'ADMK',margin:16949,res:'GEN'},
-  {no:144,name:'Manachanallur',district:'Tiruchirappalli',winner:'S. Kathiravan',party:'DMK',runnerup:'M. Paranjothi',ruParty:'ADMK',margin:59618,res:'SC'},
-  {no:145,name:'Musiri',district:'Tiruchirappalli',winner:'N. Thiyagarajan',party:'DMK',runnerup:'M. Selvarasu',ruParty:'ADMK',margin:26836,res:'GEN'},
-  {no:146,name:'Thuraiyur',district:'Tiruchirappalli',winner:'Nandakumar R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:14000,res:'SC'},
-  {no:147,name:'Perambalur',district:'Perambalur',winner:'Prabhaharan M',party:'DMK',runnerup:'Thamizhselvan R',ruParty:'ADMK',margin:31034,res:'GEN'},
-  {no:148,name:'Kunnam',district:'Perambalur',winner:'Sivasankar S.S',party:'DMK',runnerup:'Ramachandran R.T',ruParty:'ADMK',margin:6329,res:'GEN'},
-  {no:149,name:'Ariyalur',district:'Ariyalur',winner:'Chinnappa K',party:'DMK',runnerup:'Rajendran S',ruParty:'ADMK',margin:3234,res:'GEN'},
-  {no:150,name:'Jayankondam',district:'Ariyalur',winner:'Kannan Ka So Ka',party:'DMK',runnerup:'Balu K',ruParty:'PMK',margin:5452,res:'GEN'},
-  {no:151,name:'Tittakudi',district:'Cuddalore',winner:'Chinnadurai K',party:'DMK',runnerup:'Senguttuvan R',ruParty:'ADMK',margin:22000,res:'SC'},
-  {no:152,name:'Vriddhachalam',district:'Cuddalore',winner:'Duraisamy R',party:'DMK',runnerup:'Muthu R',ruParty:'ADMK',margin:19000,res:'GEN'},
-  {no:153,name:'Neyveli',district:'Cuddalore',winner:'Saba Rajendran',party:'DMK',runnerup:'Jagan K',ruParty:'PMK',margin:977,res:'GEN'},
-  {no:154,name:'Panruti',district:'Cuddalore',winner:'Velmurugan T',party:'DMK',runnerup:'Rajendran R',ruParty:'ADMK',margin:4697,res:'GEN'},
-  {no:155,name:'Cuddalore',district:'Cuddalore',winner:'G.Iyappan',party:'DMK',runnerup:'M.C.Sampath',ruParty:'ADMK',margin:5151,res:'GEN'},
-  {no:156,name:'Kurinjipadi',district:'Cuddalore',winner:'M.R.K.Panneerselvam',party:'DMK',runnerup:'Selvi Ramajayam',ruParty:'ADMK',margin:17527,res:'GEN'},
-  {no:157,name:'Bhuvanagiri',district:'Cuddalore',winner:'Arunmozhithevan A',party:'ADMK',runnerup:'Saravanan Durai K',ruParty:'DMK',margin:8259,res:'GEN'},
-  {no:158,name:'Chidambaram',district:'Cuddalore',winner:'K.A. Pandian',party:'ADMK',runnerup:'S. Abdul Rahman',ruParty:'IUML',margin:16937,res:'GEN'},
-  {no:159,name:'Kattumannarkoil',district:'Cuddalore',winner:'Sinthanai Selvan',party:'VCK',runnerup:'N. Murugumaran',ruParty:'ADMK',margin:10565,res:'SC'},
-  {no:160,name:'Sirkazhi',district:'Nagapattinam',winner:'Malaiyuran T',party:'DMK',runnerup:'Rajendar',ruParty:'ADMK',margin:19000,res:'SC'},
-  {no:161,name:'Mayiladuthurai',district:'Mayiladuthurai',winner:'Rajakumar S',party:'INC',runnerup:'Palanisamy A',ruParty:'PMK',margin:2742,res:'GEN'},
-  {no:162,name:'Poompuhar',district:'Nagapattinam',winner:'Nivedha M. Murugan',party:'DMK',runnerup:'S.Pavunraj',ruParty:'ADMK',margin:3299,res:'GEN'},
-  {no:163,name:'Nagapattinam',district:'Nagapattinam',winner:'J. Mohamed Shanavas',party:'VCK',runnerup:'Thanka Kathiravan',ruParty:'ADMK',margin:7238,res:'SC'},
-  {no:164,name:'Kilvelur',district:'Nagapattinam',winner:'Nagaimaali V P',party:'CPI(M)',runnerup:'Vadivel Ravanan S',ruParty:'PMK',margin:16985,res:'SC'},
-  {no:165,name:'Vedaranyam',district:'Nagapattinam',winner:'Devarajan K',party:'DMK',runnerup:'Elumalai',ruParty:'ADMK',margin:15000,res:'SC'},
-  {no:166,name:'Thiruthuraipoondi',district:'Tiruvarur',winner:'Mannai Rajendran',party:'DMK',runnerup:'Rajiv Gandhi',ruParty:'ADMK',margin:21000,res:'SC'},
-  {no:167,name:'Mannargudi',district:'Tiruvarur',winner:'Rajaa T R B',party:'DMK',runnerup:'Rajamanickam Siva',ruParty:'ADMK',margin:37393,res:'GEN'},
-  {no:168,name:'Tiruvarur',district:'Tiruvarur',winner:'Duraimurugan K',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:22000,res:'GEN'},
-  {no:169,name:'Nannilam',district:'Tiruvarur',winner:'Kamaraj R',party:'ADMK',runnerup:'Jothiraman S',ruParty:'DMK',margin:4424,res:'GEN'},
-  {no:170,name:'Papanasam',district:'Thanjavur',winner:'Dr.Jawahirullah M.H',party:'DMK',runnerup:'Gopinathan K',ruParty:'ADMK',margin:16273,res:'GEN'},
-  {no:171,name:'Kumbakonam',district:'Thanjavur',winner:'Anbalagan G',party:'DMK',runnerup:'Srithar Vandayar G.M',ruParty:'ADMK',margin:21383,res:'GEN'},
-  {no:172,name:'Papanasam',district:'Thanjavur',winner:'Dr.Jawahirullah M.H',party:'DMK',runnerup:'Gopinathan K',ruParty:'ADMK',margin:16273,res:'GEN'},
-  {no:173,name:'Thanjavur',district:'Thanjavur',winner:'Palanisami T',party:'DMK',runnerup:'Thangaraj M',ruParty:'ADMK',margin:18000,res:'GEN'},
-  {no:174,name:'Thiruvidaimarudur',district:'Thanjavur',winner:'Dhanavelu A',party:'DMK',runnerup:'Moorthy K',ruParty:'ADMK',margin:25000,res:'SC'},
-  {no:175,name:'Orathanadu',district:'Thanjavur',winner:'Vaithilingam R',party:'ADMK',runnerup:'Ramchandran M',ruParty:'DMK',margin:28835,res:'GEN'},
-  {no:176,name:'Pattukkottai',district:'Thanjavur',winner:'Annadurai K',party:'DMK',runnerup:'Rengarajan N.R',ruParty:'ADMK',margin:25269,res:'GEN'},
-  {no:177,name:'Peravurani',district:'Thanjavur',winner:'Ashokkumar N',party:'DMK',runnerup:'Thirugnanasambandam S.V',ruParty:'ADMK',margin:23503,res:'GEN'},
-  {no:178,name:'Gandarvakkottai',district:'Pudukkottai',winner:'M.Chinnadurai',party:'CPI(M)',runnerup:'S.Jayabharathi',ruParty:'ADMK',margin:12721,res:'SC'},
-  {no:179,name:'Viralimalai',district:'Pudukkottai',winner:'Muthuramalingam K',party:'DMK',runnerup:'Arumugam R',ruParty:'ADMK',margin:20000,res:'GEN'},
-  {no:180,name:'Pudukkottai',district:'Pudukkottai',winner:'V. Muthuraja',party:'DMK',runnerup:'Karthik Thondaiman',ruParty:'ADMK',margin:13001,res:'GEN'},
-  {no:181,name:'Thirumayam',district:'Pudukkottai',winner:'Anbalagan N',party:'DMK',runnerup:'Arumugam',ruParty:'ADMK',margin:12000,res:'SC'},
-  {no:182,name:'Alangudi',district:'Pudukkottai',winner:'Siva V.Meyyanathan',party:'DMK',runnerup:'Dharma Thangavel',ruParty:'ADMK',margin:25847,res:'GEN'},
-  {no:183,name:'Aranthangi',district:'Pudukkottai',winner:'Ramachandran T',party:'INC',runnerup:'Rajanayagam M',ruParty:'ADMK',margin:30893,res:'GEN'},
-  {no:184,name:'Karaikudi',district:'Sivaganga',winner:'S.Mangudi',party:'INC',runnerup:'H.Raja',ruParty:'BJP',margin:21589,res:'GEN'},
-  {no:185,name:'Tiruppattur',district:'Sivaganga',winner:'Anbazhagan T',party:'DMK',runnerup:'Karunas T',ruParty:'ADMK',margin:14000,res:'GEN'},
-  {no:186,name:'Sivaganga',district:'Sivaganga',winner:'Gnanasambandan O S',party:'DMK',runnerup:'Palaniswami',ruParty:'ADMK',margin:22000,res:'GEN'},
-  {no:187,name:'Manamadurai',district:'Sivaganga',winner:'Tamilarasi A',party:'DMK',runnerup:'Nagarajan S',ruParty:'ADMK',margin:14091,res:'SC'},
-  {no:188,name:'Melur',district:'Madurai',winner:'Periyapullan @ Selvam P',party:'ADMK',runnerup:'Ravichandran T',ruParty:'INC',margin:35162,res:'GEN'},
-  {no:189,name:'Madurai East',district:'Madurai',winner:'Moorthy P',party:'DMK',runnerup:'Gopalakrishnan R',ruParty:'ADMK',margin:49604,res:'GEN'},
-  {no:190,name:'Sholavandan',district:'Madurai',winner:'Manickam K',party:'DMK',runnerup:'Shankar R',ruParty:'ADMK',margin:17000,res:'SC'},
-  {no:191,name:'Madurai North',district:'Madurai',winner:'Thalapathi G',party:'DMK',runnerup:'Saravanan P',ruParty:'BJP',margin:22916,res:'GEN'},
-  {no:192,name:'Madurai South',district:'Madurai',winner:'Boominathan M',party:'DMK',runnerup:'Saravanan S.S',ruParty:'ADMK',margin:6515,res:'GEN'},
-  {no:193,name:'Madurai Central',district:'Madurai',winner:'Palanivel Thiaga Rajan',party:'DMK',runnerup:'Jothi Muthuramalingam N',ruParty:'ADMK',margin:34176,res:'GEN'},
-  {no:194,name:'Madurai West',district:'Madurai',winner:'Raju K',party:'ADMK',runnerup:'Chinnammal C',ruParty:'DMK',margin:9121,res:'GEN'},
-  {no:195,name:'Thirparankundram',district:'Madurai',winner:'Rajendran V',party:'DMK',runnerup:'Rajan V',ruParty:'ADMK',margin:30000,res:'GEN'},
-  {no:196,name:'Thiruмangalam',district:'Madurai',winner:'TRB Rajaa',party:'DMK',runnerup:'Murugan S',ruParty:'ADMK',margin:27000,res:'GEN'},
-  {no:197,name:'Usilampatti',district:'Madurai',winner:'Krishnamurthy K',party:'ADMK',runnerup:'Annadurai P',ruParty:'DMK',margin:8000,res:'GEN'},
-  {no:198,name:'Andipatti',district:'Theni',winner:'A.Maharajan',party:'DMK',runnerup:'A.Logirajan',ruParty:'ADMK',margin:8538,res:'GEN'},
-  {no:199,name:'Periyakulam',district:'Theni',winner:'K.S.Saravanakumaar',party:'DMK',runnerup:'M Murugan',ruParty:'ADMK',margin:21321,res:'GEN'},
-  {no:200,name:'Bodinayakanur',district:'Theni',winner:'O.Panneerselvam',party:'ADMK',runnerup:'Thangatamilselvan',ruParty:'DMK',margin:11021,res:'GEN'},
-  {no:201,name:'Cumbum',district:'Theni',winner:'N.Ramakrishnan',party:'DMK',runnerup:'Syedukhan S.P.M',ruParty:'ADMK',margin:42413,res:'GEN'},
-  {no:202,name:'Rajapalayam',district:'Virudhunagar',winner:'Thangapandian S',party:'DMK',runnerup:'Rajenthrabhalaji K.T',ruParty:'ADMK',margin:3898,res:'GEN'},
-  {no:203,name:'Srivilliputhur',district:'Virudhunagar',winner:'Kasi Thevar',party:'DMK',runnerup:'Rajamani',ruParty:'ADMK',margin:11000,res:'SC'},
-  {no:204,name:'Sattur',district:'Virudhunagar',winner:'Duraimurugan R',party:'DMK',runnerup:'Saravanan S',ruParty:'ADMK',margin:17000,res:'GEN'},
-  {no:205,name:'Sivakasi',district:'Virudhunagar',winner:'Sabapathy N',party:'DMK',runnerup:'Raju V',ruParty:'ADMK',margin:16000,res:'GEN'},
-  {no:206,name:'Virudhunagar',district:'Virudhunagar',winner:'Subbulakshmi V',party:'DMK',runnerup:'Annamalai K',ruParty:'ADMK',margin:23000,res:'GEN'},
-  {no:207,name:'Aruppukkottai',district:'Virudhunagar',winner:'K.K.S.S.R.Ramachandran',party:'DMK',runnerup:'Vaigaichelvan',ruParty:'ADMK',margin:39034,res:'GEN'},
-  {no:208,name:'Tiruchuli',district:'Virudhunagar',winner:'Senthilkumar T',party:'DMK',runnerup:'Sundararajan K',ruParty:'ADMK',margin:14000,res:'GEN'},
-  {no:209,name:'Paramakudi',district:'Ramanathapuram',winner:'Murugesan S',party:'DMK',runnerup:'Sadhan Prabhakar N',ruParty:'ADMK',margin:13285,res:'SC'},
-  {no:210,name:'Tiruvadanai',district:'Ramanathapuram',winner:'Krishnamurthy J',party:'DMK',runnerup:'Jothi R',ruParty:'ADMK',margin:16000,res:'SC'},
-  {no:211,name:'Ramanathapuram',district:'Ramanathapuram',winner:'Katharbatcha Muthuramalingam',party:'DMK',runnerup:'D.Kuppuramu',ruParty:'BJP',margin:50479,res:'GEN'},
-  {no:212,name:'Mudhukulathur',district:'Ramanathapuram',winner:'R.S.Rajakannappan',party:'DMK',runnerup:'Keerthika',ruParty:'ADMK',margin:20721,res:'SC'},
-  {no:213,name:'Vilathikulam',district:'Thoothukudi',winner:'Geetha Jeevan S',party:'DMK',runnerup:'Shanmugam R',ruParty:'ADMK',margin:25000,res:'SC'},
-  {no:214,name:'Thoothukudi',district:'Thoothukudi',winner:'Mutharasan N',party:'DMK',runnerup:'Anand R',ruParty:'ADMK',margin:20000,res:'GEN'},
-  {no:215,name:'Tiruchendur',district:'Thoothukudi',winner:'Annadurai K',party:'DMK',runnerup:'Suresh P',ruParty:'ADMK',margin:13000,res:'GEN'},
-  {no:216,name:'Srivaikundam',district:'Thoothukudi',winner:'Subramanian R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:18000,res:'SC'},
-  {no:217,name:'Ottapidaram',district:'Thoothukudi',winner:'Shunmugaiah C',party:'DMK',runnerup:'Mohan P',ruParty:'ADMK',margin:8510,res:'GEN'},
-  {no:218,name:'Kovilpatti',district:'Thoothukudi',winner:'Kadambur Raju',party:'ADMK',runnerup:'Ttv Dhinakaran',ruParty:'AMMK',margin:12403,res:'GEN'},
-  {no:219,name:'Sankarankovil',district:'Tenkasi',winner:'Raja E',party:'DMK',runnerup:'Rajalakshmi V M',ruParty:'ADMK',margin:5297,res:'GEN'},
-  {no:220,name:'Vasudevanallur',district:'Tenkasi',winner:'Balakrishnan V',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:7000,res:'GEN'},
-  {no:221,name:'Kadayanallur',district:'Tenkasi',winner:'C.Krishnamurali',party:'ADMK',runnerup:'K.A.M.Muhammed Abubacker',ruParty:'IUML',margin:24349,res:'GEN'},
-  {no:222,name:'Tenkasi',district:'Tenkasi',winner:'Suresh M',party:'ADMK',runnerup:'Suresh R',ruParty:'DMK',margin:370,res:'GEN'},
-  {no:223,name:'Alangulam',district:'Tenkasi',winner:'Paul Manoj Pandian',party:'ADMK',runnerup:'Dr.Poongothai Aladi Aruna',ruParty:'DMK',margin:3539,res:'GEN'},
-  {no:224,name:'Tirunelveli',district:'Tirunelveli',winner:'Rajesh Kanthan R',party:'DMK',runnerup:'Nainar Nagendran',ruParty:'BJP',margin:18000,res:'GEN'},
-  {no:225,name:'Ambasamudram',district:'Tirunelveli',winner:'E.Subaya',party:'ADMK',runnerup:'R.Avudaiappan',ruParty:'DMK',margin:16915,res:'GEN'},
-  {no:226,name:'Palayamkottai',district:'Tirunelveli',winner:'Abdul Wahab M',party:'DMK',runnerup:'Gerald G',ruParty:'ADMK',margin:52141,res:'GEN'},
-  {no:227,name:'Nanguneri',district:'Tirunelveli',winner:'Ruby R Manoharan',party:'INC',runnerup:'Ganesaraja',ruParty:'ADMK',margin:16486,res:'SC'},
-  {no:228,name:'Radhapuram',district:'Tirunelveli',winner:'M.Appavu',party:'DMK',runnerup:'I.S.Inbadurai',ruParty:'ADMK',margin:5925,res:'SC'},
-  {no:229,name:'Kanniyakumari',district:'Kanyakumari',winner:'Thalavai Sundaram N',party:'ADMK',runnerup:'Austin S',ruParty:'DMK',margin:16213,res:'GEN'},
-  {no:230,name:'Nagercoil',district:'Kanyakumari',winner:'Gandhi M.R',party:'BJP',runnerup:'Suresh Rajan N',ruParty:'DMK',margin:11669,res:'GEN'},
-  {no:231,name:'Colachal',district:'Kanyakumari',winner:'Prince J.G',party:'INC',runnerup:'Ramesh P',ruParty:'BJP',margin:24832,res:'GEN'},
-  {no:232,name:'Padmanabhapuram',district:'Kanyakumari',winner:'Mano Thangaraj T',party:'DMK',runnerup:'John Thankam D',ruParty:'ADMK',margin:26885,res:'GEN'},
-  {no:233,name:'Vilavancode',district:'Kanyakumari',winner:'Vijaya Dharani',party:'INC',runnerup:'Annaraj R',ruParty:'ADMK',margin:20000,res:'GEN'},
-  {no:234,name:'Killiyoor',district:'Kanyakumari',winner:'Rajesh Kumar S',party:'INC',runnerup:'Jude Dev K.V',ruParty:'ADMK',margin:55400,res:'GEN'},
+  {no:124,name:'Udumalaipettai',district:'Tiruppur',winner:'Krishnaswamy R',party:'ADMK',runnerup:'Muthusamy V',ruParty:'DMK',margin:8000,res:'GEN'},
+  {no:125,name:'Madathukulam',district:'Tiruppur',winner:'C Mahendran',party:'ADMK',runnerup:'R.Jayaramakrishnan',ruParty:'DMK',margin:6438,res:'GEN'},
+  {no:126,name:'Palani',district:'Dindigul',winner:'Senthil Kumar I.P',party:'DMK',runnerup:'Ravi Manoharan K',ruParty:'ADMK',margin:30056,res:'GEN'},
+  {no:127,name:'Oddanchatram',district:'Dindigul',winner:'Sakkarapani R',party:'DMK',runnerup:'Nataraj N.P',ruParty:'ADMK',margin:28742,res:'GEN'},
+  {no:128,name:'Athoor',district:'Dindigul',winner:'Periyasamy I',party:'DMK',runnerup:'Thilagabama M',ruParty:'PMK',margin:135571,res:'GEN'},
+  {no:129,name:'Nilakkottai',district:'Dindigul',winner:'S.Thenmozhi',party:'ADMK',runnerup:'K.Murugavelrajan',ruParty:'DMK',margin:27618,res:'GEN'},
+  {no:130,name:'Natham',district:'Dindigul',winner:'Natham R.Viswanathan',party:'ADMK',runnerup:'M.A.Andi Ambalam',ruParty:'DMK',margin:11932,res:'GEN'},
+  {no:131,name:'Dindigul',district:'Dindigul',winner:'Sreenivasan C',party:'ADMK',runnerup:'Pandi N',ruParty:'CPI(M)',margin:17747,res:'GEN'},
+  {no:132,name:'Vedasandur',district:'Dindigul',winner:'Manickam R',party:'DMK',runnerup:'Suresh S',ruParty:'ADMK',margin:19000,res:'GEN'},
+  {no:133,name:'Aravakurichi',district:'Karur',winner:'Elango R',party:'DMK',runnerup:'Annamalai K',ruParty:'BJP',margin:24816,res:'GEN'},
+  {no:134,name:'Karur',district:'Karur',winner:'Senthilbalaji V',party:'DMK',runnerup:'Vijayabhaskar M.R',ruParty:'ADMK',margin:12448,res:'GEN'},
+  {no:135,name:'Krishnarayapuram',district:'Karur',winner:'Sivagama Sundari K',party:'DMK',runnerup:'Muthukumar',ruParty:'ADMK',margin:31625,res:'SC'},
+  {no:136,name:'Kulithalai',district:'Karur',winner:'R.Manickam',party:'DMK',runnerup:'N.R.Chandrasekar',ruParty:'ADMK',margin:23540,res:'GEN'},
+  {no:137,name:'Manapparai',district:'Tiruchirappalli',winner:'Abdul Samad P',party:'DMK',runnerup:'Chandrasekar R',ruParty:'ADMK',margin:12243,res:'GEN'},
+  {no:138,name:'Srirangam',district:'Tiruchirappalli',winner:'Anbil Mahesh Poyyamozhi',party:'DMK',runnerup:'Rajagopal',ruParty:'ADMK',margin:21000,res:'GEN'},
+  {no:139,name:'Tiruchirappalli East',district:'Tiruchirappalli',winner:'Krishnamurthy K',party:'DMK',runnerup:'Geetha S',ruParty:'ADMK',margin:18000,res:'GEN'},
+  {no:140,name:'Tiruchirappalli West',district:'Tiruchirappalli',winner:'Muthu Soundararajan',party:'DMK',runnerup:'Murugadoss',ruParty:'ADMK',margin:24000,res:'GEN'},
+  {no:141,name:'Thiruverumbur',district:'Tiruchirappalli',winner:'Sudha Sriram',party:'DMK',runnerup:'Thangam',ruParty:'ADMK',margin:28000,res:'GEN'},
+  {no:142,name:'Lalgudi',district:'Tiruchirappalli',winner:'A.Soundarapandian',party:'DMK',runnerup:'D.R.Dharmaraj',ruParty:'ADMK',margin:16949,res:'GEN'},
+  {no:143,name:'Manachanallur',district:'Tiruchirappalli',winner:'S. Kathiravan',party:'DMK',runnerup:'M. Paranjothi',ruParty:'ADMK',margin:59618,res:'SC'},
+  {no:144,name:'Musiri',district:'Tiruchirappalli',winner:'N. Thiyagarajan',party:'DMK',runnerup:'M. Selvarasu',ruParty:'ADMK',margin:26836,res:'GEN'},
+  {no:145,name:'Thuraiyur',district:'Tiruchirappalli',winner:'Nandakumar R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:14000,res:'SC'},
+  {no:146,name:'Perambalur',district:'Perambalur',winner:'Prabhaharan M',party:'DMK',runnerup:'Thamizhselvan R',ruParty:'ADMK',margin:31034,res:'GEN'},
+  {no:147,name:'Kunnam',district:'Perambalur',winner:'Sivasankar S.S',party:'DMK',runnerup:'Ramachandran R.T',ruParty:'ADMK',margin:6329,res:'GEN'},
+  {no:148,name:'Ariyalur',district:'Ariyalur',winner:'Chinnappa K',party:'DMK',runnerup:'Rajendran S',ruParty:'ADMK',margin:3234,res:'GEN'},
+  {no:149,name:'Jayankondam',district:'Ariyalur',winner:'Kannan Ka So Ka',party:'DMK',runnerup:'Balu K',ruParty:'PMK',margin:5452,res:'GEN'},
+  {no:150,name:'Tittakudi',district:'Cuddalore',winner:'Chinnadurai K',party:'DMK',runnerup:'Senguttuvan R',ruParty:'ADMK',margin:22000,res:'SC'},
+  {no:151,name:'Vriddhachalam',district:'Cuddalore',winner:'Duraisamy R',party:'DMK',runnerup:'Muthu R',ruParty:'ADMK',margin:19000,res:'GEN'},
+  {no:152,name:'Neyveli',district:'Cuddalore',winner:'Saba Rajendran',party:'DMK',runnerup:'Jagan K',ruParty:'PMK',margin:977,res:'GEN'},
+  {no:153,name:'Panruti',district:'Cuddalore',winner:'Velmurugan T',party:'DMK',runnerup:'Rajendran R',ruParty:'ADMK',margin:4697,res:'GEN'},
+  {no:154,name:'Cuddalore',district:'Cuddalore',winner:'G.Iyappan',party:'DMK',runnerup:'M.C.Sampath',ruParty:'ADMK',margin:5151,res:'GEN'},
+  {no:155,name:'Kurinjipadi',district:'Cuddalore',winner:'M.R.K.Panneerselvam',party:'DMK',runnerup:'Selvi Ramajayam',ruParty:'ADMK',margin:17527,res:'GEN'},
+  {no:156,name:'Bhuvanagiri',district:'Cuddalore',winner:'Arunmozhithevan A',party:'ADMK',runnerup:'Saravanan Durai K',ruParty:'DMK',margin:8259,res:'GEN'},
+  {no:157,name:'Chidambaram',district:'Cuddalore',winner:'K.A. Pandian',party:'ADMK',runnerup:'S. Abdul Rahman',ruParty:'IUML',margin:16937,res:'GEN'},
+  {no:158,name:'Kattumannarkoil',district:'Cuddalore',winner:'Sinthanai Selvan',party:'VCK',runnerup:'N. Murugumaran',ruParty:'ADMK',margin:10565,res:'SC'},
+  {no:159,name:'Sirkazhi',district:'Nagapattinam',winner:'Malaiyuran T',party:'DMK',runnerup:'Rajendar',ruParty:'ADMK',margin:19000,res:'SC'},
+  {no:160,name:'Mayiladuthurai',district:'Mayiladuthurai',winner:'Rajakumar S',party:'INC',runnerup:'Palanisamy A',ruParty:'PMK',margin:2742,res:'GEN'},
+  {no:161,name:'Poompuhar',district:'Nagapattinam',winner:'Nivedha M. Murugan',party:'DMK',runnerup:'S.Pavunraj',ruParty:'ADMK',margin:3299,res:'GEN'},
+  {no:162,name:'Nagapattinam',district:'Nagapattinam',winner:'J. Mohamed Shanavas',party:'VCK',runnerup:'Thanka Kathiravan',ruParty:'ADMK',margin:7238,res:'SC'},
+  {no:163,name:'Kilvelur',district:'Nagapattinam',winner:'Nagaimaali V P',party:'CPI(M)',runnerup:'Vadivel Ravanan S',ruParty:'PMK',margin:16985,res:'SC'},
+  {no:164,name:'Vedaranyam',district:'Nagapattinam',winner:'Devarajan K',party:'DMK',runnerup:'Elumalai',ruParty:'ADMK',margin:15000,res:'SC'},
+  {no:165,name:'Thiruthuraipoondi',district:'Tiruvarur',winner:'Mannai Rajendran',party:'DMK',runnerup:'Rajiv Gandhi',ruParty:'ADMK',margin:21000,res:'SC'},
+  {no:166,name:'Mannargudi',district:'Tiruvarur',winner:'Rajaa T R B',party:'DMK',runnerup:'Rajamanickam Siva',ruParty:'ADMK',margin:37393,res:'GEN'},
+  {no:167,name:'Tiruvarur',district:'Tiruvarur',winner:'Duraimurugan K',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:168,name:'Nannilam',district:'Tiruvarur',winner:'Kamaraj R',party:'ADMK',runnerup:'Jothiraman S',ruParty:'DMK',margin:4424,res:'GEN'},
+  {no:169,name:'Papanasam',district:'Thanjavur',winner:'Dr.Jawahirullah M.H',party:'DMK',runnerup:'Gopinathan K',ruParty:'ADMK',margin:16273,res:'GEN'},
+  {no:170,name:'Kumbakonam',district:'Thanjavur',winner:'Anbalagan G',party:'DMK',runnerup:'Srithar Vandayar G.M',ruParty:'ADMK',margin:21383,res:'GEN'},
+  {no:171,name:'Thanjavur',district:'Thanjavur',winner:'Palanisami T',party:'DMK',runnerup:'Thangaraj M',ruParty:'ADMK',margin:18000,res:'GEN'},
+  {no:172,name:'Thiruvidaimarudur',district:'Thanjavur',winner:'Dhanavelu A',party:'DMK',runnerup:'Moorthy K',ruParty:'ADMK',margin:25000,res:'SC'},
+  {no:173,name:'Orathanadu',district:'Thanjavur',winner:'Vaithilingam R',party:'ADMK',runnerup:'Ramchandran M',ruParty:'DMK',margin:28835,res:'GEN'},
+  {no:174,name:'Pattukkottai',district:'Thanjavur',winner:'Annadurai K',party:'DMK',runnerup:'Rengarajan N.R',ruParty:'ADMK',margin:25269,res:'GEN'},
+  {no:175,name:'Peravurani',district:'Thanjavur',winner:'Ashokkumar N',party:'DMK',runnerup:'Thirugnanasambandam S.V',ruParty:'ADMK',margin:23503,res:'GEN'},
+  {no:176,name:'Gandarvakkottai',district:'Pudukkottai',winner:'M.Chinnadurai',party:'CPI(M)',runnerup:'S.Jayabharathi',ruParty:'ADMK',margin:12721,res:'SC'},
+  {no:177,name:'Viralimalai',district:'Pudukkottai',winner:'Muthuramalingam K',party:'DMK',runnerup:'Arumugam R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:178,name:'Pudukkottai',district:'Pudukkottai',winner:'V. Muthuraja',party:'DMK',runnerup:'Karthik Thondaiman',ruParty:'ADMK',margin:13001,res:'GEN'},
+  {no:179,name:'Thirumayam',district:'Pudukkottai',winner:'Anbalagan N',party:'DMK',runnerup:'Arumugam',ruParty:'ADMK',margin:12000,res:'SC'},
+  {no:180,name:'Alangudi',district:'Pudukkottai',winner:'Siva V.Meyyanathan',party:'DMK',runnerup:'Dharma Thangavel',ruParty:'ADMK',margin:25847,res:'GEN'},
+  {no:181,name:'Aranthangi',district:'Pudukkottai',winner:'Ramachandran T',party:'INC',runnerup:'Rajanayagam M',ruParty:'ADMK',margin:30893,res:'GEN'},
+  {no:182,name:'Karaikudi',district:'Sivaganga',winner:'S.Mangudi',party:'INC',runnerup:'H.Raja',ruParty:'BJP',margin:21589,res:'GEN'},
+  {no:183,name:'Tiruppattur',district:'Sivaganga',winner:'Anbazhagan T',party:'DMK',runnerup:'Karunas T',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:184,name:'Sivaganga',district:'Sivaganga',winner:'Gnanasambandan O S',party:'DMK',runnerup:'Palaniswami',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:185,name:'Manamadurai',district:'Sivaganga',winner:'Tamilarasi A',party:'DMK',runnerup:'Nagarajan S',ruParty:'ADMK',margin:14091,res:'SC'},
+  {no:186,name:'Melur',district:'Madurai',winner:'Periyapullan @ Selvam P',party:'ADMK',runnerup:'Ravichandran T',ruParty:'INC',margin:35162,res:'GEN'},
+  {no:187,name:'Madurai East',district:'Madurai',winner:'Moorthy P',party:'DMK',runnerup:'Gopalakrishnan R',ruParty:'ADMK',margin:49604,res:'GEN'},
+  {no:188,name:'Sholavandan',district:'Madurai',winner:'Manickam K',party:'DMK',runnerup:'Shankar R',ruParty:'ADMK',margin:17000,res:'SC'},
+  {no:189,name:'Madurai North',district:'Madurai',winner:'Thalapathi G',party:'DMK',runnerup:'Saravanan P',ruParty:'BJP',margin:22916,res:'GEN'},
+  {no:190,name:'Madurai South',district:'Madurai',winner:'Boominathan M',party:'DMK',runnerup:'Saravanan S.S',ruParty:'ADMK',margin:6515,res:'GEN'},
+  {no:191,name:'Madurai Central',district:'Madurai',winner:'Palanivel Thiaga Rajan',party:'DMK',runnerup:'Jothi Muthuramalingam N',ruParty:'ADMK',margin:34176,res:'GEN'},
+  {no:192,name:'Madurai West',district:'Madurai',winner:'Raju K',party:'ADMK',runnerup:'Chinnammal C',ruParty:'DMK',margin:9121,res:'GEN'},
+  {no:193,name:'Thirparankundram',district:'Madurai',winner:'Rajendran V',party:'DMK',runnerup:'Rajan V',ruParty:'ADMK',margin:30000,res:'GEN'},
+  {no:194,name:'Usilampatti',district:'Madurai',winner:'Krishnamurthy K',party:'ADMK',runnerup:'Annadurai P',ruParty:'DMK',margin:8000,res:'GEN'},
+  {no:195,name:'Andipatti',district:'Theni',winner:'A.Maharajan',party:'DMK',runnerup:'A.Logirajan',ruParty:'ADMK',margin:8538,res:'GEN'},
+  {no:196,name:'Periyakulam',district:'Theni',winner:'K.S.Saravanakumaar',party:'DMK',runnerup:'M Murugan',ruParty:'ADMK',margin:21321,res:'GEN'},
+  {no:197,name:'Bodinayakanur',district:'Theni',winner:'O.Panneerselvam',party:'ADMK',runnerup:'Thangatamilselvan',ruParty:'DMK',margin:11021,res:'GEN'},
+  {no:198,name:'Cumbum',district:'Theni',winner:'N.Ramakrishnan',party:'DMK',runnerup:'Syedukhan S.P.M',ruParty:'ADMK',margin:42413,res:'GEN'},
+  {no:199,name:'Rajapalayam',district:'Virudhunagar',winner:'Thangapandian S',party:'DMK',runnerup:'Rajenthrabhalaji K.T',ruParty:'ADMK',margin:3898,res:'GEN'},
+  {no:200,name:'Srivilliputhur',district:'Virudhunagar',winner:'Kasi Thevar',party:'DMK',runnerup:'Rajamani',ruParty:'ADMK',margin:11000,res:'SC'},
+  {no:201,name:'Sattur',district:'Virudhunagar',winner:'Duraimurugan R',party:'DMK',runnerup:'Saravanan S',ruParty:'ADMK',margin:17000,res:'GEN'},
+  {no:202,name:'Sivakasi',district:'Virudhunagar',winner:'Sabapathy N',party:'DMK',runnerup:'Raju V',ruParty:'ADMK',margin:16000,res:'GEN'},
+  {no:203,name:'Virudhunagar',district:'Virudhunagar',winner:'Subbulakshmi V',party:'DMK',runnerup:'Annamalai K',ruParty:'ADMK',margin:23000,res:'GEN'},
+  {no:204,name:'Aruppukkottai',district:'Virudhunagar',winner:'K.K.S.S.R.Ramachandran',party:'DMK',runnerup:'Vaigaichelvan',ruParty:'ADMK',margin:39034,res:'GEN'},
+  {no:205,name:'Tiruchuli',district:'Virudhunagar',winner:'Senthilkumar T',party:'DMK',runnerup:'Sundararajan K',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:206,name:'Paramakudi',district:'Ramanathapuram',winner:'Murugesan S',party:'DMK',runnerup:'Sadhan Prabhakar N',ruParty:'ADMK',margin:13285,res:'SC'},
+  {no:207,name:'Tiruvadanai',district:'Ramanathapuram',winner:'Krishnamurthy J',party:'DMK',runnerup:'Jothi R',ruParty:'ADMK',margin:16000,res:'SC'},
+  {no:208,name:'Ramanathapuram',district:'Ramanathapuram',winner:'Katharbatcha Muthuramalingam',party:'DMK',runnerup:'D.Kuppuramu',ruParty:'BJP',margin:50479,res:'GEN'},
+  {no:209,name:'Mudhukulathur',district:'Ramanathapuram',winner:'R.S.Rajakannappan',party:'DMK',runnerup:'Keerthika',ruParty:'ADMK',margin:20721,res:'SC'},
+  {no:210,name:'Vilathikulam',district:'Thoothukudi',winner:'Geetha Jeevan S',party:'DMK',runnerup:'Shanmugam R',ruParty:'ADMK',margin:25000,res:'SC'},
+  {no:211,name:'Thoothukudi',district:'Thoothukudi',winner:'Mutharasan N',party:'DMK',runnerup:'Anand R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:212,name:'Tiruchendur',district:'Thoothukudi',winner:'Annadurai K',party:'DMK',runnerup:'Suresh P',ruParty:'ADMK',margin:13000,res:'GEN'},
+  {no:213,name:'Srivaikundam',district:'Thoothukudi',winner:'Subramanian R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:18000,res:'SC'},
+  {no:214,name:'Ottapidaram',district:'Thoothukudi',winner:'Shunmugaiah C',party:'DMK',runnerup:'Mohan P',ruParty:'ADMK',margin:8510,res:'GEN'},
+  {no:215,name:'Kovilpatti',district:'Thoothukudi',winner:'Kadambur Raju',party:'ADMK',runnerup:'Ttv Dhinakaran',ruParty:'AMMK',margin:12403,res:'GEN'},
+  {no:216,name:'Sankarankovil',district:'Tenkasi',winner:'Raja E',party:'DMK',runnerup:'Rajalakshmi V M',ruParty:'ADMK',margin:5297,res:'GEN'},
+  {no:217,name:'Vasudevanallur',district:'Tenkasi',winner:'Balakrishnan V',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:7000,res:'GEN'},
+  {no:218,name:'Kadayanallur',district:'Tenkasi',winner:'C.Krishnamurali',party:'ADMK',runnerup:'K.A.M.Muhammed Abubacker',ruParty:'IUML',margin:24349,res:'GEN'},
+  {no:219,name:'Tenkasi',district:'Tenkasi',winner:'Suresh M',party:'ADMK',runnerup:'Suresh R',ruParty:'DMK',margin:370,res:'GEN'},
+  {no:220,name:'Alangulam',district:'Tenkasi',winner:'Paul Manoj Pandian',party:'ADMK',runnerup:'Dr.Poongothai Aladi Aruna',ruParty:'DMK',margin:3539,res:'GEN'},
+  {no:221,name:'Tirunelveli',district:'Tirunelveli',winner:'Rajesh Kanthan R',party:'DMK',runnerup:'Nainar Nagendran',ruParty:'BJP',margin:18000,res:'GEN'},
+  {no:222,name:'Ambasamudram',district:'Tirunelveli',winner:'E.Subaya',party:'ADMK',runnerup:'R.Avudaiappan',ruParty:'DMK',margin:16915,res:'GEN'},
+  {no:223,name:'Palayamkottai',district:'Tirunelveli',winner:'Abdul Wahab M',party:'DMK',runnerup:'Gerald G',ruParty:'ADMK',margin:52141,res:'GEN'},
+  {no:224,name:'Nanguneri',district:'Tirunelveli',winner:'Ruby R Manoharan',party:'INC',runnerup:'Ganesaraja',ruParty:'ADMK',margin:16486,res:'SC'},
+  {no:225,name:'Radhapuram',district:'Tirunelveli',winner:'M.Appavu',party:'DMK',runnerup:'I.S.Inbadurai',ruParty:'ADMK',margin:5925,res:'SC'},
+  {no:226,name:'Kanniyakumari',district:'Kanyakumari',winner:'Thalavai Sundaram N',party:'ADMK',runnerup:'Austin S',ruParty:'DMK',margin:16213,res:'GEN'},
+  {no:227,name:'Nagercoil',district:'Kanyakumari',winner:'Gandhi M.R',party:'BJP',runnerup:'Suresh Rajan N',ruParty:'DMK',margin:11669,res:'GEN'},
+  {no:228,name:'Colachal',district:'Kanyakumari',winner:'Prince J.G',party:'INC',runnerup:'Ramesh P',ruParty:'BJP',margin:24832,res:'GEN'},
+  {no:229,name:'Padmanabhapuram',district:'Kanyakumari',winner:'Mano Thangaraj T',party:'DMK',runnerup:'John Thankam D',ruParty:'ADMK',margin:26885,res:'GEN'},
+  {no:230,name:'Vilavancode',district:'Kanyakumari',winner:'Vijaya Dharani',party:'INC',runnerup:'Annaraj R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:231,name:'Killiyoor',district:'Kanyakumari',winner:'Rajesh Kumar S',party:'INC',runnerup:'Jude Dev K.V',ruParty:'ADMK',margin:55400,res:'GEN'},
 ];
 
-// De-dup no 172 (same as 170)
-const DATA = ALL_DATA.filter((d,i,a)=>a.findIndex(x=>x.no===d.no)===i);
+// Constituency history (state winner party by year — for modal trend)
+const CONST_HIST={
+  25:[
+    {year:2021,winner:'Dha. Velu',party:'DMK',margin:12633,alliance:'SPA'},
+    {year:2016,winner:'R. Nataraj',party:'ADMK',margin:14728,alliance:'AIADMK solo'},
+    {year:2011,winner:'R. Rajalakshmi',party:'ADMK',margin:29204,alliance:'AIADMK+DMDK'},
+    {year:2006,winner:'S. Ve. Shekher',party:'ADMK',margin:1667,alliance:'AIADMK-MDMK'},
+    {year:2001,winner:'K. N. Lakshmanan',party:'BJP',margin:6047,alliance:'DPA'},
+    {year:1996,winner:'N. P. Ramajayam',party:'DMK',margin:51804,alliance:'DMK-TMC'},
+    {year:1991,winner:'T. M. Rangarajan',party:'ADMK',margin:26696,alliance:'AIADMK-INC'},
+  ]
+};
 
-// Districts list
-const districts=[...new Set(DATA.map(d=>d.district))].sort();
+// ── DISTRICT FILTER ──
+const districts=[...new Set(CONST_DATA.map(d=>d.district))].sort();
 const distSel=document.getElementById('districtFilter');
 districts.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;distSel.appendChild(o);});
 
-let filtered=[...DATA];
+let filtered=[...CONST_DATA];
 let currentPage=1;
 const PER_PAGE=25;
 let activeParty='ALL';
+const maxMargin=Math.max(...CONST_DATA.map(d=>d.margin));
 
 function filterParty(p,btn){
   activeParty=p;
@@ -538,7 +1085,7 @@ function applyFilters(){
   const dist=document.getElementById('districtFilter').value;
   const al=document.getElementById('allianceFilter').value;
   const sort=document.getElementById('sortFilter').value;
-  filtered=DATA.filter(d=>{
+  filtered=CONST_DATA.filter(d=>{
     const matchP=activeParty==='ALL'||d.party===activeParty||(activeParty==='CPI'&&(d.party==='CPI'||d.party==='CPI(M)'));
     const matchQ=!q||d.name.toLowerCase().includes(q)||d.winner.toLowerCase().includes(q)||d.district.toLowerCase().includes(q)||d.party.toLowerCase().includes(q);
     const matchD=!dist||d.district===dist;
@@ -554,31 +1101,28 @@ function applyFilters(){
   renderGrid();
 }
 
-const maxMargin=Math.max(...DATA.map(d=>d.margin));
 function renderGrid(){
   const start=(currentPage-1)*PER_PAGE;
   const page=filtered.slice(start,start+PER_PAGE);
   const body=document.getElementById('gridBody');
-  if(filtered.length===0){body.innerHTML='<div style="padding:2rem;text-align:center;color:var(--muted);font-size:13px">No constituencies match your filters.</div>';renderPagination();return;}
-  const al_color={'SPA':'rgba(46,139,87,0.2)','NDA':'rgba(201,76,46,0.2)','Other':'rgba(136,136,136,0.2)'};
-  const al_text={'SPA':'#2e8b57','NDA':'#c94c2e','Other':'#888'};
+  if(!filtered.length){body.innerHTML='<div style="padding:2rem;text-align:center;color:#aaa;font-size:13px">No constituencies match your filters.</div>';renderPagination();return;}
   body.innerHTML=page.map(d=>{
     const al=getAlliance(d.party);
     const pct=Math.round(d.margin/maxMargin*100);
     return`<div class="grid-row${d.no===25?' highlighted':''}" onclick="openModal(${d.no})">
       <div class="const-no">${d.no}</div>
       <div><div class="const-name">${d.name}</div><div class="const-dist">${d.district}</div></div>
-      <div><div class="winner-name">${d.winner}</div></div>
+      <div><div style="font-size:12px;font-weight:600;color:#1a1a1a">${d.winner}</div></div>
       <div>
-        <span class="party-pill" style="background:${gc(d.party)}22;color:${gc(d.party)}">${d.party}</span><br>
-        <span class="alliance-tag" style="background:${al_color[al]};color:${al_text[al]}">${al}</span>
+        <span class="party-pill" style="background:${gc(d.party)}22;color:${gc(d.party)}">${d.party}</span>
+        <span class="al-tag" style="background:${alColor[al]};color:${alText[al]}">${al}</span>
       </div>
-      <div style="font-size:11px;color:var(--muted)">${d.runnerup}<br><span style="color:${gc(d.ruParty)};font-size:10px;font-weight:600">${d.ruParty}</span></div>
-      <div class="margin-bar-wrap">
-        <div class="margin-bar-bg"><div class="margin-bar-fill" style="width:${pct}%;background:${gc(d.party)}"></div></div>
-        <div class="margin-num">${d.margin.toLocaleString()}</div>
+      <div style="font-size:11px;color:#888">${d.runnerup}<br><span style="color:${gc(d.ruParty)};font-weight:600">${d.ruParty}</span></div>
+      <div class="margin-wrap">
+        <div class="margin-bg"><div class="margin-fill" style="width:${pct}%;background:${gc(d.party)}"></div></div>
+        <span class="margin-num">${d.margin.toLocaleString()}</span>
       </div>
-      <div><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:var(--muted)">${d.res}</span></div>
+      <div><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:#f0ece6;color:#888">${d.res}</span></div>
     </div>`;
   }).join('');
   renderPagination();
@@ -586,47 +1130,50 @@ function renderGrid(){
 
 function renderPagination(){
   const total=Math.ceil(filtered.length/PER_PAGE);
-  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${total} · ${filtered.length} constituencies`;
+  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${total} · ${filtered.length} results`;
   const btns=document.getElementById('pageBtns');
   btns.innerHTML='';
-  const addBtn=(label,page,active,disabled)=>{
+  const mk=(label,page,active,disabled)=>{
     const b=document.createElement('button');
     b.className='page-btn'+(active?' active':'');
     b.textContent=label;b.disabled=disabled;
-    b.onclick=()=>{currentPage=page;renderGrid();};
+    b.onclick=()=>{currentPage=page;renderGrid();window.scrollTo({top:400,behavior:'smooth'});};
     btns.appendChild(b);
   };
-  addBtn('←',currentPage-1,false,currentPage===1);
-  const start=Math.max(1,currentPage-2);
-  const end=Math.min(total,start+4);
-  for(let i=start;i<=end;i++) addBtn(i,i,i===currentPage,false);
-  addBtn('→',currentPage+1,false,currentPage===total);
+  mk('←',currentPage-1,false,currentPage===1);
+  const s=Math.max(1,currentPage-2),e=Math.min(total,s+4);
+  for(let i=s;i<=e;i++) mk(i,i,i===currentPage,false);
+  mk('→',currentPage+1,false,currentPage===total);
 }
 
+// ── MODAL ──
 function openModal(no){
-  const d=DATA.find(x=>x.no===no);if(!d)return;
+  const d=CONST_DATA.find(x=>x.no===no);
+  if(!d) return;
   const al=getAlliance(d.party);
+  const hist=CONST_HIST[no];
+  let histHtml='';
+  if(hist){
+    histHtml=`<div style="font-size:12px;font-weight:700;color:#888;margin:1rem 0 8px;text-transform:uppercase;letter-spacing:0.5px">Historical results (this constituency)</div>`;
+    histHtml+=hist.map((h,i)=>`
+      <div class="modal-hist-row">
+        <span class="modal-year">${h.year}</span>
+        <span class="modal-party-dot" style="background:${gc(h.party)}"></span>
+        <span class="modal-winner" style="color:${gc(h.party)}">${h.winner} (${h.party})</span>
+        <span class="modal-margin">${h.margin.toLocaleString()} votes</span>
+      </div>`).join('');
+  }
   document.getElementById('modalBody').innerHTML=`
     <div class="modal-title">${d.name} — Constituency ${d.no}</div>
-    <div class="modal-sub">${d.district} District · ${d.res} Category · 2021 Tamil Nadu Assembly Election</div>
+    <div class="modal-sub">${d.district} District · ${d.res} category · 2021 Tamil Nadu Assembly Election</div>
     <div class="modal-grid">
-      <div class="mcard"><div class="mcard-label">Winner</div><div class="mcard-val">${d.winner}</div></div>
-      <div class="mcard"><div class="mcard-label">Party</div><div class="mcard-val" style="color:${gc(d.party)}">${d.party}</div></div>
-      <div class="mcard"><div class="mcard-label">Alliance</div><div class="mcard-val">${al}</div></div>
+      <div class="mcard"><div class="mcard-label">Winner</div><div class="mcard-val" style="color:${gc(d.party)}">${d.winner}</div></div>
+      <div class="mcard"><div class="mcard-label">Party · Alliance</div><div class="mcard-val">${d.party} <span style="font-size:11px;color:#888">· ${al}</span></div></div>
+      <div class="mcard"><div class="mcard-label">Runner-up</div><div class="mcard-val" style="font-size:13px">${d.runnerup} (${d.ruParty})</div></div>
       <div class="mcard"><div class="mcard-label">Winning margin</div><div class="mcard-val">${d.margin.toLocaleString()} votes</div></div>
     </div>
-    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Candidates</div>
-    <div class="cand-row">
-      <div class="cand-name"><span style="color:${gc(d.party)};font-weight:700">${d.winner}</span><span class="winner-crown">★ WON</span></div>
-      <div class="cand-votes">—</div>
-      <div class="cand-pct" style="color:${gc(d.party)}">${d.party}</div>
-    </div>
-    <div class="cand-row">
-      <div class="cand-name">${d.runnerup}</div>
-      <div class="cand-votes">—</div>
-      <div class="cand-pct" style="color:${gc(d.ruParty)}">${d.ruParty}</div>
-    </div>
-    <div style="margin-top:1rem;font-size:11px;color:var(--muted)">Click anywhere outside to close</div>`;
+    ${histHtml}
+    <div style="margin-top:12px;font-size:11px;color:#aaa">Click outside to close · Historical data for all constituencies coming soon</div>`;
   document.getElementById('modal').classList.add('open');
 }
 
@@ -634,35 +1181,13 @@ function closeModal(e){
   if(e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
 }
 
-// CHARTS
-new Chart(document.getElementById('seatsChart'),{
-  type:'bar',
-  data:{labels:['DMK','AIADMK','INC','BJP','PMK','VCK','Others'],
-    datasets:[{data:[133,66,18,4,5,4,4],
-    backgroundColor:['#e88c10','#c94c2e','#2e8b57','#1a5fa8','#c47a1a','#0d7a6e','#666'],
-    borderRadius:4,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} seats`}}},
-    scales:{x:{grid:{display:false},ticks:{color:'#8898b0',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8898b0',font:{size:10}}}}}
-});
-
-new Chart(document.getElementById('voteShareChart'),{
-  type:'doughnut',
-  data:{labels:['DMK','AIADMK','INC','BJP','PMK','Others'],
-    datasets:[{data:[37.70,33.29,4.27,2.62,3.80,18.32],
-    backgroundColor:['#e88c10','#c94c2e','#2e8b57','#1a5fa8','#c47a1a','#555'],
-    borderWidth:2,borderColor:'#111d35'}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw}%`}}}}
-});
-
-new Chart(document.getElementById('allianceChart'),{
-  type:'bar',
-  data:{labels:['SPA\n(DMK-led)','NDA\n(AIADMK-led)','Others'],
-    datasets:[{data:[159,75,0],backgroundColor:['#2e8b57','#c94c2e','#666'],borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} seats`}}},
-    scales:{x:{grid:{display:false},ticks:{color:'#8898b0',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8898b0',font:{size:10}}}}}
-});
-
+// ── INIT ──
+renderOverviewTabs();
+renderOverviewSummary();
+renderSeatsBar();
+renderVoteDonut();
+renderAllianceBlock();
+renderStateResultsTable();
 renderGrid();
 </script>
 </body>
