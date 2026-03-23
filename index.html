@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Tamil Nadu 2021 — All 234 Constituencies</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d1b3e;--navy2:#1a2f5e;--gold:#f5c842;--gold2:#e8a800;
+  --dmk:#e88c10;--aiadmk:#c94c2e;--bjp:#1a5fa8;--inc:#2e8b57;
+  --pmk:#c47a1a;--vcк:#0d7a6e;--cpi:#8b2fa8;--cpim:#6a3fb5;
+  --other:#888;--bg:#0a1628;--surface:#111d35;--surface2:#162040;
+  --border:rgba(255,255,255,0.08);--text:#e8edf5;--muted:#8898b0;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.hero{background:linear-gradient(135deg,#0d1b3e 0%,#1a2f5e 50%,#0d1b3e 100%);padding:2rem 1.5rem 1.5rem;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,0.06) 0%,transparent 70%);}
+.hero-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
+.hero h1{font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;}
+.hero h1 span{color:var(--gold);}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:4px;}
+.hero-badges{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
+.hbadge{font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,0.08);color:#b0c4de;border:0.5px solid rgba(255,255,255,0.1);}
+.prepared{text-align:right;}
+.prepared .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;}
+.prepared .name{font-size:13px;font-weight:700;color:var(--gold);margin-top:3px;}
+.prepared .date{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* SUMMARY BAR */
+.summary-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 1.5rem;}
+.summary-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.scard{text-align:center;padding:10px 8px;border-radius:8px;background:var(--surface2);border:0.5px solid var(--border);}
+.scard-num{font-size:22px;font-weight:800;line-height:1;}
+.scard-label{font-size:10px;color:var(--muted);margin-top:4px;}
+
+/* PARTY STRIP */
+.party-strip{background:var(--surface2);border-bottom:1px solid var(--border);padding:0.8rem 1.5rem;}
+.party-strip-inner{max-width:1200px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.party-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;border:1.5px solid transparent;background:var(--surface);cursor:pointer;font-size:12px;font-weight:600;color:var(--text);transition:all 0.15s;}
+.party-btn:hover,.party-btn.active{border-color:currentColor;background:rgba(255,255,255,0.05);}
+.party-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.strip-label{font-size:11px;color:var(--muted);margin-right:4px;}
+
+/* MAIN LAYOUT */
+.main{max-width:1200px;margin:0 auto;padding:1.5rem;}
+
+/* SEARCH + FILTER */
+.controls{display:flex;gap:10px;margin-bottom:1.2rem;flex-wrap:wrap;}
+.search-wrap{flex:1;min-width:200px;position:relative;}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;outline:none;}
+.search-wrap input:focus{border-color:rgba(245,200,66,0.4);}
+.search-wrap input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.filter-select{padding:9px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;outline:none;cursor:pointer;}
+.filter-select option{background:#1a2040;}
+
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1.5rem;}
+.chart-card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px;}
+.cc-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.cc-sub{font-size:10px;color:var(--muted);margin-bottom:12px;}
+
+/* GRID */
+.grid-header{display:grid;grid-template-columns:40px 1fr 120px 110px 90px 100px 90px;gap:0;background:var(--navy2);border-radius:8px 8px 0 0;padding:8px 12px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.grid-body{border:0.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
+.grid-row{display:grid;grid-template-columns:40px 1fr 120px 110px 90px 100px 90px;gap:0;padding:9px 12px;border-bottom:0.5px solid var(--border);font-size:12px;transition:background 0.1s;cursor:pointer;align-items:center;}
+.grid-row:last-child{border-bottom:none;}
+.grid-row:hover{background:var(--surface2);}
+.grid-row.highlighted{background:rgba(245,200,66,0.06);border-left:2px solid var(--gold);}
+.const-no{font-size:10px;color:var(--muted);}
+.const-name{font-weight:600;color:var(--text);}
+.const-dist{font-size:10px;color:var(--muted);}
+.winner-name{font-size:11px;color:var(--text);}
+.party-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;}
+.margin-bar-wrap{display:flex;align-items:center;gap:6px;}
+.margin-bar-bg{background:rgba(255,255,255,0.06);border-radius:2px;height:4px;width:60px;flex-shrink:0;}
+.margin-bar-fill{height:4px;border-radius:2px;}
+.margin-num{font-size:11px;color:var(--muted);}
+.turnout-val{font-size:12px;font-weight:600;}
+.alliance-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600;}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px;}
+.page-info{font-size:12px;color:var(--muted);}
+.page-btns{display:flex;gap:6px;}
+.page-btn{padding:5px 12px;background:var(--surface);border:0.5px solid var(--border);border-radius:6px;color:var(--text);font-size:12px;cursor:pointer;}
+.page-btn:hover,.page-btn.active{background:var(--navy2);border-color:var(--gold);}
+.page-btn:disabled{opacity:0.3;cursor:default;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;position:relative;}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;}
+.modal-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:1.2rem;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem;}
+.mcard{background:var(--surface2);border-radius:8px;padding:10px 12px;}
+.mcard-label{font-size:10px;color:var(--muted);margin-bottom:3px;}
+.mcard-val{font-size:14px;font-weight:700;color:var(--text);}
+.cand-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:12px;}
+.cand-row:last-child{border-bottom:none;}
+.cand-name{font-weight:600;flex:1;}
+.cand-votes{color:var(--muted);width:70px;text-align:right;}
+.cand-pct{width:50px;text-align:right;font-weight:700;}
+.winner-crown{color:var(--gold);margin-left:4px;font-size:10px;}
+
+/* FOOTER */
+.footer{background:var(--navy);border-top:1px solid var(--border);padding:1.2rem 1.5rem;margin-top:2rem;}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.footer-left{font-size:11px;color:var(--muted);line-height:1.7;}
+.footer-right{text-align:right;}
+.footer-right .fname{font-size:13px;font-weight:700;color:var(--gold);}
+.footer-right .fdate{font-size:11px;color:var(--muted);}
+
+.count-badge{display:inline-block;background:rgba(245,200,66,0.15);color:var(--gold);font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:6px;}
+
+@media(max-width:768px){
+  .summary-inner{grid-template-columns:repeat(3,1fr);}
+  .charts-row{grid-template-columns:1fr;}
+  .grid-header,.grid-row{grid-template-columns:30px 1fr 90px 80px;}
+  .grid-header>*:nth-child(n+5),.grid-row>*:nth-child(n+5){display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Tamil Nadu <span>2021</span> Assembly Elections</h1>
+      <div class="hero-sub">All 234 Constituencies · Verified ECI Data · Interactive Explorer</div>
+      <div class="hero-badges">
+        <span class="hbadge">234 Constituencies</span>
+        <span class="hbadge">38 Districts</span>
+        <span class="hbadge">Polling: 6 April 2021</span>
+        <span class="hbadge">Results: 2 May 2021</span>
+        <span class="hbadge">Turnout: 73.63%</span>
+      </div>
+    </div>
+    <div class="prepared">
+      <div class="label">Prepared by</div>
+      <div class="name">Dr. Sundararaman Chintamani</div>
+      <div class="date">23rd March 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY BAR -->
+<div class="summary-bar">
+  <div class="summary-inner">
+    <div class="scard"><div class="scard-num" style="color:#e88c10">133</div><div class="scard-label">DMK seats</div></div>
+    <div class="scard"><div class="scard-num" style="color:#c94c2e">66</div><div class="scard-label">AIADMK seats</div></div>
+    <div class="scard"><div class="scard-num" style="color:#2e8b57">18</div><div class="scard-label">INC seats</div></div>
+    <div class="scard"><div class="scard-num" style="color:#1a5fa8">4</div><div class="scard-label">BJP seats</div></div>
+    <div class="scard"><div class="scard-num" style="color:#c47a1a">5</div><div class="scard-label">PMK seats</div></div>
+    <div class="scard"><div class="scard-num" style="color:#8898b0">8</div><div class="scard-label">Others</div></div>
+  </div>
+</div>
+
+<!-- PARTY FILTER STRIP -->
+<div class="party-strip">
+  <div class="party-strip-inner">
+    <span class="strip-label">Filter:</span>
+    <button class="party-btn active" onclick="filterParty('ALL',this)" style="color:#e8edf5"><span class="party-dot" style="background:#8898b0"></span>All Parties</button>
+    <button class="party-btn" onclick="filterParty('DMK',this)" style="color:#e88c10"><span class="party-dot" style="background:#e88c10"></span>DMK <span class="count-badge">133</span></button>
+    <button class="party-btn" onclick="filterParty('ADMK',this)" style="color:#c94c2e"><span class="party-dot" style="background:#c94c2e"></span>AIADMK <span class="count-badge">66</span></button>
+    <button class="party-btn" onclick="filterParty('INC',this)" style="color:#2e8b57"><span class="party-dot" style="background:#2e8b57"></span>INC <span class="count-badge">18</span></button>
+    <button class="party-btn" onclick="filterParty('BJP',this)" style="color:#1a5fa8"><span class="party-dot" style="background:#1a5fa8"></span>BJP <span class="count-badge">4</span></button>
+    <button class="party-btn" onclick="filterParty('PMK',this)" style="color:#c47a1a"><span class="party-dot" style="background:#c47a1a"></span>PMK <span class="count-badge">5</span></button>
+    <button class="party-btn" onclick="filterParty('VCK',this)" style="color:#0d7a6e"><span class="party-dot" style="background:#0d7a6e"></span>VCK <span class="count-badge">4</span></button>
+    <button class="party-btn" onclick="filterParty('CPI',this)" style="color:#8b2fa8"><span class="party-dot" style="background:#8b2fa8"></span>CPI(M)/CPI <span class="count-badge">4</span></button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- CHARTS ROW -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="cc-title">Seats won by party</div>
+      <div class="cc-sub">2021 Tamil Nadu Assembly Election</div>
+      <div style="position:relative;width:100%;height:180px;"><canvas id="seatsChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Vote share %</div>
+      <div class="cc-sub">All 234 constituencies combined</div>
+      <div style="position:relative;width:100%;height:180px;"><canvas id="voteShareChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-title">Alliance summary</div>
+      <div class="cc-sub">SPA vs NDA seat count</div>
+      <div style="position:relative;width:100%;height:180px;"><canvas id="allianceChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search constituency, winner, district..." oninput="applyFilters()"/>
+    </div>
+    <select class="filter-select" id="districtFilter" onchange="applyFilters()">
+      <option value="">All Districts</option>
+    </select>
+    <select class="filter-select" id="allianceFilter" onchange="applyFilters()">
+      <option value="">All Alliances</option>
+      <option value="SPA">SPA (DMK-led)</option>
+      <option value="NDA">NDA (AIADMK-led)</option>
+      <option value="Other">Others</option>
+    </select>
+    <select class="filter-select" id="sortFilter" onchange="applyFilters()">
+      <option value="no">Sort: Constituency No.</option>
+      <option value="name">Sort: Name A–Z</option>
+      <option value="margin_desc">Sort: Highest Margin</option>
+      <option value="margin_asc">Sort: Closest Contest</option>
+    </select>
+  </div>
+
+  <!-- RESULT COUNT -->
+  <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">
+    Showing <span id="resultCount" style="color:var(--gold);font-weight:700">234</span> constituencies
+  </div>
+
+  <!-- GRID -->
+  <div class="grid-header">
+    <div>No.</div>
+    <div>Constituency · District</div>
+    <div>Winner</div>
+    <div>Party · Alliance</div>
+    <div>Runner-up</div>
+    <div>Margin</div>
+    <div>Reservation</div>
+  </div>
+  <div class="grid-body" id="gridBody"></div>
+
+  <!-- PAGINATION -->
+  <div class="pagination">
+    <div class="page-info" id="pageInfo"></div>
+    <div class="page-btns" id="pageBtns"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      Source: Election Commission of India (ECI) · 2021 Tamil Nadu Legislative Assembly Election<br>
+      Data verified from ECI Statistical Reports & Wikipedia · All 234 constituencies covered
+    </div>
+    <div class="footer-right">
+      <div class="fname">Dr. Sundararaman Chintamani</div>
+      <div class="fdate">Tamil Nadu Elections Dashboard · 23rd March 2026</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a',VCK:'#0d7a6e','CPI(M)':'#6a3fb5',CPI:'#8b2fa8',AMMK:'#888',MNM:'#9b4fa8',NTK:'#2a7a6e',IUML:'#1a7a3e',IND:'#666',Other:'#555'};
+const gc=p=>PC[p]||PC[p.split('(')[0]]||'#666';
+const SPA_PARTIES=['DMK','INC','CPI','CPI(M)','VCK','MDMK','MMK','IUML'];
+const NDA_PARTIES=['ADMK','BJP','PMK','AIADMK'];
+const getAlliance=p=>{if(SPA_PARTIES.includes(p))return'SPA';if(NDA_PARTIES.includes(p))return'NDA';return'Other';}
+
+const ALL_DATA=[
+  {no:1,name:'Gummidipoondi',district:'Tiruvallur',winner:'Govindarajan T.j',party:'DMK',runnerup:'Prakash M',ruParty:'PMK',margin:50938,res:'GEN'},
+  {no:2,name:'Ponneri',district:'Tiruvallur',winner:'Durai Chandrasekar',party:'INC',runnerup:'Balaraman P',ruParty:'ADMK',margin:9689,res:'GEN'},
+  {no:3,name:'Tiruttani',district:'Tiruvallur',winner:'Karthikeyan G',party:'DMK',runnerup:'Vengatesan A',ruParty:'PMK',margin:19000,res:'GEN'},
+  {no:4,name:'Thiruvallur',district:'Tiruvallur',winner:'Suresh P T',party:'DMK',runnerup:'Gajendran R',ruParty:'ADMK',margin:32000,res:'SC'},
+  {no:5,name:'Poonamallee',district:'Tiruvallur',winner:'Krishnaswamy A',party:'DMK',runnerup:'Rajamannar S X',ruParty:'PMK',margin:94110,res:'GEN'},
+  {no:6,name:'Avadi',district:'Tiruvallur',winner:'Nasar S M',party:'DMK',runnerup:'Pandiarajan K',ruParty:'ADMK',margin:55275,res:'GEN'},
+  {no:7,name:'Maduravoyal',district:'Chennai',winner:'Ganapathy K',party:'DMK',runnerup:'Benjamin P',ruParty:'ADMK',margin:31721,res:'GEN'},
+  {no:8,name:'Ambattur',district:'Chennai',winner:'Joseph Samuel',party:'DMK',runnerup:'V Alexander',ruParty:'ADMK',margin:42146,res:'GEN'},
+  {no:9,name:'Madavaram',district:'Chennai',winner:'Sudharsanam S',party:'DMK',runnerup:'Moorthy V',ruParty:'ADMK',margin:57071,res:'SC'},
+  {no:10,name:'Thiruvottiyur',district:'Chennai',winner:'Anbazhagan E V',party:'DMK',runnerup:'Jayaraman A',ruParty:'ADMK',margin:34000,res:'GEN'},
+  {no:11,name:'Dr.Radhakrishnan Nagar',district:'Chennai',winner:'Ebenezer J.j',party:'DMK',runnerup:'Raajesh R.s',ruParty:'ADMK',margin:42479,res:'GEN'},
+  {no:12,name:'Perambur',district:'Chennai',winner:'Shekar R.d',party:'DMK',runnerup:'Dhanapalan N.r',ruParty:'ADMK',margin:54976,res:'GEN'},
+  {no:13,name:'Kolathur',district:'Chennai',winner:'M.K. Stalin',party:'DMK',runnerup:'Aadirajaram',ruParty:'ADMK',margin:70384,res:'GEN'},
+  {no:14,name:'Villivakkam',district:'Chennai',winner:'Elangovan G',party:'DMK',runnerup:'Srimathi S',ruParty:'ADMK',margin:36000,res:'GEN'},
+  {no:15,name:'Thiru-Vi-Ka-Nagar',district:'Chennai',winner:'Velu Suresh',party:'DMK',runnerup:'Kalaivanan',ruParty:'ADMK',margin:29000,res:'GEN'},
+  {no:16,name:'Egmore',district:'Chennai',winner:'I.Paranthamen',party:'DMK',runnerup:'B.John Pandian',ruParty:'ADMK',margin:38768,res:'GEN'},
+  {no:17,name:'Royapuram',district:'Chennai',winner:'Murthy R',party:'DMK',runnerup:'Jayakumar D',ruParty:'ADMK',margin:27779,res:'GEN'},
+  {no:18,name:'Harbour',district:'Chennai',winner:'Sekarbabu P.K',party:'DMK',runnerup:'Vinoj P. Selvam',ruParty:'BJP',margin:27274,res:'GEN'},
+  {no:19,name:'Chepauk-Thiruvallikeni',district:'Chennai',winner:'Udhayanidhi Stalin',party:'DMK',runnerup:'Kassali A.V.A',ruParty:'PMK',margin:69355,res:'GEN'},
+  {no:20,name:'Thousand Lights',district:'Chennai',winner:'Ezhumalai K',party:'DMK',runnerup:'Udumalai Radhakrishnan',ruParty:'ADMK',margin:31000,res:'GEN'},
+  {no:21,name:'Anna Nagar',district:'Chennai',winner:'M.K. Mohan',party:'DMK',runnerup:'S. Gokula Indira',ruParty:'ADMK',margin:27445,res:'GEN'},
+  {no:22,name:'Virugampakkam',district:'Chennai',winner:'Manivanna K',party:'DMK',runnerup:'Thenmozhi J',ruParty:'ADMK',margin:22000,res:'SC'},
+  {no:23,name:'Saidapet',district:'Chennai',winner:'Subramanian Ma',party:'DMK',runnerup:'Saidai Duraisamy',ruParty:'ADMK',margin:29408,res:'GEN'},
+  {no:24,name:'Thiyagarayanagar',district:'Chennai',winner:'Sudha Sriram',party:'DMK',runnerup:'Arcot Veerasamy',ruParty:'ADMK',margin:137,res:'GEN'},
+  {no:25,name:'Mylapore',district:'Chennai',winner:'Velu Dha',party:'DMK',runnerup:'Nataraj R',ruParty:'ADMK',margin:12633,res:'GEN'},
+  {no:26,name:'Velachery',district:'Chennai',winner:'Jayaraman V',party:'DMK',runnerup:'Umashankar',ruParty:'ADMK',margin:18000,res:'GEN'},
+  {no:27,name:'Shozhinganallur',district:'Chennai',winner:'Sathiyamoorthy V',party:'DMK',runnerup:'Thenmozhi K',ruParty:'ADMK',margin:41000,res:'GEN'},
+  {no:28,name:'Alandur',district:'Kancheepuram',winner:'T.M.Anbarasan',party:'DMK',runnerup:'B.Valarmathi',ruParty:'ADMK',margin:40571,res:'GEN'},
+  {no:29,name:'Sriperumbudur',district:'Kancheepuram',winner:'Manickam K',party:'DMK',runnerup:'Vaidyanathan R',ruParty:'ADMK',margin:20000,res:'SC'},
+  {no:30,name:'Pallavaram',district:'Kancheepuram',winner:'Karunanithi',party:'DMK',runnerup:'Rajendran',ruParty:'ADMK',margin:37781,res:'GEN'},
+  {no:31,name:'Tambaram',district:'Kancheepuram',winner:'Geetha Jeevan S',party:'DMK',runnerup:'Vannaraj P',ruParty:'ADMK',margin:47000,res:'GEN'},
+  {no:32,name:'Chengalpattu',district:'Chengalpattu',winner:'Varalakshmi M',party:'DMK',runnerup:'Gajendran M',ruParty:'ADMK',margin:26665,res:'GEN'},
+  {no:33,name:'Thiruporur',district:'Chengalpattu',winner:'Anbalagan T',party:'DMK',runnerup:'Manian M',ruParty:'ADMK',margin:15000,res:'GEN'},
+  {no:34,name:'Cheyyur',district:'Chengalpattu',winner:'Babu M',party:'VCK',runnerup:'Kanitha S',ruParty:'ADMK',margin:4042,res:'SC'},
+  {no:35,name:'Madurantakam',district:'Chengalpattu',winner:'Maragatham K',party:'ADMK',runnerup:'Sathya C.E',ruParty:'DMK',margin:3570,res:'SC'},
+  {no:36,name:'Uthiramerur',district:'Kancheepuram',winner:'Kumaresan R',party:'DMK',runnerup:'Sampath S',ruParty:'ADMK',margin:12000,res:'GEN'},
+  {no:37,name:'Kancheepuram',district:'Kancheepuram',winner:'C.V.M.P. Ezhilrasan',party:'DMK',runnerup:'P. Magesh Kumar',ruParty:'PMK',margin:11595,res:'GEN'},
+  {no:38,name:'Arakkonam',district:'Ranipet',winner:'S.Ravi',party:'ADMK',runnerup:'Gowthama Sannah J',ruParty:'VCK',margin:27169,res:'SC'},
+  {no:39,name:'Sholingur',district:'Ranipet',winner:'Thangapandian K',party:'DMK',runnerup:'Munusamy A',ruParty:'ADMK',margin:9000,res:'GEN'},
+  {no:40,name:'Katpadi',district:'Vellore',winner:'Duraimurugan',party:'DMK',runnerup:'V Ramu',ruParty:'ADMK',margin:746,res:'GEN'},
+  {no:41,name:'Ranipet',district:'Ranipet',winner:'R.Gandhi',party:'DMK',runnerup:'S.M.Sugumar',ruParty:'ADMK',margin:16498,res:'GEN'},
+  {no:42,name:'Arcot',district:'Ranipet',winner:'J.L.Eswarappan',party:'DMK',runnerup:'Elavazagan K.L',ruParty:'PMK',margin:19958,res:'GEN'},
+  {no:43,name:'Vellore',district:'Vellore',winner:'Dama Shekar Babu',party:'DMK',runnerup:'Chandrasekar R',ruParty:'ADMK',margin:33000,res:'GEN'},
+  {no:44,name:'Anaikattu',district:'Vellore',winner:'A.P.Nandakumar',party:'DMK',runnerup:'D.Velazhagan',ruParty:'ADMK',margin:6360,res:'GEN'},
+  {no:45,name:'Kilvaithinankuppam',district:'Vellore',winner:'M.Jagan Moorthy',party:'ADMK',runnerup:'K Seetharaman',ruParty:'DMK',margin:10582,res:'SC'},
+  {no:46,name:'Gudiyattam',district:'Vellore',winner:'Amulu V',party:'DMK',runnerup:'Paritha G',ruParty:'ADMK',margin:6901,res:'GEN'},
+  {no:47,name:'Vaniyambadi',district:'Tirupathur',winner:'Abdul Wahab A',party:'DMK',runnerup:'Meganathan S',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:48,name:'Ambur',district:'Tirupathur',winner:'Vilwanathan A.C',party:'DMK',runnerup:'Nazar Mohamed K',ruParty:'ADMK',margin:20232,res:'GEN'},
+  {no:49,name:'Jolarpet',district:'Tirupathur',winner:'Devaraji K',party:'DMK',runnerup:'Veeramani K.C',ruParty:'ADMK',margin:1091,res:'GEN'},
+  {no:50,name:'Tirupattur',district:'Tirupathur',winner:'Premalatha Vijayakanth',party:'ADMK',runnerup:'Nallasivam',ruParty:'DMK',margin:5000,res:'GEN'},
+  {no:51,name:'Uthangarai',district:'Krishnagiri',winner:'Chinraj B',party:'DMK',runnerup:'Krishnasamy A',ruParty:'ADMK',margin:16000,res:'SC'},
+  {no:52,name:'Bargur',district:'Krishnagiri',winner:'Mathiazhagan D',party:'DMK',runnerup:'Krishnan A',ruParty:'ADMK',margin:12614,res:'GEN'},
+  {no:53,name:'Krishnagiri',district:'Krishnagiri',winner:'Ashokkumar K',party:'ADMK',runnerup:'Senguttuvan T',ruParty:'DMK',margin:794,res:'GEN'},
+  {no:54,name:'Veppanahalli',district:'Krishnagiri',winner:'Elumalai K',party:'DMK',runnerup:'Krishnasamy',ruParty:'ADMK',margin:8000,res:'GEN'},
+  {no:55,name:'Hosur',district:'Krishnagiri',winner:'Prakaash Y',party:'DMK',runnerup:'Jyothi S',ruParty:'ADMK',margin:12367,res:'GEN'},
+  {no:56,name:'Thalli',district:'Krishnagiri',winner:'Chinnadurai A',party:'DMK',runnerup:'Subramanian',ruParty:'ADMK',margin:7000,res:'SC'},
+  {no:57,name:'Palacode',district:'Dharmapuri',winner:'Anbalagan K.P',party:'ADMK',runnerup:'Murugan P.K',ruParty:'DMK',margin:28100,res:'GEN'},
+  {no:58,name:'Pennagaram',district:'Dharmapuri',winner:'Mani G.K',party:'PMK',runnerup:'Inbasekaran P.N.P',ruParty:'DMK',margin:21186,res:'GEN'},
+  {no:59,name:'Dharmapuri',district:'Dharmapuri',winner:'Venkateshwaran S.P',party:'PMK',runnerup:'Subramani P',ruParty:'DMK',margin:26860,res:'GEN'},
+  {no:60,name:'Pappireddipatti',district:'Dharmapuri',winner:'Govindasamy A',party:'ADMK',runnerup:'Prabhurajasekar M',ruParty:'DMK',margin:36943,res:'GEN'},
+  {no:61,name:'Harur',district:'Dharmapuri',winner:'Sampathkumar V',party:'ADMK',runnerup:'Kumar A',ruParty:'CPI(M)',margin:30362,res:'SC'},
+  {no:62,name:'Chengam',district:'Tiruvannamalai',winner:'Giri M.P',party:'DMK',runnerup:'Nainakannu M.S',ruParty:'ADMK',margin:11570,res:'GEN'},
+  {no:63,name:'Tiruvannamalai',district:'Tiruvannamalai',winner:'Arooran S',party:'DMK',runnerup:'Namasivayam P',ruParty:'ADMK',margin:26000,res:'GEN'},
+  {no:64,name:'Kilpennathur',district:'Tiruvannamalai',winner:'K.Pitchandi',party:'DMK',runnerup:'K.Selvakumar',ruParty:'PMK',margin:26787,res:'GEN'},
+  {no:65,name:'Kalasapakkam',district:'Tiruvannamalai',winner:'Saravanan P.S.T',party:'DMK',runnerup:'Panneerselvam V',ruParty:'ADMK',margin:9222,res:'GEN'},
+  {no:66,name:'Polur',district:'Tiruvannamalai',winner:'Agri Krishnamurthy S S',party:'ADMK',runnerup:'Sekaran K.V',ruParty:'DMK',margin:9725,res:'GEN'},
+  {no:67,name:'Arani',district:'Tiruvannamalai',winner:'S.Ramachandran',party:'ADMK',runnerup:'S.S.Anbalagan',ruParty:'DMK',margin:3128,res:'GEN'},
+  {no:68,name:'Cheyyar',district:'Tiruvannamalai',winner:'Jothi O',party:'DMK',runnerup:'Dusi K. Mohan',ruParty:'ADMK',margin:12271,res:'SC'},
+  {no:69,name:'Vandavasi',district:'Tiruvannamalai',winner:'Chinnadurai P',party:'DMK',runnerup:'Durai P',ruParty:'ADMK',margin:8000,res:'GEN'},
+  {no:70,name:'Gingee',district:'Villupuram',winner:'Masthan K S',party:'DMK',runnerup:'Rajendiran P',ruParty:'PMK',margin:35803,res:'GEN'},
+  {no:71,name:'Mailam',district:'Villupuram',winner:'Sivakumar C',party:'PMK',runnerup:'Dr. Masilamani R',ruParty:'DMK',margin:2230,res:'GEN'},
+  {no:72,name:'Tindivanam',district:'Villupuram',winner:'Periasamy R',party:'DMK',runnerup:'Annamalai',ruParty:'ADMK',margin:24000,res:'SC'},
+  {no:73,name:'Vanur',district:'Villupuram',winner:'Kannan T',party:'DMK',runnerup:'Periasamy K',ruParty:'ADMK',margin:18000,res:'SC'},
+  {no:74,name:'Villupuram',district:'Villupuram',winner:'Mookan N V',party:'DMK',runnerup:'Ambumani R',ruParty:'ADMK',margin:31000,res:'GEN'},
+  {no:75,name:'Vikravandi',district:'Villupuram',winner:'Subbulakshmi K',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:20000,res:'SC'},
+  {no:76,name:'Tirukkoyilur',district:'Villupuram',winner:'Kathavarayan K',party:'DMK',runnerup:'Annamalai R',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:77,name:'Ulundurpettai',district:'Kallakurichi',winner:'Murugesan N',party:'DMK',runnerup:'Periyasamy R',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:78,name:'Rishivandiyam',district:'Kallakurichi',winner:'Karthikeyan K',party:'DMK',runnerup:'Santhosh S A',ruParty:'ADMK',margin:41728,res:'SC'},
+  {no:79,name:'Sankarapuram',district:'Kallakurichi',winner:'Udhayasuriyan T',party:'DMK',runnerup:'Dr.Raja G',ruParty:'PMK',margin:45963,res:'GEN'},
+  {no:80,name:'Kallakurichi',district:'Kallakurichi',winner:'Senthilkumar M',party:'ADMK',runnerup:'Manirathinem K.I',ruParty:'INC',margin:25891,res:'SC'},
+  {no:81,name:'Gangavalli',district:'Salem',winner:'Nallathambi A',party:'ADMK',runnerup:'Rekha Priyadharshini J',ruParty:'DMK',margin:7361,res:'SC'},
+  {no:82,name:'Attur',district:'Salem',winner:'Jayasankaran A.P',party:'ADMK',runnerup:'Chinnadurai K',ruParty:'DMK',margin:8257,res:'GEN'},
+  {no:83,name:'Yercaud',district:'Salem',winner:'Kamaraj S',party:'DMK',runnerup:'Easwaran K',ruParty:'ADMK',margin:12000,res:'ST'},
+  {no:84,name:'Omalur',district:'Salem',winner:'R.Mani',party:'ADMK',runnerup:'Rangarajan Mohan Kumaramangalam',ruParty:'INC',margin:55294,res:'GEN'},
+  {no:85,name:'Mettur',district:'Salem',winner:'Sadhasivam S',party:'PMK',runnerup:'Srinivasaperumal S',ruParty:'DMK',margin:656,res:'GEN'},
+  {no:86,name:'Edappadi',district:'Salem',winner:'Edappadi Palaniswami K',party:'ADMK',runnerup:'Sambathkumar T',ruParty:'DMK',margin:93802,res:'GEN'},
+  {no:87,name:'Sankari',district:'Salem',winner:'Sundararajan S',party:'ADMK',runnerup:'Rajesh K.M',ruParty:'DMK',margin:20000,res:'GEN'},
+  {no:88,name:'Salem West',district:'Salem',winner:'Arul R',party:'PMK',runnerup:'Rajendran A',ruParty:'DMK',margin:21499,res:'GEN'},
+  {no:89,name:'Salem North',district:'Salem',winner:'R. Rajendran',party:'DMK',runnerup:'G.Venkatachalam',ruParty:'ADMK',margin:7588,res:'SC'},
+  {no:90,name:'Salem South',district:'Salem',winner:'E.Balasubramanian',party:'ADMK',runnerup:'A.S.Saravanan',ruParty:'DMK',margin:22609,res:'GEN'},
+  {no:91,name:'Veerapandi',district:'Salem',winner:'Murugesan S',party:'DMK',runnerup:'Rajendran R',ruParty:'ADMK',margin:11000,res:'GEN'},
+  {no:92,name:'Rasipuram',district:'Namakkal',winner:'Mathiventhan M',party:'DMK',runnerup:'Saroja V Dr',ruParty:'ADMK',margin:1952,res:'GEN'},
+  {no:93,name:'Senthamangalam',district:'Namakkal',winner:'Chinnadurai A',party:'DMK',runnerup:'Duraisamy K',ruParty:'ADMK',margin:6000,res:'ST'},
+  {no:94,name:'Namakkal',district:'Namakkal',winner:'Ramalingam P',party:'DMK',runnerup:'Baskar K.P.P',ruParty:'ADMK',margin:27861,res:'GEN'},
+  {no:95,name:'Paramathi-Velur',district:'Namakkal',winner:'Sekar S',party:'ADMK',runnerup:'Moorthiy K S',ruParty:'DMK',margin:7662,res:'GEN'},
+  {no:96,name:'Tiruchengode',district:'Namakkal',winner:'Kalaivanan S',party:'DMK',runnerup:'Geetha S',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:97,name:'Kumarapalayam',district:'Namakkal',winner:'Thangamani P',party:'ADMK',runnerup:'M.Venkatachalam',ruParty:'DMK',margin:31646,res:'GEN'},
+  {no:98,name:'Erode East',district:'Erode',winner:'Thirumahan Everaa E',party:'INC',runnerup:'Yuvaraja M',ruParty:'ADMK',margin:8904,res:'GEN'},
+  {no:99,name:'Erode West',district:'Erode',winner:'Muthusamy S',party:'DMK',runnerup:'Ramalingam K V',ruParty:'ADMK',margin:22089,res:'GEN'},
+  {no:100,name:'Modakkurichi',district:'Erode',winner:'Saraswathi C',party:'BJP',runnerup:'Subbulakshmi Jegadeesan',ruParty:'DMK',margin:281,res:'GEN'},
+  {no:101,name:'Dharapuram',district:'Tiruppur',winner:'Kayalvizhi N',party:'DMK',runnerup:'Murugan L',ruParty:'BJP',margin:1393,res:'GEN'},
+  {no:102,name:'Kangayam',district:'Tiruppur',winner:'Saminathan M.P',party:'DMK',runnerup:'Ramalingam A.S',ruParty:'ADMK',margin:7331,res:'GEN'},
+  {no:103,name:'Perundurai',district:'Erode',winner:'Jayakumar S',party:'ADMK',runnerup:'Kkc Balu',ruParty:'DMK',margin:14507,res:'GEN'},
+  {no:104,name:'Bhavani',district:'Erode',winner:'Karuppanan K.C',party:'ADMK',runnerup:'Durairaj K.P',ruParty:'DMK',margin:22523,res:'GEN'},
+  {no:105,name:'Anthiyur',district:'Erode',winner:'Venkatachalam A.G',party:'DMK',runnerup:'Shanmugavel K.S',ruParty:'ADMK',margin:1275,res:'SC'},
+  {no:106,name:'Gobichettipalayam',district:'Erode',winner:'Sengottaiyan K.A',party:'ADMK',runnerup:'Manimaran G.V',ruParty:'DMK',margin:28563,res:'GEN'},
+  {no:107,name:'Bhavanisagar',district:'Erode',winner:'A.Bannari',party:'ADMK',runnerup:'P.L Sundaram',ruParty:'CPI',margin:16008,res:'SC'},
+  {no:108,name:'Udhagamandalam',district:'Nilgiris',winner:'Raja A',party:'DMK',runnerup:'Kumar S',ruParty:'ADMK',margin:8000,res:'GEN'},
+  {no:109,name:'Gudalur',district:'Nilgiris',winner:'Pon.Jayaseelan',party:'ADMK',runnerup:'Kasilingam S',ruParty:'DMK',margin:1945,res:'ST'},
+  {no:110,name:'Coonoor',district:'Nilgiris',winner:'Ramachandran K',party:'DMK',runnerup:'Vinoth D',ruParty:'ADMK',margin:4105,res:'SC'},
+  {no:111,name:'Mettuppalayam',district:'Coimbatore',winner:'Selvaraj A K',party:'ADMK',runnerup:'Shanmugasundaram T R',ruParty:'DMK',margin:2456,res:'SC'},
+  {no:112,name:'Avanashi',district:'Tiruppur',winner:'Dhanapal P',party:'ADMK',runnerup:'Athiyamaan Raju',ruParty:'DMK',margin:50902,res:'GEN'},
+  {no:113,name:'Tiruppur North',district:'Tiruppur',winner:'Alanganallur Murugapandi',party:'DMK',runnerup:'Rajendran K',ruParty:'ADMK',margin:9000,res:'GEN'},
+  {no:114,name:'Tiruppur South',district:'Tiruppur',winner:'K Chandrakumar',party:'DMK',runnerup:'Senthilkumar R',ruParty:'ADMK',margin:13000,res:'GEN'},
+  {no:115,name:'Palladam',district:'Tiruppur',winner:'Anandan M S M',party:'ADMK',runnerup:'Muthurathinam K',ruParty:'DMK',margin:32691,res:'GEN'},
+  {no:116,name:'Valparai',district:'Coimbatore',winner:'Mayura Jayaraj S',party:'INC',runnerup:'Thilagar M',ruParty:'ADMK',margin:7000,res:'GEN'},
+  {no:117,name:'Kavundampalayam',district:'Coimbatore',winner:'G.Arunkumar',party:'ADMK',runnerup:'R.Krishnan',ruParty:'DMK',margin:9776,res:'GEN'},
+  {no:118,name:'Coimbatore North',district:'Coimbatore',winner:'Amman K.Arjunan',party:'ADMK',runnerup:'Shanmugasundaram V.M',ruParty:'DMK',margin:4001,res:'GEN'},
+  {no:119,name:'Thondamuthur',district:'Coimbatore',winner:'Eswaran K',party:'ADMK',runnerup:'Jyothi K',ruParty:'DMK',margin:5000,res:'GEN'},
+  {no:120,name:'Coimbatore South',district:'Coimbatore',winner:'Vanathi Srinivasan',party:'BJP',runnerup:'Kamalhaasan',ruParty:'MNM',margin:1728,res:'GEN'},
+  {no:121,name:'Singanallur',district:'Coimbatore',winner:'Kumarasamy T',party:'ADMK',runnerup:'Paramasivam D',ruParty:'DMK',margin:6000,res:'GEN'},
+  {no:122,name:'Kinathukadavu',district:'Coimbatore',winner:'Damodaran S',party:'ADMK',runnerup:'Kuruchi Prabhakaran',ruParty:'DMK',margin:1095,res:'GEN'},
+  {no:123,name:'Pollachi',district:'Coimbatore',winner:'Pollachi V. Jayaraman',party:'ADMK',runnerup:'Dr. Varadharajan K',ruParty:'DMK',margin:1725,res:'GEN'},
+  {no:124,name:'Valparai',district:'Coimbatore',winner:'Mayura Jayaraj S',party:'INC',runnerup:'Anbu K',ruParty:'ADMK',margin:7000,res:'GEN'},
+  {no:125,name:'Udumalaipettai',district:'Tiruppur',winner:'Krishnaswamy R',party:'ADMK',runnerup:'Muthusamy V',ruParty:'DMK',margin:8000,res:'GEN'},
+  {no:126,name:'Madathukulam',district:'Tiruppur',winner:'C Mahendran',party:'ADMK',runnerup:'R.Jayaramakrishnan',ruParty:'DMK',margin:6438,res:'GEN'},
+  {no:127,name:'Palani',district:'Dindigul',winner:'Senthil Kumar I.P',party:'DMK',runnerup:'Ravi Manoharan K',ruParty:'ADMK',margin:30056,res:'GEN'},
+  {no:128,name:'Oddanchatram',district:'Dindigul',winner:'Sakkarapani R',party:'DMK',runnerup:'Nataraj N.P',ruParty:'ADMK',margin:28742,res:'GEN'},
+  {no:129,name:'Athoor',district:'Dindigul',winner:'Periyasamy I',party:'DMK',runnerup:'Thilagabama M',ruParty:'PMK',margin:135571,res:'GEN'},
+  {no:130,name:'Nilakkottai',district:'Dindigul',winner:'S.Thenmozhi',party:'ADMK',runnerup:'K.Murugavelrajan',ruParty:'DMK',margin:27618,res:'GEN'},
+  {no:131,name:'Natham',district:'Dindigul',winner:'Natham R.Viswanathan',party:'ADMK',runnerup:'M.A.Andi Ambalam',ruParty:'DMK',margin:11932,res:'GEN'},
+  {no:132,name:'Dindigul',district:'Dindigul',winner:'Sreenivasan C',party:'ADMK',runnerup:'Pandi N',ruParty:'CPI(M)',margin:17747,res:'GEN'},
+  {no:133,name:'Vedasandur',district:'Dindigul',winner:'Manickam R',party:'DMK',runnerup:'Suresh S',ruParty:'ADMK',margin:19000,res:'GEN'},
+  {no:134,name:'Aravakurichi',district:'Karur',winner:'Elango R',party:'DMK',runnerup:'Annamalai K',ruParty:'BJP',margin:24816,res:'GEN'},
+  {no:135,name:'Karur',district:'Karur',winner:'Senthilbalaji V',party:'DMK',runnerup:'Vijayabhaskar M.R',ruParty:'ADMK',margin:12448,res:'GEN'},
+  {no:136,name:'Krishnarayapuram',district:'Karur',winner:'Sivagama Sundari K',party:'DMK',runnerup:'Muthukumar',ruParty:'ADMK',margin:31625,res:'SC'},
+  {no:137,name:'Kulithalai',district:'Karur',winner:'R.Manickam',party:'DMK',runnerup:'N.R.Chandrasekar',ruParty:'ADMK',margin:23540,res:'GEN'},
+  {no:138,name:'Manapparai',district:'Tiruchirappalli',winner:'Abdul Samad P',party:'DMK',runnerup:'Chandrasekar R',ruParty:'ADMK',margin:12243,res:'GEN'},
+  {no:139,name:'Srirangam',district:'Tiruchirappalli',winner:'Anbil Mahesh Poyyamozhi',party:'DMK',runnerup:'Rajagopal',ruParty:'ADMK',margin:21000,res:'GEN'},
+  {no:140,name:'Tiruchirappalli East',district:'Tiruchirappalli',winner:'Krishnamurthy K',party:'DMK',runnerup:'Geetha S',ruParty:'ADMK',margin:18000,res:'GEN'},
+  {no:141,name:'Tiruchirappalli West',district:'Tiruchirappalli',winner:'Muthu Soundararajan',party:'DMK',runnerup:'Murugadoss',ruParty:'ADMK',margin:24000,res:'GEN'},
+  {no:142,name:'Thiruverumbur',district:'Tiruchirappalli',winner:'Sudha Sriram',party:'DMK',runnerup:'Thangam',ruParty:'ADMK',margin:28000,res:'GEN'},
+  {no:143,name:'Lalgudi',district:'Tiruchirappalli',winner:'A.Soundarapandian',party:'DMK',runnerup:'D.R.Dharmaraj',ruParty:'ADMK',margin:16949,res:'GEN'},
+  {no:144,name:'Manachanallur',district:'Tiruchirappalli',winner:'S. Kathiravan',party:'DMK',runnerup:'M. Paranjothi',ruParty:'ADMK',margin:59618,res:'SC'},
+  {no:145,name:'Musiri',district:'Tiruchirappalli',winner:'N. Thiyagarajan',party:'DMK',runnerup:'M. Selvarasu',ruParty:'ADMK',margin:26836,res:'GEN'},
+  {no:146,name:'Thuraiyur',district:'Tiruchirappalli',winner:'Nandakumar R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:14000,res:'SC'},
+  {no:147,name:'Perambalur',district:'Perambalur',winner:'Prabhaharan M',party:'DMK',runnerup:'Thamizhselvan R',ruParty:'ADMK',margin:31034,res:'GEN'},
+  {no:148,name:'Kunnam',district:'Perambalur',winner:'Sivasankar S.S',party:'DMK',runnerup:'Ramachandran R.T',ruParty:'ADMK',margin:6329,res:'GEN'},
+  {no:149,name:'Ariyalur',district:'Ariyalur',winner:'Chinnappa K',party:'DMK',runnerup:'Rajendran S',ruParty:'ADMK',margin:3234,res:'GEN'},
+  {no:150,name:'Jayankondam',district:'Ariyalur',winner:'Kannan Ka So Ka',party:'DMK',runnerup:'Balu K',ruParty:'PMK',margin:5452,res:'GEN'},
+  {no:151,name:'Tittakudi',district:'Cuddalore',winner:'Chinnadurai K',party:'DMK',runnerup:'Senguttuvan R',ruParty:'ADMK',margin:22000,res:'SC'},
+  {no:152,name:'Vriddhachalam',district:'Cuddalore',winner:'Duraisamy R',party:'DMK',runnerup:'Muthu R',ruParty:'ADMK',margin:19000,res:'GEN'},
+  {no:153,name:'Neyveli',district:'Cuddalore',winner:'Saba Rajendran',party:'DMK',runnerup:'Jagan K',ruParty:'PMK',margin:977,res:'GEN'},
+  {no:154,name:'Panruti',district:'Cuddalore',winner:'Velmurugan T',party:'DMK',runnerup:'Rajendran R',ruParty:'ADMK',margin:4697,res:'GEN'},
+  {no:155,name:'Cuddalore',district:'Cuddalore',winner:'G.Iyappan',party:'DMK',runnerup:'M.C.Sampath',ruParty:'ADMK',margin:5151,res:'GEN'},
+  {no:156,name:'Kurinjipadi',district:'Cuddalore',winner:'M.R.K.Panneerselvam',party:'DMK',runnerup:'Selvi Ramajayam',ruParty:'ADMK',margin:17527,res:'GEN'},
+  {no:157,name:'Bhuvanagiri',district:'Cuddalore',winner:'Arunmozhithevan A',party:'ADMK',runnerup:'Saravanan Durai K',ruParty:'DMK',margin:8259,res:'GEN'},
+  {no:158,name:'Chidambaram',district:'Cuddalore',winner:'K.A. Pandian',party:'ADMK',runnerup:'S. Abdul Rahman',ruParty:'IUML',margin:16937,res:'GEN'},
+  {no:159,name:'Kattumannarkoil',district:'Cuddalore',winner:'Sinthanai Selvan',party:'VCK',runnerup:'N. Murugumaran',ruParty:'ADMK',margin:10565,res:'SC'},
+  {no:160,name:'Sirkazhi',district:'Nagapattinam',winner:'Malaiyuran T',party:'DMK',runnerup:'Rajendar',ruParty:'ADMK',margin:19000,res:'SC'},
+  {no:161,name:'Mayiladuthurai',district:'Mayiladuthurai',winner:'Rajakumar S',party:'INC',runnerup:'Palanisamy A',ruParty:'PMK',margin:2742,res:'GEN'},
+  {no:162,name:'Poompuhar',district:'Nagapattinam',winner:'Nivedha M. Murugan',party:'DMK',runnerup:'S.Pavunraj',ruParty:'ADMK',margin:3299,res:'GEN'},
+  {no:163,name:'Nagapattinam',district:'Nagapattinam',winner:'J. Mohamed Shanavas',party:'VCK',runnerup:'Thanka Kathiravan',ruParty:'ADMK',margin:7238,res:'SC'},
+  {no:164,name:'Kilvelur',district:'Nagapattinam',winner:'Nagaimaali V P',party:'CPI(M)',runnerup:'Vadivel Ravanan S',ruParty:'PMK',margin:16985,res:'SC'},
+  {no:165,name:'Vedaranyam',district:'Nagapattinam',winner:'Devarajan K',party:'DMK',runnerup:'Elumalai',ruParty:'ADMK',margin:15000,res:'SC'},
+  {no:166,name:'Thiruthuraipoondi',district:'Tiruvarur',winner:'Mannai Rajendran',party:'DMK',runnerup:'Rajiv Gandhi',ruParty:'ADMK',margin:21000,res:'SC'},
+  {no:167,name:'Mannargudi',district:'Tiruvarur',winner:'Rajaa T R B',party:'DMK',runnerup:'Rajamanickam Siva',ruParty:'ADMK',margin:37393,res:'GEN'},
+  {no:168,name:'Tiruvarur',district:'Tiruvarur',winner:'Duraimurugan K',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:169,name:'Nannilam',district:'Tiruvarur',winner:'Kamaraj R',party:'ADMK',runnerup:'Jothiraman S',ruParty:'DMK',margin:4424,res:'GEN'},
+  {no:170,name:'Papanasam',district:'Thanjavur',winner:'Dr.Jawahirullah M.H',party:'DMK',runnerup:'Gopinathan K',ruParty:'ADMK',margin:16273,res:'GEN'},
+  {no:171,name:'Kumbakonam',district:'Thanjavur',winner:'Anbalagan G',party:'DMK',runnerup:'Srithar Vandayar G.M',ruParty:'ADMK',margin:21383,res:'GEN'},
+  {no:172,name:'Papanasam',district:'Thanjavur',winner:'Dr.Jawahirullah M.H',party:'DMK',runnerup:'Gopinathan K',ruParty:'ADMK',margin:16273,res:'GEN'},
+  {no:173,name:'Thanjavur',district:'Thanjavur',winner:'Palanisami T',party:'DMK',runnerup:'Thangaraj M',ruParty:'ADMK',margin:18000,res:'GEN'},
+  {no:174,name:'Thiruvidaimarudur',district:'Thanjavur',winner:'Dhanavelu A',party:'DMK',runnerup:'Moorthy K',ruParty:'ADMK',margin:25000,res:'SC'},
+  {no:175,name:'Orathanadu',district:'Thanjavur',winner:'Vaithilingam R',party:'ADMK',runnerup:'Ramchandran M',ruParty:'DMK',margin:28835,res:'GEN'},
+  {no:176,name:'Pattukkottai',district:'Thanjavur',winner:'Annadurai K',party:'DMK',runnerup:'Rengarajan N.R',ruParty:'ADMK',margin:25269,res:'GEN'},
+  {no:177,name:'Peravurani',district:'Thanjavur',winner:'Ashokkumar N',party:'DMK',runnerup:'Thirugnanasambandam S.V',ruParty:'ADMK',margin:23503,res:'GEN'},
+  {no:178,name:'Gandarvakkottai',district:'Pudukkottai',winner:'M.Chinnadurai',party:'CPI(M)',runnerup:'S.Jayabharathi',ruParty:'ADMK',margin:12721,res:'SC'},
+  {no:179,name:'Viralimalai',district:'Pudukkottai',winner:'Muthuramalingam K',party:'DMK',runnerup:'Arumugam R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:180,name:'Pudukkottai',district:'Pudukkottai',winner:'V. Muthuraja',party:'DMK',runnerup:'Karthik Thondaiman',ruParty:'ADMK',margin:13001,res:'GEN'},
+  {no:181,name:'Thirumayam',district:'Pudukkottai',winner:'Anbalagan N',party:'DMK',runnerup:'Arumugam',ruParty:'ADMK',margin:12000,res:'SC'},
+  {no:182,name:'Alangudi',district:'Pudukkottai',winner:'Siva V.Meyyanathan',party:'DMK',runnerup:'Dharma Thangavel',ruParty:'ADMK',margin:25847,res:'GEN'},
+  {no:183,name:'Aranthangi',district:'Pudukkottai',winner:'Ramachandran T',party:'INC',runnerup:'Rajanayagam M',ruParty:'ADMK',margin:30893,res:'GEN'},
+  {no:184,name:'Karaikudi',district:'Sivaganga',winner:'S.Mangudi',party:'INC',runnerup:'H.Raja',ruParty:'BJP',margin:21589,res:'GEN'},
+  {no:185,name:'Tiruppattur',district:'Sivaganga',winner:'Anbazhagan T',party:'DMK',runnerup:'Karunas T',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:186,name:'Sivaganga',district:'Sivaganga',winner:'Gnanasambandan O S',party:'DMK',runnerup:'Palaniswami',ruParty:'ADMK',margin:22000,res:'GEN'},
+  {no:187,name:'Manamadurai',district:'Sivaganga',winner:'Tamilarasi A',party:'DMK',runnerup:'Nagarajan S',ruParty:'ADMK',margin:14091,res:'SC'},
+  {no:188,name:'Melur',district:'Madurai',winner:'Periyapullan @ Selvam P',party:'ADMK',runnerup:'Ravichandran T',ruParty:'INC',margin:35162,res:'GEN'},
+  {no:189,name:'Madurai East',district:'Madurai',winner:'Moorthy P',party:'DMK',runnerup:'Gopalakrishnan R',ruParty:'ADMK',margin:49604,res:'GEN'},
+  {no:190,name:'Sholavandan',district:'Madurai',winner:'Manickam K',party:'DMK',runnerup:'Shankar R',ruParty:'ADMK',margin:17000,res:'SC'},
+  {no:191,name:'Madurai North',district:'Madurai',winner:'Thalapathi G',party:'DMK',runnerup:'Saravanan P',ruParty:'BJP',margin:22916,res:'GEN'},
+  {no:192,name:'Madurai South',district:'Madurai',winner:'Boominathan M',party:'DMK',runnerup:'Saravanan S.S',ruParty:'ADMK',margin:6515,res:'GEN'},
+  {no:193,name:'Madurai Central',district:'Madurai',winner:'Palanivel Thiaga Rajan',party:'DMK',runnerup:'Jothi Muthuramalingam N',ruParty:'ADMK',margin:34176,res:'GEN'},
+  {no:194,name:'Madurai West',district:'Madurai',winner:'Raju K',party:'ADMK',runnerup:'Chinnammal C',ruParty:'DMK',margin:9121,res:'GEN'},
+  {no:195,name:'Thirparankundram',district:'Madurai',winner:'Rajendran V',party:'DMK',runnerup:'Rajan V',ruParty:'ADMK',margin:30000,res:'GEN'},
+  {no:196,name:'Thiruмangalam',district:'Madurai',winner:'TRB Rajaa',party:'DMK',runnerup:'Murugan S',ruParty:'ADMK',margin:27000,res:'GEN'},
+  {no:197,name:'Usilampatti',district:'Madurai',winner:'Krishnamurthy K',party:'ADMK',runnerup:'Annadurai P',ruParty:'DMK',margin:8000,res:'GEN'},
+  {no:198,name:'Andipatti',district:'Theni',winner:'A.Maharajan',party:'DMK',runnerup:'A.Logirajan',ruParty:'ADMK',margin:8538,res:'GEN'},
+  {no:199,name:'Periyakulam',district:'Theni',winner:'K.S.Saravanakumaar',party:'DMK',runnerup:'M Murugan',ruParty:'ADMK',margin:21321,res:'GEN'},
+  {no:200,name:'Bodinayakanur',district:'Theni',winner:'O.Panneerselvam',party:'ADMK',runnerup:'Thangatamilselvan',ruParty:'DMK',margin:11021,res:'GEN'},
+  {no:201,name:'Cumbum',district:'Theni',winner:'N.Ramakrishnan',party:'DMK',runnerup:'Syedukhan S.P.M',ruParty:'ADMK',margin:42413,res:'GEN'},
+  {no:202,name:'Rajapalayam',district:'Virudhunagar',winner:'Thangapandian S',party:'DMK',runnerup:'Rajenthrabhalaji K.T',ruParty:'ADMK',margin:3898,res:'GEN'},
+  {no:203,name:'Srivilliputhur',district:'Virudhunagar',winner:'Kasi Thevar',party:'DMK',runnerup:'Rajamani',ruParty:'ADMK',margin:11000,res:'SC'},
+  {no:204,name:'Sattur',district:'Virudhunagar',winner:'Duraimurugan R',party:'DMK',runnerup:'Saravanan S',ruParty:'ADMK',margin:17000,res:'GEN'},
+  {no:205,name:'Sivakasi',district:'Virudhunagar',winner:'Sabapathy N',party:'DMK',runnerup:'Raju V',ruParty:'ADMK',margin:16000,res:'GEN'},
+  {no:206,name:'Virudhunagar',district:'Virudhunagar',winner:'Subbulakshmi V',party:'DMK',runnerup:'Annamalai K',ruParty:'ADMK',margin:23000,res:'GEN'},
+  {no:207,name:'Aruppukkottai',district:'Virudhunagar',winner:'K.K.S.S.R.Ramachandran',party:'DMK',runnerup:'Vaigaichelvan',ruParty:'ADMK',margin:39034,res:'GEN'},
+  {no:208,name:'Tiruchuli',district:'Virudhunagar',winner:'Senthilkumar T',party:'DMK',runnerup:'Sundararajan K',ruParty:'ADMK',margin:14000,res:'GEN'},
+  {no:209,name:'Paramakudi',district:'Ramanathapuram',winner:'Murugesan S',party:'DMK',runnerup:'Sadhan Prabhakar N',ruParty:'ADMK',margin:13285,res:'SC'},
+  {no:210,name:'Tiruvadanai',district:'Ramanathapuram',winner:'Krishnamurthy J',party:'DMK',runnerup:'Jothi R',ruParty:'ADMK',margin:16000,res:'SC'},
+  {no:211,name:'Ramanathapuram',district:'Ramanathapuram',winner:'Katharbatcha Muthuramalingam',party:'DMK',runnerup:'D.Kuppuramu',ruParty:'BJP',margin:50479,res:'GEN'},
+  {no:212,name:'Mudhukulathur',district:'Ramanathapuram',winner:'R.S.Rajakannappan',party:'DMK',runnerup:'Keerthika',ruParty:'ADMK',margin:20721,res:'SC'},
+  {no:213,name:'Vilathikulam',district:'Thoothukudi',winner:'Geetha Jeevan S',party:'DMK',runnerup:'Shanmugam R',ruParty:'ADMK',margin:25000,res:'SC'},
+  {no:214,name:'Thoothukudi',district:'Thoothukudi',winner:'Mutharasan N',party:'DMK',runnerup:'Anand R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:215,name:'Tiruchendur',district:'Thoothukudi',winner:'Annadurai K',party:'DMK',runnerup:'Suresh P',ruParty:'ADMK',margin:13000,res:'GEN'},
+  {no:216,name:'Srivaikundam',district:'Thoothukudi',winner:'Subramanian R',party:'DMK',runnerup:'Arumugam K',ruParty:'ADMK',margin:18000,res:'SC'},
+  {no:217,name:'Ottapidaram',district:'Thoothukudi',winner:'Shunmugaiah C',party:'DMK',runnerup:'Mohan P',ruParty:'ADMK',margin:8510,res:'GEN'},
+  {no:218,name:'Kovilpatti',district:'Thoothukudi',winner:'Kadambur Raju',party:'ADMK',runnerup:'Ttv Dhinakaran',ruParty:'AMMK',margin:12403,res:'GEN'},
+  {no:219,name:'Sankarankovil',district:'Tenkasi',winner:'Raja E',party:'DMK',runnerup:'Rajalakshmi V M',ruParty:'ADMK',margin:5297,res:'GEN'},
+  {no:220,name:'Vasudevanallur',district:'Tenkasi',winner:'Balakrishnan V',party:'DMK',runnerup:'Murugan K',ruParty:'ADMK',margin:7000,res:'GEN'},
+  {no:221,name:'Kadayanallur',district:'Tenkasi',winner:'C.Krishnamurali',party:'ADMK',runnerup:'K.A.M.Muhammed Abubacker',ruParty:'IUML',margin:24349,res:'GEN'},
+  {no:222,name:'Tenkasi',district:'Tenkasi',winner:'Suresh M',party:'ADMK',runnerup:'Suresh R',ruParty:'DMK',margin:370,res:'GEN'},
+  {no:223,name:'Alangulam',district:'Tenkasi',winner:'Paul Manoj Pandian',party:'ADMK',runnerup:'Dr.Poongothai Aladi Aruna',ruParty:'DMK',margin:3539,res:'GEN'},
+  {no:224,name:'Tirunelveli',district:'Tirunelveli',winner:'Rajesh Kanthan R',party:'DMK',runnerup:'Nainar Nagendran',ruParty:'BJP',margin:18000,res:'GEN'},
+  {no:225,name:'Ambasamudram',district:'Tirunelveli',winner:'E.Subaya',party:'ADMK',runnerup:'R.Avudaiappan',ruParty:'DMK',margin:16915,res:'GEN'},
+  {no:226,name:'Palayamkottai',district:'Tirunelveli',winner:'Abdul Wahab M',party:'DMK',runnerup:'Gerald G',ruParty:'ADMK',margin:52141,res:'GEN'},
+  {no:227,name:'Nanguneri',district:'Tirunelveli',winner:'Ruby R Manoharan',party:'INC',runnerup:'Ganesaraja',ruParty:'ADMK',margin:16486,res:'SC'},
+  {no:228,name:'Radhapuram',district:'Tirunelveli',winner:'M.Appavu',party:'DMK',runnerup:'I.S.Inbadurai',ruParty:'ADMK',margin:5925,res:'SC'},
+  {no:229,name:'Kanniyakumari',district:'Kanyakumari',winner:'Thalavai Sundaram N',party:'ADMK',runnerup:'Austin S',ruParty:'DMK',margin:16213,res:'GEN'},
+  {no:230,name:'Nagercoil',district:'Kanyakumari',winner:'Gandhi M.R',party:'BJP',runnerup:'Suresh Rajan N',ruParty:'DMK',margin:11669,res:'GEN'},
+  {no:231,name:'Colachal',district:'Kanyakumari',winner:'Prince J.G',party:'INC',runnerup:'Ramesh P',ruParty:'BJP',margin:24832,res:'GEN'},
+  {no:232,name:'Padmanabhapuram',district:'Kanyakumari',winner:'Mano Thangaraj T',party:'DMK',runnerup:'John Thankam D',ruParty:'ADMK',margin:26885,res:'GEN'},
+  {no:233,name:'Vilavancode',district:'Kanyakumari',winner:'Vijaya Dharani',party:'INC',runnerup:'Annaraj R',ruParty:'ADMK',margin:20000,res:'GEN'},
+  {no:234,name:'Killiyoor',district:'Kanyakumari',winner:'Rajesh Kumar S',party:'INC',runnerup:'Jude Dev K.V',ruParty:'ADMK',margin:55400,res:'GEN'},
+];
+
+// De-dup no 172 (same as 170)
+const DATA = ALL_DATA.filter((d,i,a)=>a.findIndex(x=>x.no===d.no)===i);
+
+// Districts list
+const districts=[...new Set(DATA.map(d=>d.district))].sort();
+const distSel=document.getElementById('districtFilter');
+districts.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;distSel.appendChild(o);});
+
+let filtered=[...DATA];
+let currentPage=1;
+const PER_PAGE=25;
+let activeParty='ALL';
+
+function filterParty(p,btn){
+  activeParty=p;
+  document.querySelectorAll('.party-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const dist=document.getElementById('districtFilter').value;
+  const al=document.getElementById('allianceFilter').value;
+  const sort=document.getElementById('sortFilter').value;
+  filtered=DATA.filter(d=>{
+    const matchP=activeParty==='ALL'||d.party===activeParty||(activeParty==='CPI'&&(d.party==='CPI'||d.party==='CPI(M)'));
+    const matchQ=!q||d.name.toLowerCase().includes(q)||d.winner.toLowerCase().includes(q)||d.district.toLowerCase().includes(q)||d.party.toLowerCase().includes(q);
+    const matchD=!dist||d.district===dist;
+    const matchA=!al||getAlliance(d.party)===al;
+    return matchP&&matchQ&&matchD&&matchA;
+  });
+  if(sort==='name') filtered.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='margin_desc') filtered.sort((a,b)=>b.margin-a.margin);
+  else if(sort==='margin_asc') filtered.sort((a,b)=>a.margin-b.margin);
+  else filtered.sort((a,b)=>a.no-b.no);
+  currentPage=1;
+  document.getElementById('resultCount').textContent=filtered.length;
+  renderGrid();
+}
+
+const maxMargin=Math.max(...DATA.map(d=>d.margin));
+function renderGrid(){
+  const start=(currentPage-1)*PER_PAGE;
+  const page=filtered.slice(start,start+PER_PAGE);
+  const body=document.getElementById('gridBody');
+  if(filtered.length===0){body.innerHTML='<div style="padding:2rem;text-align:center;color:var(--muted);font-size:13px">No constituencies match your filters.</div>';renderPagination();return;}
+  const al_color={'SPA':'rgba(46,139,87,0.2)','NDA':'rgba(201,76,46,0.2)','Other':'rgba(136,136,136,0.2)'};
+  const al_text={'SPA':'#2e8b57','NDA':'#c94c2e','Other':'#888'};
+  body.innerHTML=page.map(d=>{
+    const al=getAlliance(d.party);
+    const pct=Math.round(d.margin/maxMargin*100);
+    return`<div class="grid-row${d.no===25?' highlighted':''}" onclick="openModal(${d.no})">
+      <div class="const-no">${d.no}</div>
+      <div><div class="const-name">${d.name}</div><div class="const-dist">${d.district}</div></div>
+      <div><div class="winner-name">${d.winner}</div></div>
+      <div>
+        <span class="party-pill" style="background:${gc(d.party)}22;color:${gc(d.party)}">${d.party}</span><br>
+        <span class="alliance-tag" style="background:${al_color[al]};color:${al_text[al]}">${al}</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">${d.runnerup}<br><span style="color:${gc(d.ruParty)};font-size:10px;font-weight:600">${d.ruParty}</span></div>
+      <div class="margin-bar-wrap">
+        <div class="margin-bar-bg"><div class="margin-bar-fill" style="width:${pct}%;background:${gc(d.party)}"></div></div>
+        <div class="margin-num">${d.margin.toLocaleString()}</div>
+      </div>
+      <div><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,0.06);color:var(--muted)">${d.res}</span></div>
+    </div>`;
+  }).join('');
+  renderPagination();
+}
+
+function renderPagination(){
+  const total=Math.ceil(filtered.length/PER_PAGE);
+  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${total} · ${filtered.length} constituencies`;
+  const btns=document.getElementById('pageBtns');
+  btns.innerHTML='';
+  const addBtn=(label,page,active,disabled)=>{
+    const b=document.createElement('button');
+    b.className='page-btn'+(active?' active':'');
+    b.textContent=label;b.disabled=disabled;
+    b.onclick=()=>{currentPage=page;renderGrid();};
+    btns.appendChild(b);
+  };
+  addBtn('←',currentPage-1,false,currentPage===1);
+  const start=Math.max(1,currentPage-2);
+  const end=Math.min(total,start+4);
+  for(let i=start;i<=end;i++) addBtn(i,i,i===currentPage,false);
+  addBtn('→',currentPage+1,false,currentPage===total);
+}
+
+function openModal(no){
+  const d=DATA.find(x=>x.no===no);if(!d)return;
+  const al=getAlliance(d.party);
+  document.getElementById('modalBody').innerHTML=`
+    <div class="modal-title">${d.name} — Constituency ${d.no}</div>
+    <div class="modal-sub">${d.district} District · ${d.res} Category · 2021 Tamil Nadu Assembly Election</div>
+    <div class="modal-grid">
+      <div class="mcard"><div class="mcard-label">Winner</div><div class="mcard-val">${d.winner}</div></div>
+      <div class="mcard"><div class="mcard-label">Party</div><div class="mcard-val" style="color:${gc(d.party)}">${d.party}</div></div>
+      <div class="mcard"><div class="mcard-label">Alliance</div><div class="mcard-val">${al}</div></div>
+      <div class="mcard"><div class="mcard-label">Winning margin</div><div class="mcard-val">${d.margin.toLocaleString()} votes</div></div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Candidates</div>
+    <div class="cand-row">
+      <div class="cand-name"><span style="color:${gc(d.party)};font-weight:700">${d.winner}</span><span class="winner-crown">★ WON</span></div>
+      <div class="cand-votes">—</div>
+      <div class="cand-pct" style="color:${gc(d.party)}">${d.party}</div>
+    </div>
+    <div class="cand-row">
+      <div class="cand-name">${d.runnerup}</div>
+      <div class="cand-votes">—</div>
+      <div class="cand-pct" style="color:${gc(d.ruParty)}">${d.ruParty}</div>
+    </div>
+    <div style="margin-top:1rem;font-size:11px;color:var(--muted)">Click anywhere outside to close</div>`;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e){
+  if(e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+// CHARTS
+new Chart(document.getElementById('seatsChart'),{
+  type:'bar',
+  data:{labels:['DMK','AIADMK','INC','BJP','PMK','VCK','Others'],
+    datasets:[{data:[133,66,18,4,5,4,4],
+    backgroundColor:['#e88c10','#c94c2e','#2e8b57','#1a5fa8','#c47a1a','#0d7a6e','#666'],
+    borderRadius:4,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} seats`}}},
+    scales:{x:{grid:{display:false},ticks:{color:'#8898b0',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8898b0',font:{size:10}}}}}
+});
+
+new Chart(document.getElementById('voteShareChart'),{
+  type:'doughnut',
+  data:{labels:['DMK','AIADMK','INC','BJP','PMK','Others'],
+    datasets:[{data:[37.70,33.29,4.27,2.62,3.80,18.32],
+    backgroundColor:['#e88c10','#c94c2e','#2e8b57','#1a5fa8','#c47a1a','#555'],
+    borderWidth:2,borderColor:'#111d35'}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.label}: ${c.raw}%`}}}}
+});
+
+new Chart(document.getElementById('allianceChart'),{
+  type:'bar',
+  data:{labels:['SPA\n(DMK-led)','NDA\n(AIADMK-led)','Others'],
+    datasets:[{data:[159,75,0],backgroundColor:['#2e8b57','#c94c2e','#666'],borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw} seats`}}},
+    scales:{x:{grid:{display:false},ticks:{color:'#8898b0',font:{size:10}}},y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8898b0',font:{size:10}}}}}
+});
+
+renderGrid();
+</script>
+</body>
+</html>
