@@ -1462,10 +1462,12 @@ const vvConstList=[
   'Nanguneri','Radhapuram','Kanniyakumari','Nagercoil','Colachal','Padmanabhapuram','Vilavancode','Killiyoor'
 ];
 
+// Sort alphabetically for easy finding
+const vvConstListSorted=[...vvConstList].sort((a,b)=>a.localeCompare(b));
 ['vvConstituency','vvFilterConst'].forEach(id=>{
   const sel=document.getElementById(id);
   if(!sel) return;
-  vvConstList.forEach(c=>{
+  vvConstListSorted.forEach(c=>{
     const o=document.createElement('option');
     o.value=c; o.textContent=c;
     sel.appendChild(o);
@@ -1486,15 +1488,6 @@ function copyLink(){
   btn.textContent='✅ Copied!';
   setTimeout(()=>btn.textContent='🔗 Copy Link',2000);
 }
-['vvConstituency','vvFilterConst'].forEach(id=>{
-  const sel=document.getElementById(id);
-  if(!sel) return;
-  vvConstList.forEach(c=>{
-    const o=document.createElement('option');
-    o.value=c; o.textContent=c;
-    sel.appendChild(o);
-  });
-});
 
 // All submissions in memory
 // Init overview
