@@ -249,7 +249,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="section-label">Alliance Context — <span id="allianceYearLabel">2021</span></div>
   <div class="chart-box" style="margin-bottom:1.2rem;">
-    <div class="cbox-sub" id="allianceNote" style="margin-bottom:10px;background:#faf8f5;padding:8px 12px;border-radius:6px;line-height:1.6;"></div>
+    <div class="cbox-sub" id="allianceNote" style="margin-bottom:10px;background:#0d1628;padding:8px 12px;border-radius:6px;line-height:1.6;color:#c8d4e0;"></div>
     <div id="allianceCards" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
   </div>
 
@@ -326,7 +326,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="party-strip">
     <span class="strip-label">Filter by party:</span>
-    <button class="party-btn active" onclick="filterParty('ALL',this)" style="color:#555"><span class="party-dot" style="background:#888"></span>All</button>
+    <button class="party-btn active" onclick="filterParty('ALL',this)" style="color:#c8d4e0"><span class="party-dot" style="background:#888"></span>All</button>
     <button class="party-btn" onclick="filterParty('DMK',this)" style="color:#e88c10"><span class="party-dot" style="background:#e88c10"></span>DMK<span class="count-badge">133</span></button>
     <button class="party-btn" onclick="filterParty('ADMK',this)" style="color:#c94c2e"><span class="party-dot" style="background:#c94c2e"></span>AIADMK<span class="count-badge">66</span></button>
     <button class="party-btn" onclick="filterParty('INC',this)" style="color:#2e8b57"><span class="party-dot" style="background:#2e8b57"></span>INC<span class="count-badge">18</span></button>
@@ -740,7 +740,7 @@ function renderAllianceBlock(){
   const d=stateElections[activeStateYear];
   document.getElementById('allianceNote').textContent=d.note;
   document.getElementById('allianceCards').innerHTML=d.parties.filter(p=>p.seats>0||p.votePct>=2).map(p=>`
-    <div style="background:#fff;border:1px solid #e2ddd6;border-radius:8px;padding:10px 14px;min-width:170px;flex:1">
+    <div style="background:#0d1628;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;min-width:170px;flex:1">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
         <span style="width:10px;height:10px;border-radius:2px;background:${gc(p.party)};display:inline-block"></span>
         <span style="font-weight:700;font-size:13px;color:#1a2f5e">${p.party}</span>
@@ -849,7 +849,7 @@ const tlContainer=document.getElementById('timelineCards');
 electionHistory.forEach(e=>{
   const winColor=gc(e.winner==='AIADMK'?'ADMK':e.winner==='INC'?'INC':e.winner==='DMK'?'DMK':'ADMK');
   const card=document.createElement('div');
-  card.style.cssText='background:#fff;border:1px solid #e2ddd6;border-radius:12px;overflow:hidden;';
+  card.style.cssText='background:#111d35;border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;';
   card.innerHTML=`
     <div style="background:${winColor};padding:12px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
       <div>
@@ -864,19 +864,19 @@ electionHistory.forEach(e=>{
     </div>
     <div style="padding:14px 18px;">
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">
-        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+        <div style="background:#0d1628;border-radius:8px;padding:10px 12px;">
           <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Chief Minister</div>
           <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.cm}</div>
           <div style="font-size:11px;color:${winColor};font-weight:600;margin-top:2px;">${e.cmParty}</div>
           <div style="font-size:11px;color:#888;margin-top:3px;line-height:1.5;">${e.cmNote}</div>
         </div>
-        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+        <div style="background:#0d1628;border-radius:8px;padding:10px 12px;">
           <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Result</div>
           <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.winner} — ${e.winnerSeats} seats</div>
           <div style="font-size:11px;color:#666;margin-top:2px;line-height:1.5;">${e.alliance}</div>
           <div style="font-size:11px;color:#888;margin-top:3px;">Runner-up: ${e.runnerUp} (${e.runnerUpSeats})</div>
         </div>
-        <div style="background:#faf8f5;border-radius:8px;padding:10px 12px;">
+        <div style="background:#0d1628;border-radius:8px;padding:10px 12px;">
           <div style="font-size:10px;color:#888;margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;">Opposition Leader</div>
           <div style="font-size:13px;font-weight:700;color:#1a2f5e;">${e.lop}</div>
           <div style="font-size:11px;color:#666;margin-top:2px;line-height:1.5;">${e.lopNote}</div>
@@ -885,7 +885,7 @@ electionHistory.forEach(e=>{
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
         ${e.keyParties.map(p=>`<span style="background:${gc(p.p==='ADMK'?'ADMK':p.p)}22;color:${gc(p.p==='ADMK'?'ADMK':p.p)};font-size:11px;padding:3px 9px;border-radius:4px;font-weight:600;">${p.p}: ${p.s}</span>`).join('')}
       </div>
-      <div style="background:#fff8e8;border-left:3px solid #f5c842;padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#555;line-height:1.6;">★ ${e.highlight}</div>
+      <div style="background:#1a2a0a;border-left:3px solid #f5c842;padding:8px 12px;border-radius:0 6px 6px 0;font-size:12px;color:#c8d4e0;line-height:1.6;">★ ${e.highlight}</div>
     </div>`;
   tlContainer.appendChild(card);
 });
