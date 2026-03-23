@@ -513,6 +513,54 @@ function switchPanel(id,btn){
 // STATE-LEVEL ELECTION DATA (Verified ECI)
 // ══════════════════════════════════════════
 const stateElections = {
+  1977:{
+    turnout:61.58, totalSeats:234,
+    cm:'M. G. Ramachandran (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK (first election)', majority:130,
+    note:'AIADMK\'s debut election. MGR won 130 seats and became CM for the first time. DMK weakened by splits and Emergency-era politics. Janata Party & INC split the opposition vote.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:130,votePct:38.40,votes:6100000,pillClass:'pill-aiadmk',role:'Won · MGR became CM (1st term)'},
+      {party:'INC',alliance:'SPA',seats:27,votePct:15.20,votes:2420000,pillClass:'pill-inc',role:'27 seats'},
+      {party:'DMK',alliance:'Other',seats:48,votePct:25.60,votes:4070000,pillClass:'pill-dmk',role:'Opposition · 48 seats'},
+      {party:'Other',alliance:'Other',seats:29,votePct:20.80,votes:3310000,pillClass:'pill-other',role:'Janata, CPI, CPM & others'},
+    ]
+  },
+  1980:{
+    turnout:68.00, totalSeats:234,
+    cm:'M. G. Ramachandran (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK-INC alliance', majority:129,
+    note:'MGR retained power with 129 seats. DMK-INC alliance despite winning 37/39 Lok Sabha seats in Jan 1980 failed to unseat MGR in the assembly election.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:129,votePct:38.00,votes:7200000,pillClass:'pill-aiadmk',role:'Won · MGR CM (2nd term)'},
+      {party:'DMK',alliance:'Other',seats:38,votePct:25.00,votes:4730000,pillClass:'pill-dmk',role:'38 seats · opposition'},
+      {party:'INC',alliance:'Other',seats:30,votePct:20.00,votes:3790000,pillClass:'pill-inc',role:'30 seats'},
+      {party:'Other',alliance:'Other',seats:37,votePct:17.00,votes:3220000,pillClass:'pill-other',role:'CPI 10, CPM 11, others'},
+    ]
+  },
+  1984:{
+    turnout:73.00, totalSeats:234,
+    cm:'M. G. Ramachandran (AIADMK)', lop:'M. Karunanidhi (DMK)',
+    winner:'AIADMK-INC alliance', majority:132,
+    note:'MGR won his 3rd term on sympathy wave after Indira Gandhi\'s assassination. AIADMK 132 + INC 62 = 194 seats. DMK reduced to 24. Last election MGR contested — he died in office in Dec 1987.',
+    parties:[
+      {party:'ADMK',alliance:'NDA',seats:132,votePct:38.00,votes:8800000,pillClass:'pill-aiadmk',role:'Won · MGR CM (3rd term)'},
+      {party:'INC',alliance:'NDA',seats:62,votePct:24.00,votes:5550000,pillClass:'pill-inc',role:'AIADMK ally · 62 seats'},
+      {party:'DMK',alliance:'Other',seats:24,votePct:20.00,votes:4620000,pillClass:'pill-dmk',role:'Routed · 24 seats'},
+      {party:'Other',alliance:'Other',seats:16,votePct:18.00,votes:4160000,pillClass:'pill-other',role:'CPI 2, CPM 5, others'},
+    ]
+  },
+  1989:{
+    turnout:69.69, totalSeats:234,
+    cm:'M. Karunanidhi (DMK)', lop:'J. Jayalalithaa (AIADMK)',
+    winner:'DMK-led National Front', majority:150,
+    note:'DMK swept back with 150 seats. AIADMK split into Jayalalithaa faction (27 seats) & Janaki faction (1 seat). INC contested alone and won 26 seats.',
+    parties:[
+      {party:'DMK',alliance:'SPA',seats:150,votePct:37.90,votes:9870000,pillClass:'pill-dmk',role:'Won · Karunanidhi CM (3rd term)'},
+      {party:'ADMK',alliance:'Other',seats:27,votePct:22.00,votes:5730000,pillClass:'pill-aiadmk',role:'Jayalalithaa faction · 27 seats'},
+      {party:'INC',alliance:'Other',seats:26,votePct:13.60,votes:3540000,pillClass:'pill-inc',role:'Contested alone · 26 seats'},
+      {party:'Other',alliance:'Other',seats:31,votePct:26.50,votes:6900000,pillClass:'pill-other',role:'CPM 15, CPI 3, JD 4, others'},
+    ]
+  },
   2021:{
     turnout:73.63, totalSeats:234,
     cm:'M. K. Stalin (DMK)', lop:'E. K. Palaniswami (AIADMK)',
@@ -621,7 +669,7 @@ const stateElections = {
   }
 };
 
-const YEARS=[2021,2016,2011,2006,2001,1996,1991];
+const YEARS=[2021,2016,2011,2006,2001,1996,1991,1989,1984,1980,1977];
 let activeStateYear=2021;
 let seatsBarObj=null, voteDonutObj=null;
 
@@ -708,7 +756,7 @@ function renderStateResultsTable(){
 }
 
 // ── TREND CHARTS ──
-const tY=[1991,1996,2001,2006,2011,2016,2021];
+const tY=[1977,1980,1984,1989,1991,1996,2001,2006,2011,2016,2021];
 
 function getSeats(year,party){
   const d=stateElections[year];
@@ -751,7 +799,7 @@ new Chart(document.getElementById('turnoutTrend'),{
   type:'bar',
   data:{labels:tY,datasets:[{data:toVals,backgroundColor:toVals.map(v=>v>=70?'#1a5fa8':v>=60?'#e88c10':'#c94c2e'),borderRadius:4,borderSkipped:false}]},
   options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.raw}% turnout`}}},
-    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{min:50,max:85,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888',callback:v=>v+'%'}}}}
+    scales:{x:{grid:{display:false},ticks:{font:{size:11},color:'#888'}},y:{min:55,max:85,grid:{color:'rgba(0,0,0,0.04)'},ticks:{font:{size:11},color:'#888',callback:v=>v+'%'}}}}
 });
 
 function getAllianceSeats(year,alliance){
