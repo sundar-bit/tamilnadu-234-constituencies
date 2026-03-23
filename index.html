@@ -560,7 +560,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<!-- ═══════════════ PANEL 6: VOTER VOICE ═══════════════ -->
+<div class="panel" id="panel-votervoice">
+
+  <div class="section-label">🗣️ Voter Voice — Citizens Speak</div>
+  <div style="font-size:13px;color:#8898b0;margin-bottom:1.2rem;line-height:1.7;background:#0d1628;padding:12px 16px;border-radius:8px;border-left:3px solid #f5c842;">
+    This is a citizen-driven initiative. Share your top 3 pain areas and 3 wishes for your constituency before the Tamil Nadu 2026 elections.
+    Your voice will be visible to fellow voters, candidates and the media. Together we can build a real people's agenda. 🇮🇳
+  </div>
+
+  <!-- STATS -->
+  <div class="vv-stats">
+    <div class="vv-stat"><div class="vv-stat-num" id="vvTotalCount">0</div><div class="vv-stat-label">Total submissions</div></div>
+    <div class="vv-stat"><div class="vv-stat-num" id="vvConstCount">0</div><div class="vv-stat-label">Constituencies represented</div></div>
+    <div class="vv-stat"><div class="vv-stat-num" id="vvTodayCount">0</div><div class="vv-stat-label">Submitted today</div></div>
+  </div>
+
+  <div class="vv-grid">
+
+    <!-- FORM -->
+    <div class="vv-form-box">
+      <h3>📝 Share Your Voice</h3>
+      <p>Select your constituency and share what matters most to you. All fields except name are required. Your submission will appear publicly below.</p>
+
+      <label class="vv-label">Your Constituency *</label>
+      <select class="vv-select" id="vvConstituency">
+        <option value="">— Select your constituency —</option>
+      </select>
+
+      <label class="vv-label">Your Name (optional)</label>
+      <input class="vv-input" type="text" id="vvName" placeholder="Anonymous if left blank"/>
+
+      <div class="vv-group">
+        <span class="vv-group-label pain-label">🔴 Top 3 Pain Areas in your Constituency *</span>
+        <input class="vv-input" type="text" id="vvPain1" placeholder="Pain area 1 (e.g. Waterlogging, bad roads...)" style="margin-bottom:6px;"/>
+        <input class="vv-input" type="text" id="vvPain2" placeholder="Pain area 2" style="margin-bottom:6px;"/>
+        <input class="vv-input" type="text" id="vvPain3" placeholder="Pain area 3"/>
+      </div>
+
+      <div class="vv-group" style="margin-top:8px;">
+        <span class="vv-group-label wish-label">🟢 Top 3 Wishes / Expectations *</span>
+        <input class="vv-input" type="text" id="vvWish1" placeholder="Wish 1 (e.g. Better public transport...)" style="margin-bottom:6px;"/>
+        <input class="vv-input" type="text" id="vvWish2" placeholder="Wish 2" style="margin-bottom:6px;"/>
+        <input class="vv-input" type="text" id="vvWish3" placeholder="Wish 3"/>
+      </div>
+
+      <button class="vv-submit" id="vvSubmitBtn" onclick="submitVoterVoice()">Submit My Voice 🗳️</button>
+      <div class="vv-msg" id="vvMsg"></div>
+    </div>
+
+    <!-- RIGHT SIDE INFO -->
+    <div>
+      <div style="background:#111d35;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:700;color:#e8edf5;margin-bottom:10px;">💡 Why this matters</div>
+        <div style="font-size:12px;color:#8898b0;line-height:1.8;">
+          ✅ Your issues become visible to candidates canvassing<br>
+          ✅ Media can use this data for election stories<br>
+          ✅ After results — compare promises vs delivery<br>
+          ✅ Builds a real citizen agenda for Tamil Nadu 2026<br>
+          ✅ Anonymous submission — your privacy is protected
+        </div>
+      </div>
+      <div style="background:#111d35;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;">
+        <div style="font-size:13px;font-weight:700;color:#e8edf5;margin-bottom:10px;">📢 Spread the word</div>
+        <div style="font-size:12px;color:#8898b0;line-height:1.8;margin-bottom:12px;">
+          Share this dashboard with your friends, neighbours and WhatsApp groups. The more voices we collect, the stronger the people's mandate.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="shareWhatsApp()" style="background:#25d366;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">📱 Share on WhatsApp</button>
+          <button onclick="copyLink()" style="background:#1a3a6e;color:#f5c842;border:1px solid #f5c842;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;" id="copyBtn">🔗 Copy Link</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUBMISSIONS DISPLAY -->
+  <div class="section-label">All Submissions</div>
+  <div class="vv-filter-bar">
+    <select class="filter-select" id="vvFilterConst" onchange="renderSubmissions()">
+      <option value="">All Constituencies</option>
+    </select>
+    <select class="filter-select" id="vvSortBy" onchange="renderSubmissions()">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="const">By constituency</option>
+    </select>
+    <div style="flex:1;font-size:12px;color:#8898b0;display:flex;align-items:center;" id="vvFilterCount"></div>
+  </div>
+  <div id="vvSubmissionsList"></div>
+
+</div>
+
+
 <script>
 // ── COLOURS ──
 const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a',
@@ -1461,98 +1553,6 @@ renderAllianceBlock();
 renderStateResultsTable();
 renderGrid();
 </script>
-<!-- ═══════════════ PANEL 6: VOTER VOICE ═══════════════ -->
-<div class="panel" id="panel-votervoice">
-
-  <div class="section-label">🗣️ Voter Voice — Citizens Speak</div>
-  <div style="font-size:13px;color:#8898b0;margin-bottom:1.2rem;line-height:1.7;background:#0d1628;padding:12px 16px;border-radius:8px;border-left:3px solid #f5c842;">
-    This is a citizen-driven initiative. Share your top 3 pain areas and 3 wishes for your constituency before the Tamil Nadu 2026 elections.
-    Your voice will be visible to fellow voters, candidates and the media. Together we can build a real people's agenda. 🇮🇳
-  </div>
-
-  <!-- STATS -->
-  <div class="vv-stats">
-    <div class="vv-stat"><div class="vv-stat-num" id="vvTotalCount">0</div><div class="vv-stat-label">Total submissions</div></div>
-    <div class="vv-stat"><div class="vv-stat-num" id="vvConstCount">0</div><div class="vv-stat-label">Constituencies represented</div></div>
-    <div class="vv-stat"><div class="vv-stat-num" id="vvTodayCount">0</div><div class="vv-stat-label">Submitted today</div></div>
-  </div>
-
-  <div class="vv-grid">
-
-    <!-- FORM -->
-    <div class="vv-form-box">
-      <h3>📝 Share Your Voice</h3>
-      <p>Select your constituency and share what matters most to you. All fields except name are required. Your submission will appear publicly below.</p>
-
-      <label class="vv-label">Your Constituency *</label>
-      <select class="vv-select" id="vvConstituency">
-        <option value="">— Select your constituency —</option>
-      </select>
-
-      <label class="vv-label">Your Name (optional)</label>
-      <input class="vv-input" type="text" id="vvName" placeholder="Anonymous if left blank"/>
-
-      <div class="vv-group">
-        <span class="vv-group-label pain-label">🔴 Top 3 Pain Areas in your Constituency *</span>
-        <input class="vv-input" type="text" id="vvPain1" placeholder="Pain area 1 (e.g. Waterlogging, bad roads...)" style="margin-bottom:6px;"/>
-        <input class="vv-input" type="text" id="vvPain2" placeholder="Pain area 2" style="margin-bottom:6px;"/>
-        <input class="vv-input" type="text" id="vvPain3" placeholder="Pain area 3"/>
-      </div>
-
-      <div class="vv-group" style="margin-top:8px;">
-        <span class="vv-group-label wish-label">🟢 Top 3 Wishes / Expectations *</span>
-        <input class="vv-input" type="text" id="vvWish1" placeholder="Wish 1 (e.g. Better public transport...)" style="margin-bottom:6px;"/>
-        <input class="vv-input" type="text" id="vvWish2" placeholder="Wish 2" style="margin-bottom:6px;"/>
-        <input class="vv-input" type="text" id="vvWish3" placeholder="Wish 3"/>
-      </div>
-
-      <button class="vv-submit" id="vvSubmitBtn" onclick="submitVoterVoice()">Submit My Voice 🗳️</button>
-      <div class="vv-msg" id="vvMsg"></div>
-    </div>
-
-    <!-- RIGHT SIDE INFO -->
-    <div>
-      <div style="background:#111d35;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;margin-bottom:12px;">
-        <div style="font-size:13px;font-weight:700;color:#e8edf5;margin-bottom:10px;">💡 Why this matters</div>
-        <div style="font-size:12px;color:#8898b0;line-height:1.8;">
-          ✅ Your issues become visible to candidates canvassing<br>
-          ✅ Media can use this data for election stories<br>
-          ✅ After results — compare promises vs delivery<br>
-          ✅ Builds a real citizen agenda for Tamil Nadu 2026<br>
-          ✅ Anonymous submission — your privacy is protected
-        </div>
-      </div>
-      <div style="background:#111d35;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;">
-        <div style="font-size:13px;font-weight:700;color:#e8edf5;margin-bottom:10px;">📢 Spread the word</div>
-        <div style="font-size:12px;color:#8898b0;line-height:1.8;margin-bottom:12px;">
-          Share this dashboard with your friends, neighbours and WhatsApp groups. The more voices we collect, the stronger the people's mandate.
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button onclick="shareWhatsApp()" style="background:#25d366;color:#fff;border:none;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">📱 Share on WhatsApp</button>
-          <button onclick="copyLink()" style="background:#1a3a6e;color:#f5c842;border:1px solid #f5c842;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;" id="copyBtn">🔗 Copy Link</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- SUBMISSIONS DISPLAY -->
-  <div class="section-label">All Submissions</div>
-  <div class="vv-filter-bar">
-    <select class="filter-select" id="vvFilterConst" onchange="renderSubmissions()">
-      <option value="">All Constituencies</option>
-    </select>
-    <select class="filter-select" id="vvSortBy" onchange="renderSubmissions()">
-      <option value="newest">Newest first</option>
-      <option value="oldest">Oldest first</option>
-      <option value="const">By constituency</option>
-    </select>
-    <div style="flex:1;font-size:12px;color:#8898b0;display:flex;align-items:center;" id="vvFilterCount"></div>
-  </div>
-  <div id="vvSubmissionsList"></div>
-
-</div>
-
 <!-- Firebase Voter Voice -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
