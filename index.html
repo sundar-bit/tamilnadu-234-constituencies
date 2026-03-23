@@ -561,7 +561,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script type="module">
+<script>
 // ── COLOURS ──
 const PC={DMK:'#e88c10',ADMK:'#c94c2e',BJP:'#1a5fa8',INC:'#2e8b57',PMK:'#c47a1a',
   VCK:'#0d7a6e','CPI(M)':'#6a3fb5',CPI:'#8b2fa8',AMMK:'#888',MNM:'#9b4fa8',
@@ -1360,25 +1360,8 @@ function closeModal(e){
 }
 
 // ══════════════════════════════════════════
-// VOTER VOICE — Firebase Firestore
+// VOTER VOICE — stubs (Firebase module below)
 // ══════════════════════════════════════════
-
-// Firebase config
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAgYTdGBuf-GfxJPK4cZsgHzkBr9a0lPTQ",
-  authDomain: "tn234-voter-voice.firebaseapp.com",
-  projectId: "tn234-voter-voice",
-  storageBucket: "tn234-voter-voice.firebasestorage.app",
-  messagingSenderId: "578960675924",
-  appId: "1:578960675924:web:828d1f730602fbc0f689c1"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-const voicesCol = collection(db, 'voices');
 
 // Populate constituency dropdowns
 const vvConstList=[
@@ -1418,114 +1401,8 @@ const vvConstList=[
   });
 });
 
-// All submissions in memory
-let allVoices=[];
-
-// Real-time listener — updates instantly when anyone submits
-onSnapshot(query(voicesCol, orderBy('ts','desc')), snap=>{
-  allVoices=snap.docs.map(d=>({id:d.id,...d.data()}));
-  updateVVStats();
-  renderSubmissions();
-});
-
-async function submitVoterVoice(){
-  const constituency=document.getElementById('vvConstituency').value;
-  const name=document.getElementById('vvName').value.trim();
-  const pain1=document.getElementById('vvPain1').value.trim();
-  const pain2=document.getElementById('vvPain2').value.trim();
-  const pain3=document.getElementById('vvPain3').value.trim();
-  const wish1=document.getElementById('vvWish1').value.trim();
-  const wish2=document.getElementById('vvWish2').value.trim();
-  const wish3=document.getElementById('vvWish3').value.trim();
-
-  const msg=document.getElementById('vvMsg');
-  msg.className='vv-msg';
-
-  if(!constituency){msg.className='vv-msg error';msg.textContent='Please select your constituency.';return;}
-  if(!pain1||!pain2||!pain3){msg.className='vv-msg error';msg.textContent='Please fill all 3 pain areas.';return;}
-  if(!wish1||!wish2||!wish3){msg.className='vv-msg error';msg.textContent='Please fill all 3 wishes.';return;}
-
-  const btn=document.getElementById('vvSubmitBtn');
-  btn.disabled=true;
-  btn.textContent='Submitting...';
-
-  try{
-    await addDoc(voicesCol,{
-      constituency,
-      name:name||'Anonymous',
-      pains:[pain1,pain2,pain3],
-      wishes:[wish1,wish2,wish3],
-      date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),
-      ts:serverTimestamp()
-    });
-
-    ['vvConstituency','vvName','vvPain1','vvPain2','vvPain3','vvWish1','vvWish2','vvWish3'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.value='';
-    });
-
-    msg.className='vv-msg success';
-    msg.textContent='✅ Thank you! Your voice has been recorded and is now visible to everyone.';
-  }catch(e){
-    msg.className='vv-msg error';
-    msg.textContent='❌ Submission failed. Please try again.';
-    console.error(e);
-  }finally{
-    btn.disabled=false;
-    btn.textContent='Submit My Voice 🗳️';
-  }
-}
-
-function updateVVStats(){
-  document.getElementById('vvTotalCount').textContent=allVoices.length;
-  const uniqueConst=new Set(allVoices.map(s=>s.constituency)).size;
-  document.getElementById('vvConstCount').textContent=uniqueConst;
-  const today=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-  document.getElementById('vvTodayCount').textContent=allVoices.filter(s=>s.date===today).length;
-}
-
-function renderSubmissions(){
-  const filterConst=document.getElementById('vvFilterConst').value;
-  const sortBy=document.getElementById('vvSortBy').value;
-  let list=[...allVoices];
-
-  if(filterConst) list=list.filter(s=>s.constituency===filterConst);
-  if(sortBy==='oldest') list=list.reverse();
-  else if(sortBy==='const') list=list.sort((a,b)=>a.constituency.localeCompare(b.constituency));
-
-  document.getElementById('vvFilterCount').textContent=`${list.length} submission${list.length!==1?'s':''}`;
-
-  const container=document.getElementById('vvSubmissionsList');
-  if(!list.length){
-    container.innerHTML=`<div class="vv-empty">
-      <div style="font-size:40px;margin-bottom:12px;">🗳️</div>
-      <div style="font-weight:700;color:#e8edf5;margin-bottom:6px;">No submissions yet</div>
-      <div>Be the first to share your voice! Fill the form above.</div>
-    </div>`;
-    return;
-  }
-
-  container.innerHTML=list.map(s=>`
-    <div class="vv-card">
-      <div class="vv-card-header">
-        <div>
-          <div class="vv-card-const">📍 ${s.constituency}</div>
-          <div class="vv-card-name">👤 ${s.name}</div>
-        </div>
-        <div class="vv-card-meta">🗓️ ${s.date}</div>
-      </div>
-      <div class="vv-points">
-        <div class="vv-point-group">
-          <div class="vv-point-title pain-title">🔴 Pain Areas</div>
-          ${(s.pains||[]).map(p=>`<div class="vv-point-item">• ${p}</div>`).join('')}
-        </div>
-        <div class="vv-point-group">
-          <div class="vv-point-title wish-title">🟢 Wishes</div>
-          ${(s.wishes||[]).map(w=>`<div class="vv-point-item">• ${w}</div>`).join('')}
-        </div>
-      </div>
-    </div>`).join('');
-}
+function submitVoterVoice(){ if(window._vvSubmit) window._vvSubmit(); }
+function renderSubmissions(){ if(window._vvRender) window._vvRender(); }
 
 function shareWhatsApp(){
   const text=`🗳️ Tamil Nadu Elections 2026 — Share your voice!\n\nTell us your top 3 pain areas & 3 wishes for your constituency:\n👉 https://sundar-bit.github.io/tamilnadu-234-constituencies/\n\nClick "Voter Voice" tab and submit. Your voice matters! 🇮🇳\n\n— Dr. Sundararaman Chintamani | sundarspeaks.com`;
@@ -1569,132 +1446,12 @@ function copyLink(){
   if(!sel) return;
   vvConstList.forEach(c=>{
     const o=document.createElement('option');
-    o.value=c;o.textContent=c;
+    o.value=c; o.textContent=c;
     sel.appendChild(o);
   });
 });
 
-// Storage key
-const VV_KEY='tn234_voter_voice_v1';
-
-function loadSubmissions(){
-  try{return JSON.parse(localStorage.getItem(VV_KEY)||'[]');}
-  catch{return [];}
-}
-
-function saveSubmission(entry){
-  const all=loadSubmissions();
-  all.unshift(entry);
-  localStorage.setItem(VV_KEY,JSON.stringify(all));
-}
-
-function submitVoterVoice(){
-  const constituency=document.getElementById('vvConstituency').value;
-  const name=document.getElementById('vvName').value.trim();
-  const pain1=document.getElementById('vvPain1').value.trim();
-  const pain2=document.getElementById('vvPain2').value.trim();
-  const pain3=document.getElementById('vvPain3').value.trim();
-  const wish1=document.getElementById('vvWish1').value.trim();
-  const wish2=document.getElementById('vvWish2').value.trim();
-  const wish3=document.getElementById('vvWish3').value.trim();
-
-  const msg=document.getElementById('vvMsg');
-  msg.className='vv-msg';
-
-  if(!constituency){msg.className='vv-msg error';msg.textContent='Please select your constituency.';return;}
-  if(!pain1||!pain2||!pain3){msg.className='vv-msg error';msg.textContent='Please fill all 3 pain areas.';return;}
-  if(!wish1||!wish2||!wish3){msg.className='vv-msg error';msg.textContent='Please fill all 3 wishes.';return;}
-
-  const entry={
-    id:Date.now(),
-    constituency,
-    name:name||'Anonymous',
-    pains:[pain1,pain2,pain3],
-    wishes:[wish1,wish2,wish3],
-    date:new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),
-    ts:Date.now()
-  };
-
-  saveSubmission(entry);
-
-  // Reset form
-  ['vvConstituency','vvName','vvPain1','vvPain2','vvPain3','vvWish1','vvWish2','vvWish3'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.value='';
-  });
-
-  msg.className='vv-msg success';
-  msg.textContent='✅ Thank you! Your voice has been recorded. Scroll down to see all submissions.';
-
-  renderSubmissions();
-  updateVVStats();
-}
-
-function updateVVStats(){
-  const all=loadSubmissions();
-  document.getElementById('vvTotalCount').textContent=all.length;
-  const uniqueConst=new Set(all.map(s=>s.constituency)).size;
-  document.getElementById('vvConstCount').textContent=uniqueConst;
-  const today=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
-  const todayCount=all.filter(s=>s.date===today).length;
-  document.getElementById('vvTodayCount').textContent=todayCount;
-}
-
-function renderSubmissions(){
-  const filterConst=document.getElementById('vvFilterConst').value;
-  const sortBy=document.getElementById('vvSortBy').value;
-  let all=loadSubmissions();
-
-  if(filterConst) all=all.filter(s=>s.constituency===filterConst);
-  if(sortBy==='oldest') all=all.slice().reverse();
-  else if(sortBy==='const') all=all.slice().sort((a,b)=>a.constituency.localeCompare(b.constituency));
-
-  document.getElementById('vvFilterCount').textContent=`${all.length} submission${all.length!==1?'s':''}`;
-
-  const container=document.getElementById('vvSubmissionsList');
-  if(!all.length){
-    container.innerHTML=`<div class="vv-empty">
-      <div style="font-size:40px;margin-bottom:12px;">🗳️</div>
-      <div style="font-weight:700;color:#e8edf5;margin-bottom:6px;">No submissions yet</div>
-      <div>Be the first to share your voice! Fill the form above.</div>
-    </div>`;
-    return;
-  }
-
-  container.innerHTML=all.map(s=>`
-    <div class="vv-card">
-      <div class="vv-card-header">
-        <div>
-          <div class="vv-card-const">📍 ${s.constituency}</div>
-          <div class="vv-card-name">👤 ${s.name}</div>
-        </div>
-        <div class="vv-card-meta">🗓️ ${s.date}</div>
-      </div>
-      <div class="vv-points">
-        <div class="vv-point-group">
-          <div class="vv-point-title pain-title">🔴 Pain Areas</div>
-          ${s.pains.filter(p=>p).map(p=>`<div class="vv-point-item">• ${p}</div>`).join('')}
-        </div>
-        <div class="vv-point-group">
-          <div class="vv-point-title wish-title">🟢 Wishes</div>
-          ${s.wishes.filter(w=>w).map(w=>`<div class="vv-point-item">• ${w}</div>`).join('')}
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-function shareWhatsApp(){
-  const text=`🗳️ Tamil Nadu Elections 2026 — Share your voice!\n\nTell us your top 3 pain areas & 3 wishes for your constituency:\n👉 https://sundar-bit.github.io/tamilnadu-234-constituencies/\n\nClick "Voter Voice" tab and submit. Your voice matters! 🇮🇳`;
-  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
-}
-
-function copyLink(){
-  navigator.clipboard.writeText('https://sundar-bit.github.io/tamilnadu-234-constituencies/');
-  const btn=document.getElementById('copyBtn');
-  btn.textContent='✅ Copied!';
-  setTimeout(()=>btn.textContent='🔗 Copy Link',2000);
-}
-
+// All submissions in memory
 // Init overview
 renderOverviewTabs();
 renderOverviewSummary();
@@ -1795,6 +1552,112 @@ renderGrid();
   <div id="vvSubmissionsList"></div>
 
 </div>
+
+<!-- Firebase Voter Voice -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyAgYTdGBuf-GfxJPK4cZsgHzkBr9a0lPTQ",
+  authDomain: "tn234-voter-voice.firebaseapp.com",
+  projectId: "tn234-voter-voice",
+  storageBucket: "tn234-voter-voice.firebasestorage.app",
+  messagingSenderId: "578960675924",
+  appId: "1:578960675924:web:828d1f730602fbc0f689c1"
+});
+
+const db = getFirestore(app);
+const voicesCol = collection(db, 'voices');
+let allVoices = [];
+
+// Real-time listener
+onSnapshot(query(voicesCol, orderBy('ts','desc')), snap => {
+  allVoices = snap.docs.map(d => ({id: d.id, ...d.data()}));
+  updateStats();
+  window._vvRender && window._vvRender();
+});
+
+function updateStats() {
+  document.getElementById('vvTotalCount').textContent = allVoices.length;
+  document.getElementById('vvConstCount').textContent = new Set(allVoices.map(s => s.constituency)).size;
+  const today = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('vvTodayCount').textContent = allVoices.filter(s => s.date === today).length;
+}
+
+// Submit handler — exposed to global scope
+window._vvSubmit = async function() {
+  const get = id => document.getElementById(id).value.trim();
+  const constituency = get('vvConstituency');
+  const name = get('vvName');
+  const pain1 = get('vvPain1'), pain2 = get('vvPain2'), pain3 = get('vvPain3');
+  const wish1 = get('vvWish1'), wish2 = get('vvWish2'), wish3 = get('vvWish3');
+  const msg = document.getElementById('vvMsg');
+  msg.className = 'vv-msg';
+
+  if (!constituency) { msg.className='vv-msg error'; msg.textContent='Please select your constituency.'; return; }
+  if (!pain1||!pain2||!pain3) { msg.className='vv-msg error'; msg.textContent='Please fill all 3 pain areas.'; return; }
+  if (!wish1||!wish2||!wish3) { msg.className='vv-msg error'; msg.textContent='Please fill all 3 wishes.'; return; }
+
+  const btn = document.getElementById('vvSubmitBtn');
+  btn.disabled = true; btn.textContent = 'Submitting...';
+
+  try {
+    await addDoc(voicesCol, {
+      constituency,
+      name: name || 'Anonymous',
+      pains: [pain1, pain2, pain3],
+      wishes: [wish1, wish2, wish3],
+      date: new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}),
+      ts: serverTimestamp()
+    });
+    ['vvConstituency','vvName','vvPain1','vvPain2','vvPain3','vvWish1','vvWish2','vvWish3'].forEach(id => { document.getElementById(id).value=''; });
+    msg.className = 'vv-msg success';
+    msg.textContent = '✅ Thank you! Your voice is now visible to everyone across Tamil Nadu.';
+  } catch(e) {
+    msg.className = 'vv-msg error';
+    msg.textContent = '❌ Submission failed. Please try again.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Submit My Voice 🗳️';
+  }
+};
+
+// Render submissions — exposed to global scope
+window._vvRender = function() {
+  const filterConst = document.getElementById('vvFilterConst').value;
+  const sortBy = document.getElementById('vvSortBy').value;
+  let list = [...allVoices];
+  if (filterConst) list = list.filter(s => s.constituency === filterConst);
+  if (sortBy === 'oldest') list = list.reverse();
+  else if (sortBy === 'const') list = list.sort((a,b) => a.constituency.localeCompare(b.constituency));
+
+  document.getElementById('vvFilterCount').textContent = `${list.length} submission${list.length!==1?'s':''}`;
+  const container = document.getElementById('vvSubmissionsList');
+
+  if (!list.length) {
+    container.innerHTML = `<div class="vv-empty"><div style="font-size:40px;margin-bottom:12px;">🗳️</div><div style="font-weight:700;color:#e8edf5;margin-bottom:6px;">No submissions yet</div><div>Be the first to share your voice!</div></div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(s => `
+    <div class="vv-card">
+      <div class="vv-card-header">
+        <div><div class="vv-card-const">📍 ${s.constituency}</div><div class="vv-card-name">👤 ${s.name}</div></div>
+        <div class="vv-card-meta">🗓️ ${s.date}</div>
+      </div>
+      <div class="vv-points">
+        <div class="vv-point-group">
+          <div class="vv-point-title pain-title">🔴 Pain Areas</div>
+          ${(s.pains||[]).map(p=>`<div class="vv-point-item">• ${p}</div>`).join('')}
+        </div>
+        <div class="vv-point-group">
+          <div class="vv-point-title wish-title">🟢 Wishes</div>
+          ${(s.wishes||[]).map(w=>`<div class="vv-point-item">• ${w}</div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('');
+};
+</script>
 
 <!-- GoatCounter Analytics -->
 <script data-goatcounter="https://sundarspeaks.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
